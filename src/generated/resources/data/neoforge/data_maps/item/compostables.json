@@ -1,0 +1,22 @@
+{
+  "values": {
+    "decisland:autumn_leaves": {
+      "replace": true,
+      "value": {
+        "chance": 0.3
+      }
+    },
+    "decisland:bracken": {
+      "replace": true,
+      "value": {
+        "chance": 0.3
+      }
+    },
+    "decisland:cob": {
+      "replace": true,
+      "value": {
+        "chance": 0.3
+      }
+    }
+  }
+}

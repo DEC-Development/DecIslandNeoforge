@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "com.dec.decisland.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "ThrowableProjectileMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}
