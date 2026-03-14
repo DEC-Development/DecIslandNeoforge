@@ -3,6 +3,7 @@ plugins {
     id 'maven-publish'
     id 'net.neoforged.moddev' version '2.0.140'
     id 'idea'
+    id 'org.jetbrains.kotlin.jvm'
 }
 
 tasks.named('wrapper', Wrapper).configure {
@@ -54,6 +55,7 @@ repositories {
             includeGroup "curse.maven"
         }
     }
+    mavenCentral()
 }
 
 base {
@@ -173,6 +175,7 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 //    implementation "maven.modrinth:geckolib-neoforge-${minecraft_version}:${geckolib_version}"
     implementation "curse.maven:geckolib-neoforge-388172:7405440"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 //    implementation "software.bernie.geckolib:geckolib-neoforge-${minecraft_version}:${geckolib_version}"
 }
 
@@ -223,4 +226,7 @@ idea {
         downloadSources = true
         downloadJavadoc = true
     }
+}
+kotlin {
+    jvmToolchain(21)
 }
