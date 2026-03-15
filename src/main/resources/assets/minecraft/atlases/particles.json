@@ -1,0 +1,19 @@
+{
+  "sources": [
+    {
+      "type": "directory",
+      "source": "particle",
+      "prefix": ""
+    },
+    {
+      "type": "directory",
+      "source": "wb_par",
+      "prefix": "wb_par/"
+    },
+    {
+      "type": "directory",
+      "source": "epic",
+      "prefix": "epic/"
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "global": {
+    "color": "#8FB4FF",
+    "color_mix": 0.22,
+    "start_mul": 0.80,
+    "end_mul": 0.62,
+    "alpha_mul": 1.0
+  },
+  "by_biome": {
+    "minecraft:ice_spikes": {
+      "color": "#B9F6FF",
+      "color_mix": 0.45,
+      "start_mul": 0.78,
+      "end_mul": 0.58
+    },
+    "minecraft:snowy_taiga": {
+      "color": "#A8C8FF",
+      "color_mix": 0.28,
+      "start_mul": 0.84,
+      "end_mul": 0.66
+    },
+    "minecraft:grove": {
+      "color": "#9FC3FF",
+      "color_mix": 0.30,
+      "start_mul": 0.82,
+      "end_mul": 0.62
+    },
+    "minecraft:forest": {
+      "color": "#93C8A0",
+      "color_mix": 0.18,
+      "start_mul": 0.88,
+      "end_mul": 0.70
+    },
+    "minecraft:birch_forest": {
+      "color": "#A6D7AE",
+      "color_mix": 0.16,
+      "start_mul": 0.90,
+      "end_mul": 0.72
+    },
+    "minecraft:river": {
+      "color": "#6AA5FF",
+      "color_mix": 0.25,
+      "start_mul": 0.82,
+      "end_mul": 0.60
+    },
+    "minecraft:frozen_river": {
+      "color": "#A3E6FF",
+      "color_mix": 0.30,
+      "start_mul": 0.80,
+      "end_mul": 0.58
+    }
+  }
+}

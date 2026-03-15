@@ -1,6 +1,8 @@
 package com.dec.decisland.events
 
 import com.dec.decisland.DecIsland
+import com.dec.decisland.client.RecoilClient
+import com.dec.decisland.client.bedrock.BedrockEmitterManager
 import com.dec.decisland.client.gui.ClientManaOverlay
 import com.dec.decisland.client.renderer.EmptyRenderer
 import com.dec.decisland.entity.ModEntities
@@ -25,6 +27,14 @@ object ModClientEvents {
         EntityRenderers.register(ModEntities.BLIZZARD_ENERGY.get(), ::EmptyRenderer)
         EntityRenderers.register(ModEntities.THROWN_ASH_PUFFERFISH.get(), ::ThrownItemRenderer)
         EntityRenderers.register(ModEntities.ENERGY_RAY.get(), ::EmptyRenderer)
+        EntityRenderers.register(ModEntities.BULLET_BY_FLINTLOCK.get(), ::ThrownItemRenderer)
+        EntityRenderers.register(ModEntities.BULLET_BY_FLINTLOCK_PRO.get(), ::ThrownItemRenderer)
+        EntityRenderers.register(ModEntities.BULLET_BY_SHORT_FLINTLOCK.get(), ::ThrownItemRenderer)
+        EntityRenderers.register(ModEntities.BULLET_BY_EVERLASTING_WINTER_FLINTLOCK.get(), ::ThrownItemRenderer)
+        EntityRenderers.register(ModEntities.BULLET_BY_GHOST_FLINTLOCK.get(), ::ThrownItemRenderer)
+        EntityRenderers.register(ModEntities.BULLET_BY_LAVA_FLINTLOCK.get(), ::ThrownItemRenderer)
+        EntityRenderers.register(ModEntities.BULLET_BY_STAR_FLINTLOCK.get(), ::ThrownItemRenderer)
+        EntityRenderers.register(ModEntities.BULLET_BY_STORM_FLINTLOCK.get(), ::ThrownItemRenderer)
     }
 
     @SubscribeEvent
@@ -51,6 +61,8 @@ object ModClientEvents {
     @JvmStatic
     fun onRenderGuiOverlay(event: RenderGuiEvent.Pre) {
         val mc = Minecraft.getInstance()
+        RecoilClient.tick(mc)
+        mc.level?.let(BedrockEmitterManager::tick)
         ClientManaOverlay.render(
             event.guiGraphics,
             mc.window.guiScaledWidth,

@@ -1,6 +1,7 @@
 package com.dec.decisland.block
 
 import com.dec.decisland.DecIsland
+import com.dec.decisland.block.custom.SnowPortalBlock
 import com.dec.decisland.item.ModCreativeModeTabs
 import com.dec.decisland.item.ModItems
 import net.minecraft.core.Holder
@@ -8,6 +9,7 @@ import net.minecraft.tags.BlockTags
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.state.BlockBehaviour
+import net.minecraft.world.level.material.PushReaction
 import net.neoforged.bus.api.IEventBus
 import net.neoforged.neoforge.registries.DeferredBlock
 import net.neoforged.neoforge.registries.DeferredRegister
@@ -36,6 +38,22 @@ object ModBlocks {
             .creativeTab(ModCreativeModeTabs.DECISLAND_MATERIALS_TAB)
             .tags(listOf(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_IRON_TOOL))
             .build(),
+    )
+
+    @JvmField
+    val SNOW_PORTAL: DeferredBlock<SnowPortalBlock> = registerBlock(
+        "snow_portal",
+        ::SnowPortalBlock,
+        Supplier {
+            BlockBehaviour.Properties.of()
+                .noCollision()
+                .strength(-1.0f)
+                .lightLevel { 11 }
+                .sound(SoundType.GLASS)
+                .noLootTable()
+                .pushReaction(PushReaction.BLOCK)
+        },
+        false,
     )
 
     private fun <T : Block> registerBlock(

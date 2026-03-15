@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "decisland:block/snow_portal_x"
+    },
+    "axis=y": {
+      "model": "decisland:block/snow_portal_y"
+    },
+    "axis=z": {
+      "model": "decisland:block/snow_portal_z"
+    }
+  }
+}

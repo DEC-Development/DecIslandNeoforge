@@ -24,3 +24,8 @@ runs
 run-data
 
 repo
+_merge_staging
+_tmp_fabric_source
+
+generated
+.*

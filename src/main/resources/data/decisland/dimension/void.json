@@ -1,0 +1,139 @@
+{
+  "type": "decisland:void",
+  "generator": {
+    "type": "decisland:fractal_surface",
+    "biome_source": {
+      "type": "decisland:void_biomes",
+      "plains": "minecraft:plains",
+      "snowy_plains": "minecraft:snowy_plains",
+      "snowy_slopes": "minecraft:snowy_slopes",
+      "forest": "minecraft:forest",
+      "birch_forest": "minecraft:birch_forest",
+      "snowy_taiga": "minecraft:snowy_taiga",
+      "grove": "minecraft:grove",
+      "meadow": "minecraft:meadow",
+      "river": "minecraft:river",
+      "frozen_river": "minecraft:frozen_river",
+      "ice_spikes": "minecraft:ice_spikes",
+      "climate_scale": 8
+    },
+    "settings": {
+      "base_height": 74.0,
+      "base_frequency": 0.0078125,
+      "base_amplitude": 125.0,
+      "max_layers": 9,
+      "lacunarity": 2.0,
+      "persistence": 0.5,
+      "selector_frequency": 0.00048828125,
+      "smooth_passes": 0,
+      "gradient_step": 2,
+      "macro": {
+        "ridge_frequency": 0.001953125,
+        "ridge_amplitude": 52.0,
+        "ridge_sharpness": 1.8,
+        "valley_frequency": 0.0009765625,
+        "valley_depth": 62.0,
+        "river_frequency": 0.0048828125,
+        "river_width": 0.1,
+        "river_depth": 34.0,
+        "glacier_frequency": 0.00048828125,
+        "glacier_threshold": 0.62,
+        "glacier_smooth_strength": 0.6,
+        "ice_river_threshold": 0.45,
+        "ice_river_blue_ice_threshold": 0.78
+      },
+      "underground": {
+        "enabled": true,
+        "frequency": 0.03,
+        "y_frequency": 0.045,
+        "threshold": 0.55,
+        "min_y": -56,
+        "max_y": 56,
+        "surface_protection": 6
+      },
+      "min_y": -64,
+      "gen_depth": 384,
+      "sea_level": 63,
+      "snow_line": 130,
+      "biome_slope_params": {
+        "minecraft:plains": {
+          "slope_start": 0.75,
+          "slope_end": 1.55,
+          "attenuation_power": 1.2,
+          "min_layers": 4,
+          "max_layers": 9
+        },
+        "minecraft:forest": {
+          "slope_start": 0.70,
+          "slope_end": 1.40,
+          "attenuation_power": 1.3,
+          "min_layers": 4,
+          "max_layers": 9
+        },
+        "minecraft:birch_forest": {
+          "slope_start": 0.70,
+          "slope_end": 1.40,
+          "attenuation_power": 1.3,
+          "min_layers": 4,
+          "max_layers": 9
+        },
+        "minecraft:snowy_plains": {
+          "slope_start": 0.55,
+          "slope_end": 1.25,
+          "attenuation_power": 1.6,
+          "min_layers": 3,
+          "max_layers": 8
+        },
+        "minecraft:snowy_taiga": {
+          "slope_start": 0.55,
+          "slope_end": 1.20,
+          "attenuation_power": 1.7,
+          "min_layers": 3,
+          "max_layers": 8
+        },
+        "minecraft:meadow": {
+          "slope_start": 0.55,
+          "slope_end": 1.15,
+          "attenuation_power": 1.55,
+          "min_layers": 3,
+          "max_layers": 8
+        },
+        "minecraft:river": {
+          "slope_start": 0.65,
+          "slope_end": 1.35,
+          "attenuation_power": 1.4,
+          "min_layers": 3,
+          "max_layers": 8
+        },
+        "minecraft:frozen_river": {
+          "slope_start": 0.65,
+          "slope_end": 1.35,
+          "attenuation_power": 1.4,
+          "min_layers": 3,
+          "max_layers": 8
+        },
+        "minecraft:snowy_slopes": {
+          "slope_start": 0.40,
+          "slope_end": 1.00,
+          "attenuation_power": 2.1,
+          "min_layers": 2,
+          "max_layers": 7
+        },
+        "minecraft:grove": {
+          "slope_start": 0.45,
+          "slope_end": 1.05,
+          "attenuation_power": 2.0,
+          "min_layers": 2,
+          "max_layers": 7
+        },
+        "minecraft:ice_spikes": {
+          "slope_start": 0.40,
+          "slope_end": 1.00,
+          "attenuation_power": 2.3,
+          "min_layers": 2,
+          "max_layers": 7
+        }
+      }
+    }
+  }
+}

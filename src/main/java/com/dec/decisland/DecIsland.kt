@@ -9,6 +9,7 @@ import com.dec.decisland.item.category.Mask
 import com.dec.decisland.item.category.Material
 import com.dec.decisland.item.category.Weapon
 import com.dec.decisland.particles.ModParticles
+import com.dec.decisland.worldgen.ModWorldgen
 import com.mojang.logging.LogUtils
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.item.CreativeModeTabs
@@ -40,6 +41,7 @@ class DecIsland(modEventBus: IEventBus, modContainer: ModContainer) {
             ModCreativeModeTabs.register(modEventBus)
             ModParticles.register(modEventBus)
             ModAttachments.register(modEventBus)
+            ModWorldgen.register(modEventBus)
 
             NeoForge.EVENT_BUS.register(this)
             modEventBus.addListener(this::addCreative)

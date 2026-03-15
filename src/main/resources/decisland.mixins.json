@@ -5,6 +5,14 @@
   "mixins": [
     "ThrowableProjectileMixin"
   ],
+  "client": [
+    "client.FlintlockAimCameraMixin",
+    "client.FlintlockAimCrosshairMixin",
+    "client.FlintlockAimFovMixin",
+    "client.GunHoldHandsMixin",
+    "client.GunHoldThirdPersonPoseMixin",
+    "client.GunThirdPersonStraightArmMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   },
