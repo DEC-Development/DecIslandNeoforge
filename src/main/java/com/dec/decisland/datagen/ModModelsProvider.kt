@@ -13,6 +13,8 @@ import net.minecraft.data.PackOutput
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
+import java.util.Collections
+import java.util.IdentityHashMap
 import java.util.stream.Stream
 
 class ModModelsProvider(output: PackOutput) : ModelProvider(output, DecIsland.MOD_ID) {
@@ -33,5 +35,13 @@ class ModModelsProvider(output: PackOutput) : ModelProvider(output, DecIsland.MO
 
     override fun getKnownItems(): Stream<out Holder<Item>> = ModItems.ITEMS.getEntries().stream()
 
-    override fun getKnownBlocks(): Stream<out Holder<Block>> = ModBlocks.BLOCKS.getEntries().stream()
+    override fun getKnownBlocks(): Stream<out Holder<Block>> {
+        val generatedBlocks = Collections.newSetFromMap(IdentityHashMap<Block, Boolean>())
+        ModBlocks.getBlockConfigs().forEach { config ->
+            generatedBlocks.add(ModBlocks.getBlockByConfig(config).value())
+        }
+        return ModBlocks.BLOCKS.getEntries()
+            .stream()
+            .filter { generatedBlocks.contains(it.get()) }
+    }
 }
