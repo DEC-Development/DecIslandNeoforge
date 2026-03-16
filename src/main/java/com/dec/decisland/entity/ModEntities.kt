@@ -4,7 +4,11 @@ import com.dec.decisland.DecIsland
 import com.dec.decisland.entity.projectile.BlizzardEnergy
 import com.dec.decisland.entity.projectile.EnergyRay
 import com.dec.decisland.entity.projectile.FlintlockBulletEntity
+import com.dec.decisland.entity.projectile.SnowEnergy
 import com.dec.decisland.entity.projectile.ThrownAshPufferfish
+import com.dec.decisland.entity.projectile.dart.DartDefinition
+import com.dec.decisland.entity.projectile.dart.DartEntity
+import com.dec.decisland.entity.projectile.dart.ModDarts
 import net.minecraft.resources.Identifier
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.MobCategory
@@ -29,6 +33,76 @@ object ModEntities {
         ENTITY_TYPES.registerEntityType("blizzard_energy", ::BlizzardEnergy, MobCategory.MISC) { builder ->
             builder.sized(0.5f, 0.5f)
         }
+
+    @JvmField
+    val SNOW_ENERGY: Supplier<EntityType<SnowEnergy>> =
+        ENTITY_TYPES.registerEntityType("snow_energy", ::SnowEnergy, MobCategory.MISC) { builder ->
+            builder.sized(0.2f, 0.2f).clientTrackingRange(64).updateInterval(1)
+        }
+
+    @JvmField
+    val AMETHYST_DART: Supplier<EntityType<DartEntity>> =
+        registerDartEntity(ModDarts.AMETHYST_DART)
+
+    @JvmField
+    val COPPER_DART: Supplier<EntityType<DartEntity>> =
+        registerDartEntity(ModDarts.COPPER_DART)
+
+    @JvmField
+    val CORAL_DART: Supplier<EntityType<DartEntity>> =
+        registerDartEntity(ModDarts.CORAL_DART)
+
+    @JvmField
+    val DIAMOND_DART: Supplier<EntityType<DartEntity>> =
+        registerDartEntity(ModDarts.DIAMOND_DART)
+
+    @JvmField
+    val EMERALD_DART: Supplier<EntityType<DartEntity>> =
+        registerDartEntity(ModDarts.EMERALD_DART)
+
+    @JvmField
+    val EVERLASTING_WINTER_DART: Supplier<EntityType<DartEntity>> =
+        registerDartEntity(ModDarts.EVERLASTING_WINTER_DART)
+
+    @JvmField
+    val FROZEN_DART: Supplier<EntityType<DartEntity>> =
+        registerDartEntity(ModDarts.FROZEN_DART)
+
+    @JvmField
+    val GOLD_DART: Supplier<EntityType<DartEntity>> =
+        registerDartEntity(ModDarts.GOLD_DART)
+
+    @JvmField
+    val IRON_DART: Supplier<EntityType<DartEntity>> =
+        registerDartEntity(ModDarts.IRON_DART)
+
+    @JvmField
+    val LAVA_DART: Supplier<EntityType<DartEntity>> =
+        registerDartEntity(ModDarts.LAVA_DART)
+
+    @JvmField
+    val NETHERITE_DART: Supplier<EntityType<DartEntity>> =
+        registerDartEntity(ModDarts.NETHERITE_DART)
+
+    @JvmField
+    val POISON_DART: Supplier<EntityType<DartEntity>> =
+        registerDartEntity(ModDarts.POISON_DART)
+
+    @JvmField
+    val STEEL_DART: Supplier<EntityType<DartEntity>> =
+        registerDartEntity(ModDarts.STEEL_DART)
+
+    @JvmField
+    val STONE_DART: Supplier<EntityType<DartEntity>> =
+        registerDartEntity(ModDarts.STONE_DART)
+
+    @JvmField
+    val STREAM_DART: Supplier<EntityType<DartEntity>> =
+        registerDartEntity(ModDarts.STREAM_DART)
+
+    @JvmField
+    val WOOD_DART: Supplier<EntityType<DartEntity>> =
+        registerDartEntity(ModDarts.WOOD_DART)
 
     @JvmField
     val THROWN_ASH_PUFFERFISH: Supplier<EntityType<ThrownAshPufferfish>> =
@@ -120,6 +194,18 @@ object ModEntities {
         ENTITY_TYPES.registerEntityType(path, ::FlintlockBulletEntity, MobCategory.MISC) { builder ->
             builder.sized(0.2f, 0.2f).clientTrackingRange(64).updateInterval(10)
         }
+
+    private fun registerDartEntity(
+        definition: DartDefinition,
+    ): Supplier<EntityType<DartEntity>> {
+        DartEntity.registerDefinition(definition)
+        return ENTITY_TYPES.registerEntityType(definition.path, ::DartEntity, MobCategory.MISC) { builder ->
+            builder
+                .sized(definition.entitySettings.entityWidth, definition.entitySettings.entityHeight)
+                .clientTrackingRange(definition.entitySettings.clientTrackingRange)
+                .updateInterval(definition.entitySettings.updateInterval)
+        }.also(definition::bindEntityTypeSupplier)
+    }
 
     private fun id(path: String): Identifier = Identifier.fromNamespaceAndPath(DecIsland.MOD_ID, path)
 }

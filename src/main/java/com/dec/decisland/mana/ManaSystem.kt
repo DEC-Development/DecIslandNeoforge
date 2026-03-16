@@ -4,7 +4,6 @@ import com.dec.decisland.DecIsland
 import com.dec.decisland.attachment.ModAttachments
 import com.dec.decisland.network.ManaSyncPayload
 import net.minecraft.core.particles.ParticleTypes
-import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.player.Player
@@ -63,8 +62,6 @@ object ManaSystem {
         val currentMana = player.getData(ModAttachments.CURRENT_MANA.get())
         val magicGap = player.getData(ModAttachments.MAGIC_GAP.get())
         val prevMagic = player.getData(ModAttachments.PREV_MAGIC.get())
-
-        player.displayClientMessage(Component.literal("Mana: $currentMana/$maxMana"), true)
 
         if (currentMana < maxMana) {
             if (magicGap <= 0) {

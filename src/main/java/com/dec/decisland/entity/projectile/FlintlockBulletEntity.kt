@@ -1,5 +1,4 @@
 package com.dec.decisland.entity.projectile
-
 import com.dec.decisland.entity.ModEntities
 import com.dec.decisland.item.category.Weapon
 import com.dec.decisland.network.Networking

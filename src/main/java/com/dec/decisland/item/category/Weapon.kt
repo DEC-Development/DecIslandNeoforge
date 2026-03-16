@@ -5,10 +5,13 @@ import com.dec.decisland.item.ItemConfig
 import com.dec.decisland.item.ModCreativeModeTabs
 import com.dec.decisland.item.ModItems
 import com.dec.decisland.item.ModToolMaterial
-import com.dec.decisland.lang.Lang
+import com.dec.decisland.entity.projectile.dart.DartDefinition
+import com.dec.decisland.entity.projectile.dart.ModDarts
 import com.dec.decisland.item.custom.AbsoluteZero
 import com.dec.decisland.item.custom.BambooKatana
 import com.dec.decisland.item.custom.HardBambooKatana
+import com.dec.decisland.item.custom.dart.Dart
+import com.dec.decisland.lang.Lang
 import com.dec.decisland.item.gun.EverlastingWinterFlintlock
 import com.dec.decisland.item.gun.Flintlock
 import com.dec.decisland.item.gun.FlintlockBullet
@@ -26,6 +29,54 @@ import net.minecraft.world.item.component.Consumables
 import net.neoforged.neoforge.registries.DeferredItem
 
 object Weapon {
+    @JvmField
+    val AMETHYST_DART: DeferredItem<Item> = registerDart(ModDarts.AMETHYST_DART)
+
+    @JvmField
+    val COPPER_DART: DeferredItem<Item> = registerDart(ModDarts.COPPER_DART)
+
+    @JvmField
+    val CORAL_DART: DeferredItem<Item> = registerDart(ModDarts.CORAL_DART)
+
+    @JvmField
+    val DIAMOND_DART: DeferredItem<Item> = registerDart(ModDarts.DIAMOND_DART)
+
+    @JvmField
+    val EMERALD_DART: DeferredItem<Item> = registerDart(ModDarts.EMERALD_DART)
+
+    @JvmField
+    val EVERLASTING_WINTER_DART: DeferredItem<Item> = registerDart(ModDarts.EVERLASTING_WINTER_DART)
+
+    @JvmField
+    val FROZEN_DART: DeferredItem<Item> = registerDart(ModDarts.FROZEN_DART)
+
+    @JvmField
+    val GOLD_DART: DeferredItem<Item> = registerDart(ModDarts.GOLD_DART)
+
+    @JvmField
+    val IRON_DART: DeferredItem<Item> = registerDart(ModDarts.IRON_DART)
+
+    @JvmField
+    val LAVA_DART: DeferredItem<Item> = registerDart(ModDarts.LAVA_DART)
+
+    @JvmField
+    val NETHERITE_DART: DeferredItem<Item> = registerDart(ModDarts.NETHERITE_DART)
+
+    @JvmField
+    val POISON_DART: DeferredItem<Item> = registerDart(ModDarts.POISON_DART)
+
+    @JvmField
+    val STEEL_DART: DeferredItem<Item> = registerDart(ModDarts.STEEL_DART)
+
+    @JvmField
+    val STONE_DART: DeferredItem<Item> = registerDart(ModDarts.STONE_DART)
+
+    @JvmField
+    val STREAM_DART: DeferredItem<Item> = registerDart(ModDarts.STREAM_DART)
+
+    @JvmField
+    val WOOD_DART: DeferredItem<Item> = registerDart(ModDarts.WOOD_DART)
+
     @JvmField
     val FLINTLOCK_BULLET: DeferredItem<Item> = ModItems.registerItem(
         ItemConfig.Builder("flintlock_bullet", Lang.item.get("flintlock_bullet"))
@@ -194,4 +245,14 @@ object Weapon {
     @JvmStatic
     fun load() {
     }
+
+    private fun registerDart(definition: DartDefinition): DeferredItem<Item> =
+        ModItems.registerItem(
+            ItemConfig.Builder(definition.path, Lang.item.get(definition.path))
+                .func(Dart.factory(definition))
+                .props { Item.Properties().useCooldown(definition.itemSettings.cooldownTicks / 20.0f) }
+                .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
+                .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
+                .build(),
+        ).also(definition::bindItemSupplier)
 }

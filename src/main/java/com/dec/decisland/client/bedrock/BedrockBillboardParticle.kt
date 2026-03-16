@@ -141,7 +141,17 @@ class BedrockBillboardParticle(
             val base = flipbook.baseUV ?: intArrayOf(0, 0)
             val step = flipbook.stepUV ?: intArrayOf(0, 0)
             val size = flipbook.sizeUV ?: intArrayOf(textureWidth, textureHeight)
-            val maxFrame = (flipbook.maxFrame ?: 0).coerceAtLeast(0)
+            val maxFrame = resolveFlipbookMaxFrameIndex(
+                textureWidth = textureWidth,
+                textureHeight = textureHeight,
+                baseU = base.getOrElse(0) { 0 },
+                baseV = base.getOrElse(1) { 0 },
+                stepU = step.getOrElse(0) { 0 },
+                stepV = step.getOrElse(1) { 0 },
+                sizeU = size.getOrElse(0) { textureWidth },
+                sizeV = size.getOrElse(1) { textureHeight },
+                configuredMaxFrame = flipbook.maxFrame,
+            )
             val frame = if (flipbook.stretchToLifetime == true) {
                 (((age.toDouble() / lifetime.toDouble()) * (maxFrame + 1)).toInt()).coerceIn(0, maxFrame)
             } else {
@@ -169,6 +179,30 @@ class BedrockBillboardParticle(
         val v1 = sprite.getV0() + ((sprite.getV1() - sprite.getV0()) * ((baseV + sizeV).toFloat() / textureHeight.toFloat()))
         return UvRect(u0, u1, v0, v1)
     }
+
+    private fun resolveFlipbookMaxFrameIndex(
+        textureWidth: Int,
+        textureHeight: Int,
+        baseU: Int,
+        baseV: Int,
+        stepU: Int,
+        stepV: Int,
+        sizeU: Int,
+        sizeV: Int,
+        configuredMaxFrame: Int?,
+    ): Int {
+        val maxByWidth = maxFramesForAxis(textureWidth, baseU, sizeU, stepU)
+        val maxByHeight = maxFramesForAxis(textureHeight, baseV, sizeV, stepV)
+        val maxThatFits = minOf(maxByWidth, maxByHeight).coerceAtLeast(0)
+        return minOf(configuredMaxFrame ?: maxThatFits, maxThatFits).coerceAtLeast(0)
+    }
+
+    private fun maxFramesForAxis(textureSize: Int, base: Int, frameSize: Int, step: Int): Int =
+        when {
+            step > 0 -> ((textureSize - frameSize - base) / step).coerceAtLeast(0)
+            step < 0 -> (base / -step).coerceAtLeast(0)
+            else -> 0
+        }
 
     private fun createContext(): MolangContext =
         MolangContext(

@@ -2,6 +2,22 @@ package com.dec.decisland.lang.item.en_us
 
 object Weapon {
     val translations: Map<String, String> = mapOf(
+        "amethyst_dart" to "Amethyst Dart",
+        "copper_dart" to "Copper Dart",
+        "coral_dart" to "Coral Dart",
+        "diamond_dart" to "Diamond Dart",
+        "emerald_dart" to "Emerald Dart",
+        "everlasting_winter_dart" to "Everlasting Dart",
+        "frozen_dart" to "Frozen Dart",
+        "gold_dart" to "Gold Dart",
+        "iron_dart" to "Iron Dart",
+        "lava_dart" to "Lava Dart",
+        "netherite_dart" to "Netherite Dart",
+        "poison_dart" to "Poison Dart",
+        "steel_dart" to "Steel Dart",
+        "stone_dart" to "Stone Dart",
+        "stream_dart" to "Stream Dart",
+        "wood_dart" to "Wood Dart",
         "flintlock_bullet" to "Flintlock Bullet",
         "flintlock" to "Flintlock",
         "flintlock_pro" to "Flintlock Pro",

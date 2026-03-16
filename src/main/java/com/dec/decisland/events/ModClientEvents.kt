@@ -3,9 +3,11 @@ package com.dec.decisland.events
 import com.dec.decisland.DecIsland
 import com.dec.decisland.client.RecoilClient
 import com.dec.decisland.client.bedrock.BedrockEmitterManager
+import com.dec.decisland.client.renderer.DartRenderer
 import com.dec.decisland.client.gui.ClientManaOverlay
 import com.dec.decisland.client.renderer.EmptyRenderer
 import com.dec.decisland.entity.ModEntities
+import com.dec.decisland.entity.projectile.dart.ModDarts
 import com.dec.decisland.particles.ModParticles
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.entity.EntityRenderers
@@ -25,6 +27,10 @@ object ModClientEvents {
     @JvmStatic
     fun onClientSetup(event: FMLClientSetupEvent) {
         EntityRenderers.register(ModEntities.BLIZZARD_ENERGY.get(), ::EmptyRenderer)
+        EntityRenderers.register(ModEntities.SNOW_ENERGY.get(), ::EmptyRenderer)
+        ModDarts.ALL.forEach { definition ->
+            EntityRenderers.register(definition.entityType(), ::DartRenderer)
+        }
         EntityRenderers.register(ModEntities.THROWN_ASH_PUFFERFISH.get(), ::ThrownItemRenderer)
         EntityRenderers.register(ModEntities.ENERGY_RAY.get(), ::EmptyRenderer)
         EntityRenderers.register(ModEntities.BULLET_BY_FLINTLOCK.get(), ::ThrownItemRenderer)

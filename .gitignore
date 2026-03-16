@@ -26,6 +26,7 @@ run-data
 repo
 _merge_staging
 _tmp_fabric_source
+_tmp_bedrock_source
 
 generated
 .*
