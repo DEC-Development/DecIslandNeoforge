@@ -4,22 +4,32 @@ import com.dec.decisland.DecIsland
 import com.dec.decisland.particles.bedrock.BedrockEmitterLifetimeExpression
 import com.dec.decisland.particles.bedrock.BedrockEmitterLifetimeLooping
 import com.dec.decisland.particles.bedrock.BedrockEmitterLifetimeOnce
+import com.dec.decisland.particles.bedrock.BedrockEmitterInitialization
+import com.dec.decisland.particles.bedrock.BedrockEmitterLocalSpace
 import com.dec.decisland.particles.bedrock.BedrockEmitterRate
 import com.dec.decisland.particles.bedrock.BedrockEmitterShape
+import com.dec.decisland.particles.bedrock.BedrockBezierNode
+import com.dec.decisland.particles.bedrock.BedrockCurve
 import com.dec.decisland.particles.bedrock.BedrockParticleAppearanceBillboard
 import com.dec.decisland.particles.bedrock.BedrockParticleAppearanceLighting
+import com.dec.decisland.particles.bedrock.BedrockParticleAppearanceTinting
+import com.dec.decisland.particles.bedrock.BedrockParticleCollisionEvent
 import com.dec.decisland.particles.bedrock.BedrockParticleEffectDefinition
+import com.dec.decisland.particles.bedrock.BedrockParticleEventDefinition
+import com.dec.decisland.particles.bedrock.BedrockParticleEventEffect
 import com.dec.decisland.particles.bedrock.BedrockParticleFlipbook
 import com.dec.decisland.particles.bedrock.BedrockParticleInitialSpeed
 import com.dec.decisland.particles.bedrock.BedrockParticleInitialSpin
+import com.dec.decisland.particles.bedrock.BedrockParticleInitialization
 import com.dec.decisland.particles.bedrock.BedrockParticleLifetimeExpression
 import com.dec.decisland.particles.bedrock.BedrockParticleMotionCollision
 import com.dec.decisland.particles.bedrock.BedrockParticleMotionDynamic
 import com.dec.decisland.particles.bedrock.BedrockParticleUv
+import com.dec.decisland.particles.bedrock.BedrockTintColor
+import com.dec.decisland.particles.bedrock.ColorStop
 import com.dec.decisland.particles.custom.AbsoluteZeroSmokeSeedParticle
 import com.dec.decisland.particles.custom.AbsoluteZeroSmokeSingleParticle
 import com.dec.decisland.particles.custom.BlizzardWakeParticle
-import com.dec.decisland.particles.custom.KatanaParticle
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
@@ -42,7 +52,7 @@ object ModParticles {
 
     private val particleConfigs = mutableListOf<ParticleConfig>()
     private val bedrockDefinitionById = LinkedHashMap<Identifier, BedrockParticleEffectDefinition>()
-    private val bedrockSpriteById = LinkedHashMap<Identifier, Identifier>()
+    private val bedrockSpritesById = LinkedHashMap<Identifier, List<Identifier>>()
 
     @Volatile
     private var bedrockLoaded = false
@@ -51,27 +61,6 @@ object ModParticles {
     val BLIZZARD_WAKE_PARTICLE: Supplier<SimpleParticleType> = registerParticle(
         ParticleConfig.Builder("blizzard_wake_particle")
             .factoryProvider { event, particleType -> event.registerSpriteSet(particleType, BlizzardWakeParticle::Provider) }
-            .build(),
-    )
-
-    @JvmField
-    val ABSOLUTE_ZERO_PARTICLE: Supplier<SimpleParticleType> = registerParticle(
-        ParticleConfig.Builder("absolute_zero_particle")
-            .factoryProvider { event, particleType -> event.registerSpriteSet(particleType, KatanaParticle::Provider) }
-            .build(),
-    )
-
-    @JvmField
-    val BAMBOO_KATANA_PARTICLE: Supplier<SimpleParticleType> = registerParticle(
-        ParticleConfig.Builder("bamboo_katana_particle")
-            .factoryProvider { event, particleType -> event.registerSpriteSet(particleType, KatanaParticle::Provider) }
-            .build(),
-    )
-
-    @JvmField
-    val HARD_BAMBOO_KATANA_PARTICLE: Supplier<SimpleParticleType> = registerParticle(
-        ParticleConfig.Builder("hard_bamboo_katana_particle")
-            .factoryProvider { event, particleType -> event.registerSpriteSet(particleType, KatanaParticle::Provider) }
             .build(),
     )
 
@@ -125,7 +114,13 @@ object ModParticles {
     @JvmStatic
     fun resolveBedrockSpriteId(id: Identifier): Identifier? {
         ensureBedrockLoaded()
-        return bedrockSpriteById[normalizeBedrockId(id)]
+        return bedrockSpritesById[normalizeBedrockId(id)]?.firstOrNull()
+    }
+
+    @JvmStatic
+    fun resolveBedrockSpriteIds(id: Identifier): List<Identifier> {
+        ensureBedrockLoaded()
+        return bedrockSpritesById[normalizeBedrockId(id)] ?: emptyList()
     }
 
     private fun ensureBedrockLoaded() {
@@ -149,14 +144,14 @@ object ModParticles {
                     input.use { stream ->
                         parseBedrockResource(stream)?.let { parsed ->
                             bedrockDefinitionById[parsed.first] = parsed.second
-                            parsed.third?.let { bedrockSpriteById[parsed.first] = it }
+                            parsed.third?.let { bedrockSpritesById[parsed.first] = it }
                         }
                     }
                 }
         }
     }
 
-    private fun parseBedrockResource(stream: java.io.InputStream): Triple<Identifier, BedrockParticleEffectDefinition, Identifier?>? {
+    private fun parseBedrockResource(stream: java.io.InputStream): Triple<Identifier, BedrockParticleEffectDefinition, List<Identifier>?>? {
         val root = InputStreamReader(stream).use { JsonParser.parseReader(it) }
         val effect = root.asJsonObjectOrNull()?.getAsJsonObjectOrNull("particle_effect") ?: return null
         val description = effect.getAsJsonObjectOrNull("description") ?: return null
@@ -165,10 +160,43 @@ object ModParticles {
         val texturePath = description.getAsJsonObjectOrNull("basic_render_parameters")
             ?.getAsJsonPrimitiveOrNull("texture")
             ?.asString
-        val spriteId = texturePath?.let(::texturePathToSpriteId)
+        val renderMaterial = description.getAsJsonObjectOrNull("basic_render_parameters")
+            ?.getAsJsonPrimitiveOrNull("material")
+            ?.asString
+        val spriteIds = texturePath?.let(::texturePathToSpriteIds)
         val components = effect.getAsJsonObjectOrNull("components") ?: JsonObject()
+        val curves = parseCurves(effect.getAsJsonObjectOrNull("curves"))
+        val events = effect.getAsJsonObjectOrNull("events")
+            ?.entrySet()
+            ?.mapNotNull { (name, value) ->
+                val obj = value.takeIf { it.isJsonObject }?.asJsonObject ?: return@mapNotNull null
+                val particleEffectObj = obj.getAsJsonObjectOrNull("particle_effect")
+                name to BedrockParticleEventDefinition(
+                    particleEffect = particleEffectObj?.let {
+                        BedrockParticleEventEffect(
+                            effect = it.getAsJsonPrimitiveOrNull("effect")?.asString,
+                            type = it.getAsJsonPrimitiveOrNull("type")?.asString,
+                        )
+                    },
+                )
+            }
+            ?.toMap()
+            ?: emptyMap()
 
         val definition = BedrockParticleEffectDefinition(
+            renderMaterial = renderMaterial,
+            emitterInitialization = components.getAsJsonObjectOrNull("minecraft:emitter_initialization")?.let { obj ->
+                BedrockEmitterInitialization(
+                    creationExpression = obj.getAsJsonPrimitiveOrNull("creation_expression")?.asString,
+                )
+            },
+            emitterLocalSpace = components.getAsJsonObjectOrNull("minecraft:emitter_local_space")?.let { obj ->
+                BedrockEmitterLocalSpace(
+                    position = obj.getAsJsonPrimitiveOrNull("position")?.asBoolean,
+                    rotation = obj.getAsJsonPrimitiveOrNull("rotation")?.asBoolean,
+                    velocity = obj.getAsJsonPrimitiveOrNull("velocity")?.asBoolean,
+                )
+            },
             emitterLifetimeExpression = components.getAsJsonObjectOrNull("minecraft:emitter_lifetime_expression")?.let { obj ->
                 BedrockEmitterLifetimeExpression(
                     activationExpression = obj.getAsJsonPrimitiveOrNull("activation_expression")?.asString,
@@ -184,17 +212,36 @@ object ModParticles {
                     sleepTime = obj.getAsJsonPrimitiveOrNull("sleep_time")?.asString,
                 )
             },
-            emitterRate = components.getAsJsonObjectOrNull("minecraft:emitter_rate_instant")?.let { obj ->
-                BedrockEmitterRate.Instant(obj.getAsJsonPrimitiveOrNull("num_particles")?.asString)
-            } ?: components.getAsJsonObjectOrNull("minecraft:emitter_rate_steady")?.let { obj ->
+            emitterRate = components.getAsJsonObjectOrNull("minecraft:emitter_rate_steady")?.let { obj ->
                 BedrockEmitterRate.Steady(
                     spawnRate = obj.getAsJsonPrimitiveOrNull("spawn_rate")?.asString,
+                    maxParticles = obj.getAsJsonPrimitiveOrNull("max_particles")?.asString,
+                )
+            } ?: components.getAsJsonObjectOrNull("minecraft:emitter_rate_instant")?.let { obj ->
+                BedrockEmitterRate.Instant(obj.getAsJsonPrimitiveOrNull("num_particles")?.asString)
+            } ?: components.getAsJsonObjectOrNull("minecraft:emitter_rate_manual")?.let { obj ->
+                BedrockEmitterRate.Manual(
                     maxParticles = obj.getAsJsonPrimitiveOrNull("max_particles")?.asString,
                 )
             },
             emitterShape = components.getAsJsonObjectOrNull("minecraft:emitter_shape_sphere")?.let { obj ->
                 BedrockEmitterShape.Sphere(
                     radius = obj.getAsJsonPrimitiveOrNull("radius")?.asString,
+                    offset = obj.getAsJsonArrayOrNull("offset")?.toDoubleArray3(),
+                    surfaceOnly = obj.getAsJsonPrimitiveOrNull("surface_only")?.asBoolean,
+                    direction = obj.get("direction")?.let(::parseScalarOrVecOrString),
+                )
+            } ?: components.getAsJsonObjectOrNull("minecraft:emitter_shape_box")?.let { obj ->
+                BedrockEmitterShape.Box(
+                    halfDimensions = obj.getAsJsonArrayOrNull("half_dimensions")?.toDoubleArray3(),
+                    offset = obj.getAsJsonArrayOrNull("offset")?.toDoubleArray3(),
+                    surfaceOnly = obj.getAsJsonPrimitiveOrNull("surface_only")?.asBoolean,
+                    direction = obj.get("direction")?.let(::parseScalarOrVecOrString),
+                )
+            } ?: components.getAsJsonObjectOrNull("minecraft:emitter_shape_disc")?.let { obj ->
+                BedrockEmitterShape.Disc(
+                    radius = obj.getAsJsonPrimitiveOrNull("radius")?.asString,
+                    normal = obj.getAsJsonArrayOrNull("normal")?.toDoubleArray3(),
                     offset = obj.getAsJsonArrayOrNull("offset")?.toDoubleArray3(),
                     surfaceOnly = obj.getAsJsonPrimitiveOrNull("surface_only")?.asBoolean,
                     direction = obj.get("direction")?.let(::parseScalarOrVecOrString),
@@ -207,6 +254,13 @@ object ModParticles {
             },
             particleLifetimeExpression = components.getAsJsonObjectOrNull("minecraft:particle_lifetime_expression")?.let { obj ->
                 BedrockParticleLifetimeExpression(obj.getAsJsonPrimitiveOrNull("max_lifetime")?.asString)
+            },
+            particleInitialization = components.getAsJsonObjectOrNull("minecraft:particle_initialization")?.let { obj ->
+                BedrockParticleInitialization(
+                    creationExpression = obj.getAsJsonPrimitiveOrNull("creation_expression")?.asString,
+                    perUpdateExpression = obj.getAsJsonPrimitiveOrNull("per_update_expression")?.asString,
+                    perRenderExpression = obj.getAsJsonPrimitiveOrNull("per_render_expression")?.asString,
+                )
             },
             particleInitialSpeed = components.get("minecraft:particle_initial_speed")?.let { BedrockParticleInitialSpeed(parseScalarOrVecOrString(it)) },
             particleInitialSpin = components.getAsJsonObjectOrNull("minecraft:particle_initial_spin")?.let { obj ->
@@ -222,7 +276,20 @@ object ModParticles {
                 )
             },
             particleMotionCollision = components.getAsJsonObjectOrNull("minecraft:particle_motion_collision")?.let { obj ->
-                BedrockParticleMotionCollision(obj.getAsJsonPrimitiveOrNull("collision_radius")?.asString)
+                BedrockParticleMotionCollision(
+                    collisionRadius = obj.getAsJsonPrimitiveOrNull("collision_radius")?.asString,
+                    expireOnContact = obj.getAsJsonPrimitiveOrNull("expire_on_contact")?.asBoolean,
+                    events = obj.getAsJsonArrayOrNull("events")
+                        ?.mapNotNull { eventElement ->
+                            val eventObj = eventElement.takeIf { it.isJsonObject }?.asJsonObject ?: return@mapNotNull null
+                            val eventName = eventObj.getAsJsonPrimitiveOrNull("event")?.asString ?: return@mapNotNull null
+                            BedrockParticleCollisionEvent(
+                                event = eventName,
+                                minSpeed = eventObj.getAsJsonPrimitiveOrNull("min_speed")?.asString,
+                            )
+                        }
+                        ?: emptyList(),
+                )
             },
             particleAppearanceBillboard = components.getAsJsonObjectOrNull("minecraft:particle_appearance_billboard")?.let { obj ->
                 val uvObject = obj.getAsJsonObjectOrNull("uv")
@@ -251,14 +318,22 @@ object ModParticles {
                     },
                 )
             },
+            particleAppearanceTinting = components.getAsJsonObjectOrNull("minecraft:particle_appearance_tinting")?.let { obj ->
+                BedrockParticleAppearanceTinting(
+                    color = obj.get("color")?.let(::parseTintColor),
+                    alpha = obj.get("alpha")?.let(::parseScalarOrVecOrString),
+                )
+            },
             particleAppearanceLighting = if (components.getAsJsonObjectOrNull("minecraft:particle_appearance_lighting") != null) {
                 BedrockParticleAppearanceLighting(true)
             } else {
                 null
             },
+            events = events,
+            curves = curves,
         )
 
-        return Triple(id, definition, spriteId)
+        return Triple(id, definition, spriteIds)
     }
 
     private fun normalizeBedrockId(id: Identifier): Identifier =
@@ -267,18 +342,31 @@ object ModParticles {
             else -> id
         }
 
-    private fun texturePathToSpriteId(raw: String): Identifier? {
+    private fun texturePathToSpriteIds(raw: String): List<Identifier>? {
         val normalized = raw.replace('\\', '/').removeSuffix(".png")
-        val path = if (normalized.startsWith("textures/")) normalized else "textures/$normalized"
+        val hasExplicitNamespace = normalized.contains(':')
+        val namespace: String
+        val rawPath: String
+        if (hasExplicitNamespace) {
+            val parts = normalized.split(':', limit = 2)
+            namespace = parts[0]
+            rawPath = parts[1]
+        } else {
+            namespace = DecIsland.MOD_ID
+            rawPath = normalized
+        }
+        val path = if (rawPath.startsWith("textures/")) rawPath else "textures/$rawPath"
         return when {
+            path == "textures/particle/sga_*" && namespace == "minecraft" ->
+                ('a'..'z').map { char -> Identifier.fromNamespaceAndPath(namespace, "sga_$char") }
             path.startsWith("textures/particle/") ->
-                Identifier.fromNamespaceAndPath(DecIsland.MOD_ID, path.removePrefix("textures/particle/"))
+                listOf(Identifier.fromNamespaceAndPath(namespace, path.removePrefix("textures/particle/")))
             path.startsWith("textures/wb_par/") ->
-                Identifier.fromNamespaceAndPath(DecIsland.MOD_ID, "wb_par/${path.removePrefix("textures/wb_par/")}")
+                listOf(Identifier.fromNamespaceAndPath(DecIsland.MOD_ID, "wb_par/${path.removePrefix("textures/wb_par/")}"))
             path.startsWith("textures/EPIC/") ->
-                Identifier.fromNamespaceAndPath(DecIsland.MOD_ID, "epic/${path.removePrefix("textures/EPIC/")}")
+                listOf(Identifier.fromNamespaceAndPath(DecIsland.MOD_ID, "epic/${path.removePrefix("textures/EPIC/")}"))
             path.startsWith("textures/epic/") ->
-                Identifier.fromNamespaceAndPath(DecIsland.MOD_ID, "epic/${path.removePrefix("textures/epic/")}")
+                listOf(Identifier.fromNamespaceAndPath(DecIsland.MOD_ID, "epic/${path.removePrefix("textures/epic/")}"))
             else -> null
         }
     }
@@ -287,18 +375,162 @@ object ModParticles {
         when {
             element.isJsonPrimitive && element.asJsonPrimitive.isNumber -> element.asDouble
             element.isJsonPrimitive && element.asJsonPrimitive.isString -> element.asString
-            element.isJsonArray -> {
-                val array = element.asJsonArray
-                if ((0 until array.size()).all { array[it].isJsonPrimitive && array[it].asJsonPrimitive.isNumber }) {
-                    DoubleArray(array.size()) { index -> array[index].asDouble }
-                } else if ((0 until array.size()).all { array[it].isJsonPrimitive && array[it].asJsonPrimitive.isString }) {
-                    Array(array.size()) { index -> array[index].asString }
-                } else {
-                    null
-                }
-            }
+            element.isJsonArray -> parseJsonArray(element.asJsonArray)
             else -> null
         }
+
+    private fun parseTintColor(element: com.google.gson.JsonElement): BedrockTintColor? {
+        if (element.isJsonArray) {
+            val parsed = parseJsonArray(element.asJsonArray)
+            if (parsed is DoubleArray && parsed.size >= 3) {
+                return BedrockTintColor.ConstantRgb(parsed.copyOfRange(0, 3))
+            }
+            return null
+        }
+
+        if (element.isJsonPrimitive && element.asJsonPrimitive.isString) {
+            return parseHexColor(element.asString)?.let(BedrockTintColor::ConstantHex)
+        }
+
+        if (!element.isJsonObject) {
+            return null
+        }
+
+        val obj = element.asJsonObject
+        val interpolant = obj.getAsJsonPrimitiveOrNull("interpolant")?.asString ?: return null
+        val gradient = obj.getAsJsonObjectOrNull("gradient") ?: return null
+        val stops = ArrayList<ColorStop>(gradient.entrySet().size)
+        for ((key, valueElement) in gradient.entrySet()) {
+            val t = key.toDoubleOrNull() ?: continue
+            val argb = if (valueElement.isJsonPrimitive && valueElement.asJsonPrimitive.isString) {
+                parseHexColor(valueElement.asString)
+            } else {
+                null
+            } ?: continue
+            stops += ColorStop(t, argb)
+        }
+
+        if (stops.isEmpty()) {
+            return null
+        }
+        stops.sortBy(ColorStop::t)
+        return BedrockTintColor.Gradient(interpolant, stops)
+    }
+
+    private fun parseHexColor(value: String): Int? {
+        val hex = value.trim().removePrefix("#")
+        if (hex.length != 6 && hex.length != 8) {
+            return null
+        }
+        return try {
+            val parsed = hex.toLong(16).toInt()
+            if (hex.length == 6) {
+                (0xFF shl 24) or parsed
+            } else {
+                parsed
+            }
+        } catch (_: Exception) {
+            null
+        }
+    }
+
+    private fun parseJsonArray(array: JsonArray): Any? {
+        if (array.size() == 0) {
+            return emptyList<Any>()
+        }
+
+        var allNumbers = true
+        var allStrings = true
+        for (index in 0 until array.size()) {
+            val element = array[index]
+            if (!element.isJsonPrimitive) {
+                allNumbers = false
+                allStrings = false
+                break
+            }
+            val primitive = element.asJsonPrimitive
+            allNumbers = allNumbers && primitive.isNumber
+            allStrings = allStrings && primitive.isString
+        }
+
+        return when {
+            allNumbers -> DoubleArray(array.size()) { index -> array[index].asDouble }
+            allStrings -> Array(array.size()) { index -> array[index].asString }
+            else -> {
+                val out = ArrayList<Any?>(array.size())
+                for (index in 0 until array.size()) {
+                    val element = array[index]
+                    out += when {
+                        element.isJsonPrimitive && element.asJsonPrimitive.isNumber -> element.asDouble
+                        element.isJsonPrimitive && element.asJsonPrimitive.isString -> element.asString
+                        else -> null
+                    }
+                }
+                out
+            }
+        }
+    }
+
+    private fun parseCurves(curvesObject: JsonObject?): Map<String, BedrockCurve> {
+        if (curvesObject == null) {
+            return emptyMap()
+        }
+
+        val curves = LinkedHashMap<String, BedrockCurve>()
+        for ((rawName, element) in curvesObject.entrySet()) {
+            val obj = element.takeIf { it.isJsonObject }?.asJsonObject ?: continue
+            val type = obj.getAsJsonPrimitiveOrNull("type")?.asString?.lowercase() ?: continue
+            val input = obj.get("input")?.let { parseScalarOrVecOrString(it) as? String }
+            val horizontalRange = obj.get("horizontal_range")?.let { parseScalarOrVecOrString(it)?.toString() }
+
+            val curve = when (type) {
+                "linear" -> {
+                    val nodes = obj.getAsJsonArrayOrNull("nodes")
+                        ?.mapNotNull { node -> node.takeIf { it.isJsonPrimitive && it.asJsonPrimitive.isNumber }?.asDouble }
+                        ?: emptyList()
+                    BedrockCurve.Linear(
+                        input = input,
+                        horizontalRange = horizontalRange,
+                        nodes = nodes,
+                    )
+                }
+                "catmull_rom" -> {
+                    val nodes = obj.getAsJsonArrayOrNull("nodes")
+                        ?.mapNotNull { node -> node.takeIf { it.isJsonPrimitive && it.asJsonPrimitive.isNumber }?.asDouble }
+                        ?: emptyList()
+                    BedrockCurve.CatmullRom(
+                        input = input,
+                        horizontalRange = horizontalRange,
+                        nodes = nodes,
+                    )
+                }
+                "bezier_chain" -> {
+                    val nodes = obj.getAsJsonObjectOrNull("nodes")
+                        ?.entrySet()
+                        ?.mapNotNull { (key, value) ->
+                            val position = key.toDoubleOrNull() ?: return@mapNotNull null
+                            val nodeObj = value.takeIf { it.isJsonObject }?.asJsonObject ?: return@mapNotNull null
+                            BedrockBezierNode(
+                                position = position,
+                                value = nodeObj.getAsJsonPrimitiveOrNull("value")?.asDouble ?: return@mapNotNull null,
+                                slope = nodeObj.getAsJsonPrimitiveOrNull("slope")?.asDouble ?: 0.0,
+                            )
+                        }
+                        ?.sortedBy(BedrockBezierNode::position)
+                        ?: emptyList()
+                    BedrockCurve.BezierChain(
+                        input = input,
+                        horizontalRange = horizontalRange,
+                        nodes = nodes,
+                    )
+                }
+                else -> null
+            } ?: continue
+
+            curves[rawName] = curve
+        }
+        return curves
+    }
 
     private fun JsonArray.toDoubleArray3(): DoubleArray = doubleArrayOf(
         getOrNullNumber(0),

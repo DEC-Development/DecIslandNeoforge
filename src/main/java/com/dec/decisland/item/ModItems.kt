@@ -1,7 +1,8 @@
-package com.dec.decisland.item
+﻿package com.dec.decisland.item
 
 import com.dec.decisland.DecIsland
 import com.dec.decisland.item.custom.*
+import com.dec.decisland.tag.ModItemTags
 import net.minecraft.client.data.models.model.ModelTemplates
 import net.minecraft.core.Holder
 import net.minecraft.world.effect.MobEffectInstance
@@ -13,7 +14,6 @@ import net.minecraft.world.item.Items.*
 import net.minecraft.world.item.ToolMaterial
 import net.minecraft.world.item.component.Consumables
 import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect
-import net.minecraft.world.item.equipment.ArmorType
 import net.neoforged.bus.api.IEventBus
 import net.neoforged.neoforge.registries.DeferredItem
 import net.neoforged.neoforge.registries.DeferredRegister
@@ -23,6 +23,7 @@ object ModItems {
     val ITEMS: DeferredRegister.Items =
         DeferredRegister.createItems(DecIsland.MOD_ID)
     private val ITEM_CONFIGS = mutableListOf<ItemConfig>()
+    private val ITEM_CONFIGS_BY_NAME = linkedMapOf<String, ItemConfig>()
     //    public static final DeferredItem<Item> A_BOWL_OF_RICE =
 //            ITEMS.registerSimpleItem("a_bowl_of_rice", props -> props.food(
 //                    FoodProperties(10, 10, true),
@@ -62,15 +63,9 @@ object ModItems {
     @JvmField
     val AMETHYST_AXE: DeferredItem<Item> = registerItem(
             ItemConfig.Builder("amethyst_axe", mapOf("en_us" to "Amethyst Axe", "zh_cn" to "紫水晶斧")).func { p -> AxeItem(ToolMaterial.DIAMOND, 0.0F, -3.2F, p)}
+                    .tags(listOf(ModItemTags.WEAPON_MELEE_AXE))
                     .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
                     .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM).build()
-    )
-
-    @JvmField
-    val ASH_PUFFERFISH: DeferredItem<Item> = registerItem(
-            ItemConfig.Builder("ash_pufferfish", mapOf("en_us" to "Ash Pufferfish", "zh_cn" to "灰烬豚")).func(::AshPufferfish)
-                    .props { Item.Properties().stacksTo(16).useCooldown(3.0f)}
-                    .creativeTab(ModCreativeModeTabs.DECISLAND_MISC_TAB).build()
     )
 
     @JvmField
@@ -99,55 +94,6 @@ object ModItems {
     )
 
     @JvmField
-    val BLUE_JELLYFISH: DeferredItem<Item> = registerItem(
-            ItemConfig.Builder("blue_jellyfish", mapOf("en_us" to "Blue Jellyfish", "zh_cn" to "蓝水母")).props { (Item.Properties()).food(
-                    FoodProperties(2, 0.2f, true),
-                    Consumables.defaultFood()
-                            .onConsume(ApplyStatusEffectsConsumeEffect(
-                                    MobEffectInstance(MobEffects.POISON, 5 * 20, 2), 0.7f))
-                            .onConsume(ApplyStatusEffectsConsumeEffect(
-                                    MobEffectInstance(MobEffects.INSTANT_DAMAGE, 1, 0), 0.5f))
-                            .build()
-            )}.creativeTab(ModCreativeModeTabs.DECISLAND_FOODS_TAB).build()
-    )
-
-
-    @JvmField
-    val MOON_JELLYFISH: DeferredItem<Item> = registerItem(
-            ItemConfig.Builder("moon_jellyfish", mapOf("en_us" to "Moon Jellyfish", "zh_cn" to "海月水母")).props { (Item.Properties()).food(
-                    FoodProperties(2, 0.2f, true),
-                    Consumables.defaultFood()
-                            .onConsume(ApplyStatusEffectsConsumeEffect(
-                                    MobEffectInstance(MobEffects.POISON, 5 * 20, 2), 0.7f))
-                            .onConsume(ApplyStatusEffectsConsumeEffect(
-                                    MobEffectInstance(MobEffects.INSTANT_DAMAGE, 1, 0), 0.75f))
-                            .build()
-            )}.creativeTab(ModCreativeModeTabs.DECISLAND_FOODS_TAB).build()
-    )
-
-    @JvmField
-    val PINK_JELLYFISH: DeferredItem<Item> = registerItem(
-            ItemConfig.Builder("pink_jellyfish", mapOf("en_us" to "Pink Jellyfish", "zh_cn" to "粉水母")).props { (Item.Properties()).food(
-                    FoodProperties(2, 0.2f, true),
-                    Consumables.defaultFood()
-                            .onConsume(ApplyStatusEffectsConsumeEffect(
-                                    MobEffectInstance(MobEffects.POISON, 5 * 20, 3), 0.7f))
-                            .build()
-            )}.creativeTab(ModCreativeModeTabs.DECISLAND_FOODS_TAB).build()
-    )
-
-    @JvmField
-    val YELLOW_JELLYFISH: DeferredItem<Item> = registerItem(
-            ItemConfig.Builder("yellow_jellyfish", mapOf("en_us" to "Yellow Jellyfish", "zh_cn" to "黄水母")).props { (Item.Properties()).food(
-                    FoodProperties(2, 0.2f, true),
-                    Consumables.defaultFood()
-                            .onConsume(ApplyStatusEffectsConsumeEffect(
-                                    MobEffectInstance(MobEffects.POISON, 5 * 20, 2), 0.7f))
-                            .build()
-            )}.creativeTab(ModCreativeModeTabs.DECISLAND_FOODS_TAB).build()
-    )
-
-    @JvmField
     val CANDY: DeferredItem<Item> = registerItem(
             ItemConfig.Builder("candy", mapOf("en_us" to "Candy", "zh_cn" to "糖果")).props { (Item.Properties()).food(
                     FoodProperties(1, 0.4f, true),
@@ -173,86 +119,10 @@ object ModItems {
     )
 
     @JvmField
-    val COAL_FISH: DeferredItem<Item> = registerItem(
-            ItemConfig.Builder("coal_fish", mapOf("en_us" to "Coal Fish", "zh_cn" to "煤炭鱼")).props { (Item.Properties()).food(
-                    FoodProperties(3, 0.4f, false),
-                    Consumables.defaultFood().build()
-            )}.customProp(
-                    CustomItemProperties.Builder().burnTime(8).build()
-            ).creativeTab(ModCreativeModeTabs.DECISLAND_FOODS_TAB).build()
-    )
-
-    @JvmField
     val COB: DeferredItem<Item> = registerItem(
             ItemConfig.Builder("cob", mapOf("en_us" to "Cob", "zh_cn" to "玉米棒")).customProp(CustomItemProperties.Builder().compostableChance(0.3f).build())
                     .creativeTab(ModCreativeModeTabs.DECISLAND_CROPS_TAB).build()
     )
-
-
-    @JvmField
-    val AMETHYST_HELMET: DeferredItem<Item> = registerItem(
-            ItemConfig.Builder("amethyst_helmet", mapOf("en_us" to "Amethyst Helmet", "zh_cn" to "紫水晶头盔"))
-                    .props { (Item.Properties().humanoidArmor(ModArmorMaterials.AMETHYST, ArmorType.HELMET)
-                    )}
-                    .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB).build()
-    )
-
-    @JvmField
-    val AMETHYST_CHESTPLATE: DeferredItem<Item> = registerItem(
-            ItemConfig.Builder("amethyst_chestplate", mapOf("en_us" to "Amethyst Chestplate", "zh_cn" to "紫水晶胸甲"))
-                    .props { (Item.Properties().humanoidArmor(ModArmorMaterials.AMETHYST, ArmorType.CHESTPLATE)
-                    )}
-                    .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB).build()
-    )
-
-    @JvmField
-    val AMETHYST_LEGGINGS: DeferredItem<Item> = registerItem(
-            ItemConfig.Builder("amethyst_leggings", mapOf("en_us" to "Amethyst Leggings", "zh_cn" to "紫水晶护腿"))
-                    .props { (Item.Properties().humanoidArmor(ModArmorMaterials.AMETHYST, ArmorType.LEGGINGS)
-                    )}
-                    .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB).build()
-    )
-
-    @JvmField
-    val AMETHYST_BOOTS: DeferredItem<Item> = registerItem(
-            ItemConfig.Builder("amethyst_boots", mapOf("en_us" to "Amethyst Boots", "zh_cn" to "紫水晶靴子"))
-                    .props { (Item.Properties().humanoidArmor(ModArmorMaterials.AMETHYST, ArmorType.BOOTS)
-                    )}
-                    .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB).build()
-    )
-
-    @JvmField
-    val FROZEN_HELMET: DeferredItem<Item> = registerItem(
-            ItemConfig.Builder("frozen_helmet", mapOf("en_us" to "Frozen Helmet", "zh_cn" to "霜冻头盔"))
-                    .props { (Item.Properties().humanoidArmor(ModArmorMaterials.FROZEN, ArmorType.HELMET)
-                    )}
-                    .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB).build()
-    )
-
-    @JvmField
-    val FROZEN_CHESTPLATE: DeferredItem<Item> = registerItem(
-            ItemConfig.Builder("frozen_chestplate", mapOf("en_us" to "Frozen Chestplate", "zh_cn" to "霜冻甲"))
-                    .props { (Item.Properties().humanoidArmor(ModArmorMaterials.FROZEN, ArmorType.CHESTPLATE)
-                    )}
-                    .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB).build()
-    )
-
-    @JvmField
-    val FROZEN_LEGGINGS: DeferredItem<Item> = registerItem(
-            ItemConfig.Builder("frozen_leggings", mapOf("en_us" to "Frozen Leggings", "zh_cn" to "霜冻护腿"))
-                    .props { (Item.Properties().humanoidArmor(ModArmorMaterials.FROZEN, ArmorType.LEGGINGS)
-                    )}
-                    .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB).build()
-    )
-
-    @JvmField
-    val FROZEN_BOOTS: DeferredItem<Item> = registerItem(
-            ItemConfig.Builder("frozen_boots", mapOf("en_us" to "Frozen Boots", "zh_cn" to "霜冻靴"))
-                    .props { (Item.Properties().humanoidArmor(ModArmorMaterials.FROZEN, ArmorType.BOOTS)
-                    )}
-                    .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB).build()
-    )
-
     @JvmField
     val FRIED_EGG: DeferredItem<Item> = registerItem(
             ItemConfig.Builder("fried_egg", mapOf("en_us" to "Fried Egg", "zh_cn" to "煎蛋")).props { (Item.Properties()).food(
@@ -292,6 +162,7 @@ object ModItems {
     val ENERGY_RAY_STAFF: DeferredItem<Item> = registerItem(
             ItemConfig.Builder("energy_ray_staff", mapOf("en_us" to "Energy Ray Staff", "zh_cn" to "能量射线杖")).func(::EnergyRayStaff)
                     .props { Item.Properties().useCooldown(0.7F).stacksTo(1) }
+                    .tags(listOf(ModItemTags.WEAPON_MAGIC_STAFF))
                     .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
                     .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB).build()
     )
@@ -328,6 +199,7 @@ object ModItems {
     fun registerItem(config: ItemConfig): DeferredItem<Item> {
 //        DecIsland.LOGGER.info("Registering item: {}", config.name)
         ITEM_CONFIGS.add(config)
+        ITEM_CONFIGS_BY_NAME[config.name] = config
         return ITEMS.registerItem(config.name, config.func, config.props)
     }
 
@@ -339,6 +211,11 @@ object ModItems {
     @JvmStatic
     fun getItemConfigs(): List<ItemConfig> {
         return ITEM_CONFIGS
+    }
+
+    @JvmStatic
+    fun getItemConfigByName(name: String): ItemConfig? {
+        return ITEM_CONFIGS_BY_NAME[name]
     }
 
     @JvmStatic

@@ -1,5 +1,6 @@
 package com.dec.decisland.item.custom.dart
 
+import com.dec.decisland.events.AccessoryCombatEffects
 import com.dec.decisland.entity.projectile.dart.DartDefinition
 import com.dec.decisland.entity.projectile.dart.DartEntity
 import net.minecraft.core.Direction
@@ -55,6 +56,7 @@ class Dart(
 
         player.awardStat(Stats.ITEM_USED.get(this))
         player.cooldowns.addCooldown(itemStack, definition.itemSettings.cooldownTicks)
+        AccessoryCombatEffects.onSuccessfulWeaponUse(player, itemStack)
         player.swing(hand, true)
         itemStack.consume(1, player)
         return if (level.isClientSide) InteractionResult.SUCCESS else InteractionResult.SUCCESS_SERVER

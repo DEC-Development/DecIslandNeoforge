@@ -1,6 +1,8 @@
 package com.dec.decisland.block
 
 import com.dec.decisland.DecIsland
+import com.dec.decisland.block.custom.FlowerGhostBlock
+import com.dec.decisland.block.custom.NightmareBlock
 import com.dec.decisland.block.custom.SnowPortalBlock
 import com.dec.decisland.item.ModCreativeModeTabs
 import com.dec.decisland.item.ModItems
@@ -54,6 +56,37 @@ object ModBlocks {
                 .pushReaction(PushReaction.BLOCK)
         },
         false,
+    )
+
+    @JvmField
+    val NIGHTMARE_BLOCK: DeferredBlock<NightmareBlock> = registerBlock(
+        BlockConfig.Builder("nightmare_block", mapOf("en_us" to "Nightmare Block", "zh_cn" to "梦魇方块"))
+            .func(::NightmareBlock)
+            .props {
+                BlockBehaviour.Properties.of()
+                    .strength(1.0f, 50.0f)
+                    .lightLevel { 3 }
+                    .noLootTable()
+            }
+            .shouldRegistryBlockItem(false)
+            .blockLootTableGenerator {}
+            .build(),
+    )
+
+    @JvmField
+    val FLOWER_GHOST_BLOCK: DeferredBlock<FlowerGhostBlock> = registerBlock(
+        BlockConfig.Builder("flower_ghost_block", mapOf("en_us" to "Flower Ghost Block", "zh_cn" to "花灵方块"))
+            .func(::FlowerGhostBlock)
+            .props {
+                BlockBehaviour.Properties.of()
+                    .strength(0.01f, 0.0f)
+                    .noLootTable()
+                    .noOcclusion()
+                    .pushReaction(PushReaction.DESTROY)
+            }
+            .shouldRegistryBlockItem(false)
+            .blockLootTableGenerator {}
+            .build(),
     )
 
     private fun <T : Block> registerBlock(

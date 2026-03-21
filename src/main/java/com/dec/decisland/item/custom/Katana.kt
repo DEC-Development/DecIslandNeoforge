@@ -1,6 +1,8 @@
 package com.dec.decisland.item.custom
 
 import com.dec.decisland.api.ModItemEventTrigger
+import com.dec.decisland.network.Networking
+import net.minecraft.resources.Identifier
 import net.minecraft.core.component.DataComponents
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerLevel
@@ -9,8 +11,11 @@ import net.minecraft.util.Mth
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.damagesource.DamageSource
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.attributes.Attributes
+import net.minecraft.world.entity.ai.attributes.AttributeModifier
 import net.minecraft.world.entity.decoration.ArmorStand
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
@@ -133,10 +138,10 @@ abstract class Katana(properties: Properties) : Item(properties), IItemExtension
         bonusDamage: Float,
         particleAction: ParticleAction?,
         serverAction: ServerAction?,
-    ) {
+    ): Int {
         if (level.isClientSide) {
             source.playSound(SoundEvents.PLAYER_ATTACK_SWEEP)
-            return
+            return 0
         }
 
         if (source is Player && hand != null) {
@@ -168,6 +173,7 @@ abstract class Katana(properties: Properties) : Item(properties), IItemExtension
             val aabb = AABB(pointX, pointY, pointZ, pointX, pointY, pointZ).inflate(a.toDouble())
             val entities = level.getEntitiesOfClass(LivingEntity::class.java, aabb)
             val center = Vec3(pointX, pointY, pointZ)
+            var hitCount = 0
 
             entities.forEach { livingEntity ->
                 if (livingEntity.position().distanceToSqr(center) <= a * a &&
@@ -184,6 +190,7 @@ abstract class Katana(properties: Properties) : Item(properties), IItemExtension
                     }
 
                     if (livingEntity.hurtServer(level, damageSource, finalDamage)) {
+                        hitCount++
                         val radians = Math.toRadians(source.yRot.toDouble())
                         livingEntity.knockback(
                             knockbackStrength.toDouble(),
@@ -194,7 +201,9 @@ abstract class Katana(properties: Properties) : Item(properties), IItemExtension
                     }
                 }
             }
+            return hitCount
         }
+        return 0
     }
 
     fun interface ParticleAction {
@@ -205,8 +214,68 @@ abstract class Katana(properties: Properties) : Item(properties), IItemExtension
         fun execute(serverLevel: ServerLevel, source: LivingEntity)
     }
 
+    protected fun sendBedrockKatanaEmitter(
+        serverLevel: ServerLevel,
+        particleId: Identifier,
+        x: Double,
+        y: Double,
+        z: Double,
+        radius: Double = 64.0,
+        durationTicks: Int = 6,
+    ) {
+        Networking.sendBedrockEmitterToNearby(
+            serverLevel,
+            particleId,
+            Vec3(x, y - BEDROCK_KATANA_EMITTER_Y_OFFSET, z),
+            radius,
+            durationTicks,
+        )
+    }
+
+    protected fun updateMovementSpeedModifier(
+        entity: Entity,
+        slot: EquipmentSlot?,
+        amount: Double,
+        modifierId: Identifier,
+    ) {
+        val player = entity as? Player ?: return
+        if (slot != EquipmentSlot.MAINHAND && slot != EquipmentSlot.OFFHAND) {
+            removeMovementSpeedModifier(player, modifierId)
+            return
+        }
+        if (amount == 0.0) {
+            removeMovementSpeedModifier(player, modifierId)
+            return
+        }
+
+        val attribute = player.getAttribute(Attributes.MOVEMENT_SPEED) ?: return
+        val existing = attribute.getModifier(modifierId)
+        if (existing != null && existing.amount == amount) {
+            return
+        }
+        if (existing != null) {
+            attribute.removeModifier(modifierId)
+        }
+
+        attribute.addTransientModifier(
+            AttributeModifier(
+                modifierId,
+                amount,
+                AttributeModifier.Operation.ADD_VALUE,
+            ),
+        )
+    }
+
+    protected fun removeMovementSpeedModifier(player: Player, modifierId: Identifier) {
+        val attribute = player.getAttribute(Attributes.MOVEMENT_SPEED) ?: return
+        if (attribute.getModifier(modifierId) != null) {
+            attribute.removeModifier(modifierId)
+        }
+    }
+
     companion object {
         protected const val ATTACK_COUNTER_KEY: String = "AttackCounter"
         protected const val LAST_ATTACK_TIME_KEY: String = "LastAttackTime"
+        private const val BEDROCK_KATANA_EMITTER_Y_OFFSET: Double = 1.7
     }
 }

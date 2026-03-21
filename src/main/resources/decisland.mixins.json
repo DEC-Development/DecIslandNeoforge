@@ -3,6 +3,7 @@
   "package": "com.dec.decisland.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "ItemCooldownsAccessor",
     "ThrowableProjectileMixin"
   ],
   "client": [

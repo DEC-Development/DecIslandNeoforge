@@ -2,9 +2,14 @@ package com.dec.decisland
 
 import com.dec.decisland.attachment.ModAttachments
 import com.dec.decisland.block.ModBlocks
+import com.dec.decisland.effect.ModEffects
 import com.dec.decisland.entity.ModEntities
 import com.dec.decisland.item.ModCreativeModeTabs
 import com.dec.decisland.item.ModItems
+import com.dec.decisland.item.category.Accessory
+import com.dec.decisland.item.category.Armor
+import com.dec.decisland.item.category.Food
+import com.dec.decisland.item.category.Fish
 import com.dec.decisland.item.category.Mask
 import com.dec.decisland.item.category.Material
 import com.dec.decisland.item.category.Weapon
@@ -32,6 +37,10 @@ class DecIsland(modEventBus: IEventBus, modContainer: ModContainer) {
             modEventBus.addListener(this::commonSetup)
 
             Material.load()
+            Armor.load()
+            Accessory.load()
+            Food.load()
+            Fish.load()
             Weapon.load()
             Mask.load()
             ModItems.register(modEventBus)
@@ -40,6 +49,7 @@ class DecIsland(modEventBus: IEventBus, modContainer: ModContainer) {
             ModEntities.registry(modEventBus)
             ModCreativeModeTabs.register(modEventBus)
             ModParticles.register(modEventBus)
+            ModEffects.register(modEventBus)
             ModAttachments.register(modEventBus)
             ModWorldgen.register(modEventBus)
 

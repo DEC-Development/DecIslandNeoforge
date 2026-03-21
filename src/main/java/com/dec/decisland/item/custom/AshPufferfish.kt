@@ -1,5 +1,6 @@
 package com.dec.decisland.item.custom
 
+import com.dec.decisland.events.AccessoryCombatEffects
 import com.dec.decisland.entity.projectile.ThrownAshPufferfish
 import net.minecraft.core.Direction
 import net.minecraft.core.Position
@@ -34,6 +35,7 @@ class AshPufferfish(props: Item.Properties) : Item(props), ProjectileItem {
         }
 
         player.awardStat(Stats.ITEM_USED.get(this))
+        AccessoryCombatEffects.onSuccessfulWeaponUse(player, itemStack)
         itemStack.consume(1, player)
         return InteractionResult.SUCCESS
     }

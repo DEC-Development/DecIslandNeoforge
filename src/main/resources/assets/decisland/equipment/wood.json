@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "decisland:wood"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "decisland:wood"
+      }
+    ]
+  }
+}

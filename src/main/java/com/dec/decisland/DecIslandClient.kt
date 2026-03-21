@@ -36,6 +36,8 @@ object DecIslandClientEvents {
         event.enqueueWork {
             VoidFogConfig.load(Minecraft.getInstance().resourceManager)
             ItemBlockRenderTypes.setRenderLayer(com.dec.decisland.block.ModBlocks.SNOW_PORTAL.get(), ChunkSectionLayer.TRANSLUCENT)
+            ItemBlockRenderTypes.setRenderLayer(com.dec.decisland.block.ModBlocks.NIGHTMARE_BLOCK.get(), ChunkSectionLayer.TRANSLUCENT)
+            ItemBlockRenderTypes.setRenderLayer(com.dec.decisland.block.ModBlocks.FLOWER_GHOST_BLOCK.get(), ChunkSectionLayer.CUTOUT)
         }
     }
 }

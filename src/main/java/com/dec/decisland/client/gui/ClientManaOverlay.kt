@@ -150,12 +150,19 @@ object ClientManaOverlay {
 
     @JvmStatic
     fun updateManaValues(current: Float, max: Float) {
+        val manaChanged = abs(current - cachedCurrentMana) > 0.001f || abs(max - cachedMaxMana) > 0.001f
+
         cachedCurrentMana = current
         cachedMaxMana = max
         targetCurrentMana = current
 
         if (transitionCurrentMana == 0.0f && cachedCurrentMana != 0.0f) {
             transitionCurrentMana = current
+        }
+
+        if (manaChanged) {
+            lastFullManaTime = System.currentTimeMillis()
+            isFadingOut = false
         }
 
         if (current >= max && max > 0.0f) {

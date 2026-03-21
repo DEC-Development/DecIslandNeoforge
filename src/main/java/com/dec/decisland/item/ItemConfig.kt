@@ -1,6 +1,7 @@
 package com.dec.decisland.item
 
 import com.dec.decisland.DecIsland
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.client.data.models.model.ModelTemplate
 import net.minecraft.client.data.models.model.ModelTemplates
 import net.minecraft.tags.TagKey
@@ -10,6 +11,13 @@ import java.util.function.Function
 import java.util.function.Supplier
 
 class ItemConfig private constructor(builder: Builder) {
+    enum class WeaponCooldownCategory {
+        GUN,
+        CATAPULT,
+        MAGIC_BOOK,
+        MISSILE,
+    }
+
     @JvmField
     val name: String = builder.name
 
@@ -75,9 +83,17 @@ class ItemConfig private constructor(builder: Builder) {
     companion object {
         @JvmStatic
         fun getConfig(name: String?): ItemConfig? =
-            ModItems.getItemConfigs().firstOrNull { "item.${DecIsland.MOD_ID}.${it.name}" == name }
+            when {
+                name == null -> null
+                name.startsWith("item.${DecIsland.MOD_ID}.") -> ModItems.getItemConfigByName(name.removePrefix("item.${DecIsland.MOD_ID}."))
+                else -> ModItems.getItemConfigs().firstOrNull { "item.${DecIsland.MOD_ID}.${it.name}" == name }
+            }
 
         @JvmStatic
-        fun getConfig(item: Item): ItemConfig? = getConfig(item.descriptionId)
+        fun getConfigByRegisteredName(name: String?): ItemConfig? =
+            name?.let(ModItems::getItemConfigByName)
+
+        @JvmStatic
+        fun getConfig(item: Item): ItemConfig? = getConfigByRegisteredName(BuiltInRegistries.ITEM.getKey(item).path) ?: getConfig(item.descriptionId)
     }
 }

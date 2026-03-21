@@ -9,7 +9,20 @@ import com.dec.decisland.entity.projectile.dart.DartDefinition
 import com.dec.decisland.entity.projectile.dart.ModDarts
 import com.dec.decisland.item.custom.AbsoluteZero
 import com.dec.decisland.item.custom.BambooKatana
+import com.dec.decisland.item.custom.BloodMare
+import com.dec.decisland.item.custom.FireflyBottle
+import com.dec.decisland.item.custom.FrozenBall
+import com.dec.decisland.item.custom.GasBomb
 import com.dec.decisland.item.custom.HardBambooKatana
+import com.dec.decisland.item.custom.IllagerSword
+import com.dec.decisland.item.custom.MindController
+import com.dec.decisland.item.custom.MuddyBall
+import com.dec.decisland.item.custom.NightSword
+import com.dec.decisland.item.custom.Nightmare
+import com.dec.decisland.item.custom.SmokeBomb
+import com.dec.decisland.item.custom.StickyAsh
+import com.dec.decisland.item.custom.TheBlade
+import com.dec.decisland.item.custom.ThrowableBomb
 import com.dec.decisland.item.custom.dart.Dart
 import com.dec.decisland.lang.Lang
 import com.dec.decisland.item.gun.EverlastingWinterFlintlock
@@ -21,14 +34,27 @@ import com.dec.decisland.item.gun.LavaFlintlock
 import com.dec.decisland.item.gun.ShortFlintlock
 import com.dec.decisland.item.gun.StarFlintlock
 import com.dec.decisland.item.gun.StormFlintlock
+import com.dec.decisland.tag.ModItemTags
 import net.minecraft.client.data.models.model.ModelTemplates
+import net.minecraft.tags.TagKey
 import net.minecraft.world.food.FoodProperties
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.Items.STICK
+import net.minecraft.world.item.Items
+import net.minecraft.world.item.ToolMaterial
 import net.minecraft.world.item.component.Consumables
 import net.neoforged.neoforge.registries.DeferredItem
+import java.util.function.Supplier
 
 object Weapon {
+    private val missileWeaponTags: List<TagKey<Item>> = listOf(ModItemTags.WEAPON_MISSILE)
+    private val dartWeaponTags: List<TagKey<Item>> = listOf(ModItemTags.WEAPON_MISSILE, ModItemTags.WEAPON_THROWN_DART)
+    private val sundriesMissileWeaponTags: List<TagKey<Item>> = listOf(ModItemTags.WEAPON_MISSILE, ModItemTags.WEAPON_THROWN_SUNDRIES)
+    private val gunWeaponTags: List<TagKey<Item>> = listOf(ModItemTags.WEAPON_GUN)
+    private val staffWeaponTags: List<TagKey<Item>> = listOf(ModItemTags.WEAPON_MAGIC_STAFF)
+    private val swordWeaponTags: List<TagKey<Item>> = listOf(ModItemTags.WEAPON_MELEE_SWORD)
+    private val katanaWeaponTags: List<TagKey<Item>> = listOf(ModItemTags.WEAPON_MELEE_KATANA)
+
     @JvmField
     val AMETHYST_DART: DeferredItem<Item> = registerDart(ModDarts.AMETHYST_DART)
 
@@ -86,10 +112,98 @@ object Weapon {
     )
 
     @JvmField
+    val STICKY_ASH: DeferredItem<Item> = ModItems.registerItem(
+        ItemConfig.Builder("sticky_ash", Lang.item.get("sticky_ash"))
+            .func(::StickyAsh)
+            .props { Item.Properties().stacksTo(64).useCooldown(0.05f) }
+            .tags(sundriesMissileWeaponTags)
+            .customProp(CustomItemProperties.Builder().burnTime(20).build())
+            .modelTemplate(ModelTemplates.FLAT_ITEM)
+            .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
+            .build(),
+    )
+
+    @JvmField
+    val FROZEN_BALL: DeferredItem<Item> = ModItems.registerItem(
+        ItemConfig.Builder("frozen_ball", Lang.item.get("frozen_ball"))
+            .func(::FrozenBall)
+            .tags(sundriesMissileWeaponTags)
+            .modelTemplate(ModelTemplates.FLAT_ITEM)
+            .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
+            .build(),
+    )
+
+    @JvmField
+    val MIND_CONTROLLER: DeferredItem<Item> = ModItems.registerItem(
+        ItemConfig.Builder("mind_controller", Lang.item.get("mind_controller"))
+            .func(::MindController)
+            .tags(sundriesMissileWeaponTags)
+            .modelTemplate(ModelTemplates.FLAT_ITEM)
+            .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
+            .build(),
+    )
+
+    @JvmField
+    val MUDDY_BALL: DeferredItem<Item> = ModItems.registerItem(
+        ItemConfig.Builder("muddy_ball", Lang.item.get("muddy_ball"))
+            .func(::MuddyBall)
+            .props { Item.Properties().stacksTo(64).useCooldown(1.0f) }
+            .tags(missileWeaponTags)
+            .modelTemplate(ModelTemplates.FLAT_ITEM)
+            .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
+            .build(),
+    )
+
+    @JvmField
+    val FIREFLY_BOTTLE: DeferredItem<Item> = ModItems.registerItem(
+        ItemConfig.Builder("firefly_bottle", Lang.item.get("firefly_bottle"))
+            .func(::FireflyBottle)
+            .props { Item.Properties().stacksTo(64) }
+            .tags(missileWeaponTags)
+            .modelTemplate(ModelTemplates.FLAT_ITEM)
+            .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
+            .build(),
+    )
+
+    @JvmField
+    val SMOKE_BOMB: DeferredItem<Item> = ModItems.registerItem(
+        ItemConfig.Builder("smoke_bomb", Lang.item.get("smoke_bomb"))
+            .func(::SmokeBomb)
+            .props { Item.Properties().stacksTo(64).useCooldown(3.0f) }
+            .tags(missileWeaponTags)
+            .modelTemplate(ModelTemplates.FLAT_ITEM)
+            .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
+            .build(),
+    )
+
+    @JvmField
+    val GAS_BOMB: DeferredItem<Item> = ModItems.registerItem(
+        ItemConfig.Builder("gas_bomb", Lang.item.get("gas_bomb"))
+            .func(::GasBomb)
+            .props { Item.Properties().stacksTo(64).useCooldown(4.0f) }
+            .tags(sundriesMissileWeaponTags)
+            .modelTemplate(ModelTemplates.FLAT_ITEM)
+            .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
+            .build(),
+    )
+
+    @JvmField
+    val THROWABLE_BOMB: DeferredItem<Item> = ModItems.registerItem(
+        ItemConfig.Builder("throwable_bomb", Lang.item.get("throwable_bomb"))
+            .func(::ThrowableBomb)
+            .props { Item.Properties().stacksTo(64).useCooldown(1.2f) }
+            .tags(sundriesMissileWeaponTags)
+            .modelTemplate(ModelTemplates.FLAT_ITEM)
+            .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
+            .build(),
+    )
+
+    @JvmField
     val FLINTLOCK: DeferredItem<Item> = ModItems.registerItem(
         ItemConfig.Builder("flintlock", Lang.item.get("flintlock"))
             .func(::Flintlock)
             .props { Item.Properties().stacksTo(1).durability(230).enchantable(13) }
+            .tags(gunWeaponTags)
             .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
             .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
             .build(),
@@ -100,6 +214,7 @@ object Weapon {
         ItemConfig.Builder("flintlock_pro", Lang.item.get("flintlock_pro"))
             .func(::FlintlockPro)
             .props { Item.Properties().stacksTo(1).durability(784).enchantable(14) }
+            .tags(gunWeaponTags)
             .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
             .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
             .build(),
@@ -110,6 +225,7 @@ object Weapon {
         ItemConfig.Builder("short_flintlock", Lang.item.get("short_flintlock"))
             .func(::ShortFlintlock)
             .props { Item.Properties().stacksTo(1).durability(120).enchantable(10) }
+            .tags(gunWeaponTags)
             .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
             .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
             .build(),
@@ -120,6 +236,7 @@ object Weapon {
         ItemConfig.Builder("everlasting_winter_flintlock", Lang.item.get("everlasting_winter_flintlock"))
             .func(::EverlastingWinterFlintlock)
             .props { Item.Properties().stacksTo(1).durability(1668).enchantable(24) }
+            .tags(gunWeaponTags)
             .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
             .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
             .build(),
@@ -130,6 +247,7 @@ object Weapon {
         ItemConfig.Builder("ghost_flintlock", Lang.item.get("ghost_flintlock"))
             .func(::GhostFlintlock)
             .props { Item.Properties().stacksTo(1).durability(3759).enchantable(18) }
+            .tags(gunWeaponTags)
             .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
             .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
             .build(),
@@ -140,6 +258,7 @@ object Weapon {
         ItemConfig.Builder("lava_flintlock", Lang.item.get("lava_flintlock"))
             .func(::LavaFlintlock)
             .props { Item.Properties().stacksTo(1).durability(968).enchantable(11) }
+            .tags(gunWeaponTags)
             .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
             .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
             .build(),
@@ -150,6 +269,7 @@ object Weapon {
         ItemConfig.Builder("star_flintlock", Lang.item.get("star_flintlock"))
             .func(::StarFlintlock)
             .props { Item.Properties().stacksTo(1).durability(3855).enchantable(17) }
+            .tags(gunWeaponTags)
             .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
             .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
             .build(),
@@ -160,6 +280,7 @@ object Weapon {
         ItemConfig.Builder("storm_flintlock", Lang.item.get("storm_flintlock"))
             .func(::StormFlintlock)
             .props { Item.Properties().stacksTo(1).durability(394).enchantable(26) }
+            .tags(gunWeaponTags)
             .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
             .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
             .build(),
@@ -170,6 +291,7 @@ object Weapon {
         ItemConfig.Builder("absolute_zero", Lang.item.get("absolute_zero"))
             .func(::AbsoluteZero)
             .props { Item.Properties().sword(ModToolMaterial.ABSOLUTE_ZERO, 3.0f, -2.4f).useCooldown(3.0f).stacksTo(1) }
+            .tags(swordWeaponTags)
             .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
             .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
             .build(),
@@ -180,6 +302,18 @@ object Weapon {
         ItemConfig.Builder("bamboo_katana", Lang.item.get("bamboo_katana"))
             .func(::BambooKatana)
             .props { Item.Properties().sword(ModToolMaterial.BAMBOO, 2.0f, -2.4f).useCooldown(2.5f).stacksTo(1) }
+            .tags(katanaWeaponTags)
+            .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
+            .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
+            .build(),
+    )
+
+    @JvmField
+    val BLOOD_MARE: DeferredItem<Item> = ModItems.registerItem(
+        ItemConfig.Builder("blood_mare", Lang.item.get("blood_mare"))
+            .func(::BloodMare)
+            .props { Item.Properties().sword(ModToolMaterial.BLOOD_MARE, 2.0f, -2.4f).useCooldown(2.0f).stacksTo(1) }
+            .tags(katanaWeaponTags)
             .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
             .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
             .build(),
@@ -194,6 +328,7 @@ object Weapon {
                     .sword(ModToolMaterial.CANDY_CANE, 2.0f, -2.0f)
                     .stacksTo(1)
             }
+            .tags(swordWeaponTags)
             .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
             .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
             .build(),
@@ -204,7 +339,52 @@ object Weapon {
         ItemConfig.Builder("hard_bamboo_katana", Lang.item.get("hard_bamboo_katana"))
             .func(::HardBambooKatana)
             .props { Item.Properties().sword(ModToolMaterial.HARD_BAMBOO, 2.0f, -2.4f).useCooldown(2.2f).stacksTo(1) }
+            .tags(katanaWeaponTags)
             .customProp(CustomItemProperties.Builder().burnTime(8).build())
+            .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
+            .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
+            .build(),
+    )
+
+    @JvmField
+    val ILLAGER_SWORD: DeferredItem<Item> = ModItems.registerItem(
+        ItemConfig.Builder("illager_sword", Lang.item.get("illager_sword"))
+            .func(::IllagerSword)
+            .props { Item.Properties().sword(ModToolMaterial.ILLAGER_SWORD, 2.0f, -2.4f).useCooldown(2.3f).stacksTo(1) }
+            .tags(katanaWeaponTags)
+            .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
+            .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
+            .build(),
+    )
+
+    @JvmField
+    val NIGHT_SWORD: DeferredItem<Item> = ModItems.registerItem(
+        ItemConfig.Builder("night_sword", Lang.item.get("night_sword"))
+            .func(::NightSword)
+            .props { Item.Properties().sword(ModToolMaterial.NIGHT_SWORD, 7.0f, -2.4f).useCooldown(2.0f).stacksTo(1) }
+            .tags(swordWeaponTags)
+            .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
+            .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
+            .build(),
+    )
+
+    @JvmField
+    val NIGHTMARE: DeferredItem<Item> = ModItems.registerItem(
+        ItemConfig.Builder("nightmare", Lang.item.get("nightmare"))
+            .func(::Nightmare)
+            .props { Item.Properties().stacksTo(1).durability(3442).useCooldown(0.5f).enchantable(27) }
+            .tags(staffWeaponTags)
+            .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
+            .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
+            .build(),
+    )
+
+    @JvmField
+    val THE_BLADE: DeferredItem<Item> = ModItems.registerItem(
+        ItemConfig.Builder("the_blade", Lang.item.get("the_blade"))
+            .func(::TheBlade)
+            .props { Item.Properties().sword(ModToolMaterial.THE_BLADE, 2.0f, -2.4f).useCooldown(2.0f).stacksTo(1) }
+            .tags(katanaWeaponTags)
             .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
             .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
             .build(),
@@ -219,6 +399,7 @@ object Weapon {
                     .usingConvertsTo(STICK)
                     .sword(ModToolMaterial.HARD_LOLLIPOP, 3.0f, -3.0f)
             }
+            .tags(swordWeaponTags)
             .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
             .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
             .build(),
@@ -228,6 +409,7 @@ object Weapon {
     val CACTUS_SWORD: DeferredItem<Item> = ModItems.registerItem(
         ItemConfig.Builder("cactus_sword", Lang.item.get("cactus_sword"))
             .props { Item.Properties().sword(ModToolMaterial.CACTUS, 2.0f, -2.7f) }
+            .tags(swordWeaponTags)
             .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
             .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
             .build(),
@@ -237,20 +419,175 @@ object Weapon {
     val CORRUPTED_SWORD: DeferredItem<Item> = ModItems.registerItem(
         ItemConfig.Builder("corrupted_sword", Lang.item.get("corrupted_sword"))
             .props { Item.Properties().sword(ModToolMaterial.CORRUPTED, 2.0f, -2.4f) }
+            .tags(swordWeaponTags)
             .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
             .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
             .build(),
+    )
+
+    @JvmField
+    val AMETHYST_SWORD: DeferredItem<Item> = registerSimpleSword(
+        "amethyst_sword",
+        "Amethyst Sword",
+        "紫水晶剑",
+        ModToolMaterial.AMETHYST_SWORD,
+        repairItem = Supplier { Items.AMETHYST_SHARD },
+    )
+
+    @JvmField
+    val BONE_SWORD: DeferredItem<Item> = registerSimpleSword(
+        "bone_sword",
+        "Bone Sword",
+        "骨刃",
+        ModToolMaterial.BONE_SWORD,
+        repairItem = Supplier { Items.BONE },
+    )
+
+    @JvmField
+    val CORAL_SWORD: DeferredItem<Item> = registerSimpleSword(
+        "coral_sword",
+        "Coral Sword",
+        "珊瑚剑",
+        ModToolMaterial.CORAL_SWORD,
+        repairItem = Supplier { Material.CORAL_INGOT.get() },
+    )
+
+    @JvmField
+    val EMERALD_SWORD: DeferredItem<Item> = registerSimpleSword(
+        "emerald_sword",
+        "Emerald Sword",
+        "绿宝石剑",
+        ModToolMaterial.EMERALD_SWORD,
+        repairItem = Supplier { Items.EMERALD },
+    )
+
+    @JvmField
+    val LAVA_SWORD: DeferredItem<Item> = registerSimpleSword(
+        "lava_sword",
+        "Lava Sword",
+        "岩浆之剑",
+        ModToolMaterial.LAVA_SWORD,
+        repairItem = Supplier { Material.LAVA_INGOT.get() },
+    )
+
+    @JvmField
+    val STEEL_SWORD: DeferredItem<Item> = registerSimpleSword(
+        "steel_sword",
+        "Steel Sword",
+        "钢剑",
+        ModToolMaterial.STEEL_SWORD,
+        repairItem = Supplier { Material.STEEL_INGOT.get() },
+    )
+
+    @JvmField
+    val TURTLE_SWORD: DeferredItem<Item> = registerSimpleSword(
+        "turtle_sword",
+        "Turtle Sword",
+        "龟刃剑",
+        ModToolMaterial.TURTLE_SWORD,
+        repairItem = Supplier { Items.TURTLE_SCUTE },
+    )
+
+    @JvmField
+    val SCIMITAR: DeferredItem<Item> = registerSimpleSword(
+        "scimitar",
+        "Scimitar",
+        "弯刀",
+        ModToolMaterial.SCIMITAR,
+        attackSpeed = -2.2f,
+        repairItem = Supplier { Items.IRON_INGOT },
+    )
+
+    @JvmField
+    val CUDGEL: DeferredItem<Item> = registerSimpleSword(
+        "cudgel",
+        "Cudgel",
+        "木棒",
+        ModToolMaterial.CUDGEL,
+        attackSpeed = -2.8f,
+    )
+
+    @JvmField
+    val FANG_MACE: DeferredItem<Item> = registerSimpleSword(
+        "fang_mace",
+        "Fang Mace",
+        "狼牙棒",
+        ModToolMaterial.FANG_MACE,
+        attackSpeed = -2.8f,
+    )
+
+    @JvmField
+    val SHARP_CORAL: DeferredItem<Item> = registerSimpleSword(
+        "sharp_coral",
+        "Sharp Coral",
+        "尖锐珊瑚",
+        ModToolMaterial.SHARP_CORAL,
+        attackSpeed = -2.1f,
+        repairItem = Supplier { Material.CORAL_INGOT.get() },
+    )
+
+    @JvmField
+    val BLIZZARD_SWORD: DeferredItem<Item> = registerSimpleSword(
+        "blizzard_sword",
+        "Blizzard Sword",
+        "暴雪之剑",
+        ModToolMaterial.BLIZZARD_SWORD,
+        repairItem = Supplier { Material.ICE_INGOT.get() },
+    )
+
+    @JvmField
+    val ICE_SWORD: DeferredItem<Item> = registerSimpleSword(
+        "ice_sword",
+        "Ice Sword",
+        "冰棱",
+        ModToolMaterial.ICE_SWORD,
+        repairItem = Supplier { Material.ICE_INGOT.get() },
+    )
+
+    @JvmField
+    val LAPIS_SWORD: DeferredItem<Item> = registerSimpleSword(
+        "lapis_sword",
+        "Lapis Sword",
+        "青金石剑",
+        ModToolMaterial.LAPIS_SWORD,
+        repairItem = Supplier { Items.LAPIS_LAZULI },
     )
 
     @JvmStatic
     fun load() {
     }
 
+    private fun registerSimpleSword(
+        name: String,
+        enUs: String,
+        zhCn: String,
+        material: ToolMaterial,
+        attackDamage: Float = 2.0f,
+        attackSpeed: Float = -2.4f,
+        repairItem: Supplier<Item>? = null,
+        tags: List<TagKey<Item>> = swordWeaponTags,
+    ): DeferredItem<Item> =
+        ModItems.registerItem(
+            ItemConfig.Builder(name, mapOf("en_us" to enUs, "zh_cn" to zhCn))
+                .props {
+                    var properties = Item.Properties().sword(material, attackDamage, attackSpeed).stacksTo(1)
+                    if (repairItem != null) {
+                        properties = properties.repairable(repairItem.get())
+                    }
+                    properties
+                }
+                .tags(tags)
+                .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
+                .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
+                .build(),
+        )
+
     private fun registerDart(definition: DartDefinition): DeferredItem<Item> =
         ModItems.registerItem(
             ItemConfig.Builder(definition.path, Lang.item.get(definition.path))
                 .func(Dart.factory(definition))
                 .props { Item.Properties().useCooldown(definition.itemSettings.cooldownTicks / 20.0f) }
+                .tags(dartWeaponTags)
                 .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
                 .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
                 .build(),

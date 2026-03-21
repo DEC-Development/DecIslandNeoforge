@@ -1,8 +1,9 @@
 package com.dec.decisland.item.custom
 
-import com.dec.decisland.particles.ModParticles
+import com.dec.decisland.DecIsland
 import net.minecraft.core.component.DataComponents
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.component.CustomData
@@ -17,7 +18,7 @@ open class BambooKatana(properties: Properties) : Katana(properties) {
     override fun getUseSkillBreakAmount(): Int = 1
 
     override fun useSpawnParticle(serverLevel: ServerLevel, x: Double, y: Double, z: Double) {
-        serverLevel.sendParticles(ModParticles.BAMBOO_KATANA_PARTICLE.get(), x, y, z, 1, 0.0, 0.0, 0.0, 0.0)
+        sendBedrockKatanaEmitter(serverLevel, BAMBOO_KATANA_PARTICLE_ID, x, y, z)
     }
 
     override fun getAttackSkillRadius(): Float = 1.2f
@@ -29,7 +30,7 @@ open class BambooKatana(properties: Properties) : Katana(properties) {
     override fun getAttackSkillBonusDamage(): Float = 3.0f
 
     override fun attackSpawnParticle(serverLevel: ServerLevel, x: Double, y: Double, z: Double) {
-        serverLevel.sendParticles(ModParticles.BAMBOO_KATANA_PARTICLE.get(), x, y, z, 1, 0.0, 0.0, 0.0, 0.0)
+        sendBedrockKatanaEmitter(serverLevel, BAMBOO_KATANA_PARTICLE_ID, x, y, z)
     }
 
     override fun onAttackTriggerSweep(stack: ItemStack): Boolean {
@@ -41,5 +42,10 @@ open class BambooKatana(properties: Properties) : Katana(properties) {
             0
         }
         return attackCount == getMaxAttackCount()
+    }
+
+    companion object {
+        private val BAMBOO_KATANA_PARTICLE_ID: Identifier =
+            Identifier.fromNamespaceAndPath(DecIsland.MOD_ID, "bamboo_katana_particle")
     }
 }

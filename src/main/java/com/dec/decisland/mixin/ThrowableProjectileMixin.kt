@@ -14,7 +14,7 @@ abstract class ThrowableProjectileMixin {
         ordinal = 0,
     )
     private fun modifyWaterInertia(original: Float): Float =
-        if (this is CustomInertia) this.waterInertia else original
+        if (this is CustomInertia) resolveInertia(this.waterInertia, original) else original
 
     @ModifyVariable(
         method = ["applyInertia"],
@@ -22,5 +22,15 @@ abstract class ThrowableProjectileMixin {
         ordinal = 0,
     )
     private fun modifyAirInertia(original: Float): Float =
-        if (this is CustomInertia) this.airInertia else original
+        if (this is CustomInertia) resolveInertia(this.airInertia, original) else original
+
+    private fun resolveInertia(configured: Float, vanilla: Float): Float {
+        if (configured <= 1.0f) {
+            return configured
+        }
+
+        // Bedrock projectile inertia values above 1 mean "retain more velocity",
+        // not "multiply velocity by >1 each tick" like vanilla would.
+        return (vanilla + ((1.0f - vanilla) * (1.0f - (1.0f / configured)))).coerceAtMost(0.9999f)
+    }
 }

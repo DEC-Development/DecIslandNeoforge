@@ -2,7 +2,7 @@ package com.dec.decisland.entity.projectile
 
 import com.dec.decisland.api.CustomInertia
 import com.dec.decisland.entity.ModEntities
-import com.dec.decisland.item.ModItems
+import com.dec.decisland.item.category.Fish
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
@@ -25,7 +25,7 @@ class ThrownAshPufferfish(entityType: EntityType<ThrownAshPufferfish>, level: Le
         setItem(item)
     }
 
-    override fun getDefaultItem(): Item = ModItems.ASH_PUFFERFISH.get()
+    override fun getDefaultItem(): Item = Fish.ASH_PUFFERFISH.get()
 
     override fun onHitEntity(result: EntityHitResult) {
         super.onHitEntity(result)

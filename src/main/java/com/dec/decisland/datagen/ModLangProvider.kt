@@ -2,6 +2,7 @@ package com.dec.decisland.datagen
 
 import com.dec.decisland.DecIsland
 import com.dec.decisland.block.ModBlocks
+import com.dec.decisland.effect.ModEffects
 import com.dec.decisland.item.ModCreativeModeTabs
 import com.dec.decisland.item.ModItems
 import net.minecraft.data.PackOutput
@@ -31,6 +32,11 @@ abstract class ModLangProvider protected constructor(
         ModCreativeModeTabs.getTabConfigs().forEach { config ->
             val translation = config.langMap?.get(locale) ?: return@forEach
             add("itemGroup.${config.name}", translation)
+        }
+
+        when (locale) {
+            "en_us" -> add(ModEffects.DIZZINESS.get(), "Dizziness")
+            "zh_cn" -> add(ModEffects.DIZZINESS.get(), "眩晕")
         }
     }
 }

@@ -3,7 +3,8 @@ package com.dec.decisland.mana
 import com.dec.decisland.DecIsland
 import com.dec.decisland.attachment.ModAttachments
 import com.dec.decisland.network.ManaSyncPayload
-import net.minecraft.core.particles.ParticleTypes
+import com.dec.decisland.network.Networking
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.player.Player
@@ -24,6 +25,10 @@ object ManaSystem {
     private const val G_MIN: Double = (1 - K1) / K2
     private const val MAGICGAIN_MAP_K: Double = 1.05
     private const val MAGICGAIN_MAP_K2: Double = (-G_MIN + 1) / MAGICGAIN_MAP_K
+    private val MAGIC_INCREASE_PARTICLE_ID: Identifier =
+        Identifier.fromNamespaceAndPath(DecIsland.MOD_ID, "magic_increase_particle")
+    private val MAGIC_DECREASE_PARTICLE_ID: Identifier =
+        Identifier.fromNamespaceAndPath(DecIsland.MOD_ID, "magic_decrease_particle")
 
     @SubscribeEvent
     @JvmStatic
@@ -41,9 +46,6 @@ object ManaSystem {
         if (!player.level().isClientSide) {
             val maxMana = player.getData(ModAttachments.MAX_MANA.get())
             val currentMana = player.getData(ModAttachments.CURRENT_MANA.get())
-            if (currentMana > maxMana) {
-                player.setData(ModAttachments.CURRENT_MANA.get(), maxMana)
-            }
             player.setData(ModAttachments.PREV_MAGIC.get(), currentMana)
             player.setData(ModAttachments.MAGIC_GAP.get(), WAIT_TICK)
             PacketDistributor.sendToPlayer(player as ServerPlayer, ManaSyncPayload(currentMana, maxMana))
@@ -105,8 +107,8 @@ object ManaSystem {
     private fun spawnManaParticle(player: Player, type: String) {
         val level = player.level()
         if (level is ServerLevel) {
-            val particle = if (type == "increase") ParticleTypes.HAPPY_VILLAGER else ParticleTypes.SMOKE
-            level.sendParticles(particle, player.x, player.y + 1.5, player.z, 5, 0.2, 0.2, 0.2, 0.1)
+            val particleId = if (type == "increase") MAGIC_INCREASE_PARTICLE_ID else MAGIC_DECREASE_PARTICLE_ID
+            Networking.sendBedrockEmitterToNearby(level, particleId, player.position(), 64.0, 2)
         }
     }
 }

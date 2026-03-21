@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "decisland:lava"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "decisland:lava"
+      }
+    ]
+  }
+}

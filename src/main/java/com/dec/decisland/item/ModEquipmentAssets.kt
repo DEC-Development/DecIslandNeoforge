@@ -14,7 +14,34 @@ object ModEquipmentAssets {
     val AMETHYST: ResourceKey<EquipmentAsset> = createId("amethyst")
 
     @JvmField
+    val CRYING: ResourceKey<EquipmentAsset> = createId("crying")
+
+    @JvmField
+    val DIRT: ResourceKey<EquipmentAsset> = createId("dirt")
+
+    @JvmField
+    val EMERALD: ResourceKey<EquipmentAsset> = createId("emerald")
+
+    @JvmField
+    val EVERLASTING_WINTER: ResourceKey<EquipmentAsset> = createId("everlasting_winter")
+
+    @JvmField
     val FROZEN: ResourceKey<EquipmentAsset> = createId("frozen")
+
+    @JvmField
+    val LAVA: ResourceKey<EquipmentAsset> = createId("lava")
+
+    @JvmField
+    val RUPERT: ResourceKey<EquipmentAsset> = createId("rupert")
+
+    @JvmField
+    val STEEL: ResourceKey<EquipmentAsset> = createId("steel")
+
+    @JvmField
+    val STONE: ResourceKey<EquipmentAsset> = createId("stone")
+
+    @JvmField
+    val WOOD: ResourceKey<EquipmentAsset> = createId("wood")
 
     private fun createId(name: String): ResourceKey<EquipmentAsset> =
         ResourceKey.create(EquipmentAssets.ROOT_ID, Identifier.fromNamespaceAndPath(DecIsland.MOD_ID, name))
