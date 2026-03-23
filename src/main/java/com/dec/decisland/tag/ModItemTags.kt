@@ -8,34 +8,43 @@ import net.minecraft.world.item.Item
 
 object ModItemTags {
     @JvmField
-    val WEAPON_GUN: TagKey<Item> = create("weapon_gun")
+    val RANGE_WEAPON: TagKey<Item> = create("range_weapon")
 
     @JvmField
-    val WEAPON_CATAPULT: TagKey<Item> = create("weapon_catapult")
+    val MAGIC_WEAPON: TagKey<Item> = create("magic_weapon")
 
     @JvmField
-    val WEAPON_MAGIC_BOOK: TagKey<Item> = create("weapon_magic_book")
+    val THROWN_WEAPON: TagKey<Item> = create("thrown_weapon")
 
     @JvmField
-    val WEAPON_MISSILE: TagKey<Item> = create("weapon_missile")
+    val MELEE_WEAPON: TagKey<Item> = create("melee_weapon")
 
     @JvmField
-    val WEAPON_THROWN_DART: TagKey<Item> = create("weapon_thrown_dart")
+    val GUN: TagKey<Item> = create("gun")
 
     @JvmField
-    val WEAPON_THROWN_SUNDRIES: TagKey<Item> = create("weapon_thrown_sundries")
+    val CATAPULT: TagKey<Item> = create("catapult")
 
     @JvmField
-    val WEAPON_MAGIC_STAFF: TagKey<Item> = create("weapon_magic_staff")
+    val MAGIC_BOOK: TagKey<Item> = create("magic_book")
 
     @JvmField
-    val WEAPON_MELEE_SWORD: TagKey<Item> = create("weapon_melee_sword")
+    val STAFF: TagKey<Item> = create("staff")
 
     @JvmField
-    val WEAPON_MELEE_KATANA: TagKey<Item> = create("weapon_melee_katana")
+    val DART: TagKey<Item> = create("dart")
 
     @JvmField
-    val WEAPON_MELEE_AXE: TagKey<Item> = create("weapon_melee_axe")
+    val SUNDRIES: TagKey<Item> = create("sundries")
+
+    @JvmField
+    val SWORD: TagKey<Item> = create("sword")
+
+    @JvmField
+    val KATANA: TagKey<Item> = create("katana")
+
+    @JvmField
+    val AXE: TagKey<Item> = create("axe")
 
     @JvmField
     val REPAIRS_AMETHYST_ARMOR: TagKey<Item> = create("repairs_amethyst_armor")

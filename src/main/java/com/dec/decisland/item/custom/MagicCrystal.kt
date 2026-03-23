@@ -1,6 +1,8 @@
 package com.dec.decisland.item.custom
 
 class MagicCrystal(properties: Properties) : ManaGainBoostItem(properties) {
+    override fun isGlint(): Boolean = true
+
     override fun getMinAttachmentLevel(): Float = 0.0f
 
     override fun getMaxAttachmentLevel(): Float = 19.0f

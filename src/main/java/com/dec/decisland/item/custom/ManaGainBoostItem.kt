@@ -14,6 +14,8 @@ open class ManaGainBoostItem(properties: Properties) : Item(properties) {
 
     open fun getMaxAttachmentLevel(): Float = 19.0f
 
+    open fun isGlint(): Boolean = false
+
     open fun getAttachment(): AttachmentType<Float> = ModAttachments.MANA_GAIN_LEVEL.get()
 
     open fun getNutrition(): Int = 0
@@ -21,6 +23,8 @@ open class ManaGainBoostItem(properties: Properties) : Item(properties) {
     open fun getSaturationModifier(): Float = 0.0f
 
     open fun getBoostValue(): Float = 1.0f
+
+    override fun isFoil(stack: ItemStack): Boolean = isGlint() || super.isFoil(stack)
 
     override fun finishUsingItem(stack: ItemStack, level: Level, livingEntity: LivingEntity): ItemStack {
         if (livingEntity is Player && !level.isClientSide) {

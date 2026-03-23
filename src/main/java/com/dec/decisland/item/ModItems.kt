@@ -63,7 +63,7 @@ object ModItems {
     @JvmField
     val AMETHYST_AXE: DeferredItem<Item> = registerItem(
             ItemConfig.Builder("amethyst_axe", mapOf("en_us" to "Amethyst Axe", "zh_cn" to "紫水晶斧")).func { p -> AxeItem(ToolMaterial.DIAMOND, 0.0F, -3.2F, p)}
-                    .tags(listOf(ModItemTags.WEAPON_MELEE_AXE))
+                    .tags(listOf(ModItemTags.MELEE_WEAPON, ModItemTags.AXE))
                     .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
                     .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM).build()
     )
@@ -162,36 +162,97 @@ object ModItems {
     val ENERGY_RAY_STAFF: DeferredItem<Item> = registerItem(
             ItemConfig.Builder("energy_ray_staff", mapOf("en_us" to "Energy Ray Staff", "zh_cn" to "能量射线杖")).func(::EnergyRayStaff)
                     .props { Item.Properties().useCooldown(0.7F).stacksTo(1) }
-                    .tags(listOf(ModItemTags.WEAPON_MAGIC_STAFF))
+                    .tags(listOf(ModItemTags.MAGIC_WEAPON, ModItemTags.STAFF))
                     .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
                     .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB).build()
     )
 
     @JvmField
-    val BLUE_GEM: DeferredItem<Item> = registerItem(
-            ItemConfig.Builder("blue_gem", mapOf("en_us" to "Blue Gem", "zh_cn" to "蓝宝石")).func(::BlueGem)
-                    .props { (Item.Properties()).food(
-                            FoodProperties(0, 0.0f, true),
-                            Consumables.defaultFood().build()
-                    )}.creativeTab(ModCreativeModeTabs.DECISLAND_FOODS_TAB).build()
+    val BLUE_GEM: DeferredItem<Item> = registerBoostConsumable(
+            "blue_gem",
+            mapOf("en_us" to "Blue Gem", "zh_cn" to "蓝宝石"),
+            ::BlueGem,
+            cooldown = 0.3f,
     )
 
     @JvmField
-    val RED_GEM: DeferredItem<Item> = registerItem(
-            ItemConfig.Builder("red_gem", mapOf("en_us" to "Red Gem", "zh_cn" to "红宝石")).func(::RedGem)
-                    .props { (Item.Properties()).food(
-                            FoodProperties(0, 0.0f, true),
-                            Consumables.defaultFood().build()
-                    )}.creativeTab(ModCreativeModeTabs.DECISLAND_FOODS_TAB).build()
+    val RED_GEM: DeferredItem<Item> = registerBoostConsumable(
+            "red_gem",
+            mapOf("en_us" to "Red Gem", "zh_cn" to "红宝石"),
+            ::RedGem,
+            cooldown = 0.3f,
     )
 
     @JvmField
-    val MAGIC_CRYSTAL: DeferredItem<Item> = registerItem(
-            ItemConfig.Builder("magic_crystal", mapOf("en_us" to "Magic Crystal", "zh_cn" to "魔法水晶")).func(::MagicCrystal)
-                    .props { (Item.Properties()).food(
-                            FoodProperties(0, 0.0f, true),
-                            Consumables.defaultFood().build()
-                    )}.creativeTab(ModCreativeModeTabs.DECISLAND_FOODS_TAB).build()
+    val MAGIC_CRYSTAL: DeferredItem<Item> = registerBoostConsumable(
+            "magic_crystal",
+            mapOf("en_us" to "Magic Crystal", "zh_cn" to "魔法水晶"),
+            ::MagicCrystal,
+            cooldown = 0.3f,
+    )
+
+    @JvmField
+    val CRYSTAL_NUCLEUS: DeferredItem<Item> = registerManaRestoreItem(
+            "crystal_nucleus",
+            mapOf("en_us" to "Crystal Nucleus", "zh_cn" to "魔法晶核"),
+            ::CrystalNucleus,
+            cooldown = 3.0f,
+    )
+
+    @JvmField
+    val DIAMOND_CRYSTAL_NUCLEUS: DeferredItem<Item> = registerManaRestoreItem(
+            "diamond_crystal_nucleus",
+            mapOf("en_us" to "Diamond Crystal Nucleus", "zh_cn" to "钻石晶核"),
+            ::DiamondCrystalNucleus,
+            cooldown = 3.0f,
+    )
+
+    @JvmField
+    val ENDER_CRYSTAL_NUCLEUS: DeferredItem<Item> = registerManaRestoreItem(
+            "ender_crystal_nucleus",
+            mapOf("en_us" to "Ender Crystal Nucleus", "zh_cn" to "末影晶核"),
+            ::EnderCrystalNucleus,
+            cooldown = 3.0f,
+    )
+
+    @JvmField
+    val INFINITE_CRYSTAL_NUCLEUS_1: DeferredItem<Item> = registerManaRestoreItem(
+            "infinite_crystal_nucleus_1",
+            mapOf("en_us" to "Infinite Crystal Nucleus I", "zh_cn" to "无限晶核I"),
+            ::InfiniteCrystalNucleus1,
+            cooldown = 0.2f,
+            durability = 942,
+            repairItem = LAPIS_LAZULI,
+    )
+
+    @JvmField
+    val INFINITE_CRYSTAL_NUCLEUS_2: DeferredItem<Item> = registerManaRestoreItem(
+            "infinite_crystal_nucleus_2",
+            mapOf("en_us" to "Infinite Crystal Nucleus II", "zh_cn" to "无限晶核II"),
+            ::InfiniteCrystalNucleus2,
+            cooldown = 0.15f,
+            durability = 1245,
+            repairItem = LAPIS_LAZULI,
+    )
+
+    @JvmField
+    val INFINITE_CRYSTAL_NUCLEUS_3: DeferredItem<Item> = registerManaRestoreItem(
+            "infinite_crystal_nucleus_3",
+            mapOf("en_us" to "Infinite Crystal Nucleus III", "zh_cn" to "无限晶核III"),
+            ::InfiniteCrystalNucleus3,
+            cooldown = 0.1f,
+            durability = 1672,
+            repairItem = LAPIS_LAZULI,
+    )
+
+    @JvmField
+    val FINAL_CRYSTAL_NUCLEUS: DeferredItem<Item> = registerManaRestoreItem(
+            "final_crystal_nucleus",
+            mapOf("en_us" to "Final Crystal Nucleus", "zh_cn" to "终极晶核"),
+            ::FinalCrystalNucleus,
+            cooldown = 0.05f,
+            durability = 2340,
+            repairItem = LAPIS_LAZULI,
     )
 
 
@@ -224,4 +285,48 @@ object ModItems {
             .firstOrNull { it.id.path == config.name }
             ?.value()
     }
+
+    private fun registerBoostConsumable(
+            name: String,
+            lang: Map<String, String>,
+            func: (Item.Properties) -> Item,
+            cooldown: Float,
+    ): DeferredItem<Item> = registerItem(
+            ItemConfig.Builder(name, lang)
+                    .func(func)
+                    .props {
+                        Item.Properties()
+                                .food(
+                                        FoodProperties(0, 0.0f, true),
+                                        Consumables.defaultFood().build()
+                                )
+                                .useCooldown(cooldown)
+                    }
+                    .creativeTab(ModCreativeModeTabs.DECISLAND_MISC_TAB)
+                    .build()
+    )
+
+    private fun registerManaRestoreItem(
+            name: String,
+            lang: Map<String, String>,
+            func: (Item.Properties) -> Item,
+            cooldown: Float,
+            durability: Int? = null,
+            repairItem: Item? = null,
+    ): DeferredItem<Item> = registerItem(
+            ItemConfig.Builder(name, lang)
+                    .func(func)
+                    .props {
+                        var properties = Item.Properties().useCooldown(cooldown)
+                        if (durability != null) {
+                            properties = properties.stacksTo(1).durability(durability)
+                            if (repairItem != null) {
+                                properties = properties.repairable(repairItem)
+                            }
+                        }
+                        properties
+                    }
+                    .creativeTab(ModCreativeModeTabs.DECISLAND_MISC_TAB)
+                    .build()
+    )
 }

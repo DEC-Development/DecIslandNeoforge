@@ -80,7 +80,7 @@ object Fish {
         props = Supplier { Item.Properties().stacksTo(16).useCooldown(3.0f) },
         tab = ModCreativeModeTabs.DECISLAND_MISC_TAB,
         func = java.util.function.Function(::AshPufferfish),
-        tags = listOf(ModItemTags.WEAPON_MISSILE),
+        tags = listOf(ModItemTags.THROWN_WEAPON),
     )
 
     @JvmField
@@ -390,7 +390,7 @@ object Fish {
         tab = ModCreativeModeTabs.DECISLAND_WEAPONS_TAB,
         modelTemplate = ModelTemplates.FLAT_HANDHELD_ITEM,
         func = java.util.function.Function(::SwordFish),
-        tags = listOf(ModItemTags.WEAPON_MELEE_SWORD),
+        tags = listOf(ModItemTags.MELEE_WEAPON, ModItemTags.SWORD),
     )
 
     @JvmStatic

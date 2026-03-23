@@ -16,7 +16,7 @@ class SpotsOverflow(entityType: EntityType<SpotsOverflow>, level: Level) : Parti
     constructor(level: Level, owner: LivingEntity, spawnedFrom: ItemStack) : this(ModEntities.SPOTS_OVERFLOW.get(), level) {
         setOwner(owner)
         val view = owner.getViewVector(0.0f)
-        val spawnPos = owner.eyePosition.add(view.scale(0.8))
+        val spawnPos = owner.eyePosition.add(view.scale(SPAWN_FORWARD_OFFSET))
         setPos(
             spawnPos.x,
             spawnPos.y,
@@ -29,6 +29,7 @@ class SpotsOverflow(entityType: EntityType<SpotsOverflow>, level: Level) : Parti
     override val airInertia: Double = 0.95
     override val waterInertia: Double = 0.8
     override val trailDurationTicks: Int = 6
+    override val trailIntervalTicks: Int = 4
     override val hitParticleDurationTicks: Int = 6
     override val trailParticleId: Identifier =
         Identifier.fromNamespaceAndPath(DecIsland.MOD_ID, "small_fire_wake_particle")
@@ -69,6 +70,7 @@ class SpotsOverflow(entityType: EntityType<SpotsOverflow>, level: Level) : Parti
     }
 
     companion object {
+        private const val SPAWN_FORWARD_OFFSET: Double = 1.1
         private val TRAIL_OFFSETS: DoubleArray = doubleArrayOf(0.18, 0.36, 0.54)
     }
 }

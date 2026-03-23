@@ -5,7 +5,7 @@
 			"identifier": "dec:stream_energy_ball_wake_particle",
 			"basic_render_parameters": {
 				"material": "particles_alpha",
-				"texture": "textures/particle/particles"
+				"texture": "minecraft:textures/particle/sga_*"
 			}
 		},
 		"components": {
@@ -32,9 +32,9 @@
 				"size": ["variable.particle_random_1 * 0.05 + 0.05", "variable.particle_random_1 * 0.05 + 0.05"],
 				"facing_camera_mode": "lookat_xyz",
 				"uv": {
-					"texture_width": 128,
-					"texture_height": 128,
-					"uv": ["variable.particle_random_3 < 0.5 ? Math.round(variable.particle_random_2 * 14) * 8 + 8 : Math.round(variable.particle_random_2 * 10) * 8", "variable.particle_random_3 < 0.5 ? 112 : 120"],
+					"texture_width": 8,
+					"texture_height": 8,
+					"uv": [0, 0],
 					"uv_size": [8, 8]
 				}
 			},

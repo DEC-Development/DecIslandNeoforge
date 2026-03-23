@@ -4,6 +4,8 @@ import com.dec.decisland.attachment.ModAttachments
 import net.neoforged.neoforge.attachment.AttachmentType
 
 open class BlueGem(properties: Properties) : MaxManaBoostItem(properties) {
+    override fun isGlint(): Boolean = true
+
     override fun getMinAttachmentLevel(): Int = 20
 
     override fun getMaxAttachmentLevel(): Int = 39

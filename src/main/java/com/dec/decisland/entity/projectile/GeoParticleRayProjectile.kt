@@ -20,6 +20,7 @@ abstract class GeoParticleRayProjectile(
     private val geoCache: AnimatableInstanceCache = GeckoLibUtil.createInstanceCache(this)
 
     protected open val spawnForwardOffset: Double = 0.9
+    protected open val trailSampleSpacing: Double? = null
     protected open val extraTrailOffsets: DoubleArray = doubleArrayOf(0.18, 0.36)
 
     protected fun setSpawnPositionFromOwner(owner: LivingEntity) {
@@ -38,12 +39,29 @@ abstract class GeoParticleRayProjectile(
     override fun spawnAdditionalTrailParticles(serverLevel: ServerLevel, pos: Vec3) {
         val particleId = trailParticleId ?: return
         val motion = deltaMovement
-        if (motion.lengthSqr() <= 1.0E-6) {
+        val motionLength = motion.length()
+        if (motionLength <= 1.0E-6) {
             return
         }
 
         val direction = motion.normalize()
+        val offsets = ArrayList<Double>()
+        val sampleSpacing = trailSampleSpacing
+        if (sampleSpacing != null && sampleSpacing > 0.0) {
+            var offset = sampleSpacing
+            while (offset <= motionLength + 1.0E-6) {
+                offsets.add(offset)
+                offset += sampleSpacing
+            }
+        }
+
         extraTrailOffsets.forEach { offset ->
+            if (offset > 0.0 && offsets.none { kotlin.math.abs(it - offset) <= 1.0E-6 }) {
+                offsets.add(offset)
+            }
+        }
+
+        offsets.forEach { offset ->
             Networking.sendBedrockEmitterToNearby(
                 serverLevel,
                 particleId,

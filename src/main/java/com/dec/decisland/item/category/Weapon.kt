@@ -7,22 +7,7 @@ import com.dec.decisland.item.ModItems
 import com.dec.decisland.item.ModToolMaterial
 import com.dec.decisland.entity.projectile.dart.DartDefinition
 import com.dec.decisland.entity.projectile.dart.ModDarts
-import com.dec.decisland.item.custom.AbsoluteZero
-import com.dec.decisland.item.custom.BambooKatana
-import com.dec.decisland.item.custom.BloodMare
-import com.dec.decisland.item.custom.FireflyBottle
-import com.dec.decisland.item.custom.FrozenBall
-import com.dec.decisland.item.custom.GasBomb
-import com.dec.decisland.item.custom.HardBambooKatana
-import com.dec.decisland.item.custom.IllagerSword
-import com.dec.decisland.item.custom.MindController
-import com.dec.decisland.item.custom.MuddyBall
-import com.dec.decisland.item.custom.NightSword
-import com.dec.decisland.item.custom.Nightmare
-import com.dec.decisland.item.custom.SmokeBomb
-import com.dec.decisland.item.custom.StickyAsh
-import com.dec.decisland.item.custom.TheBlade
-import com.dec.decisland.item.custom.ThrowableBomb
+import com.dec.decisland.item.custom.*
 import com.dec.decisland.item.custom.dart.Dart
 import com.dec.decisland.lang.Lang
 import com.dec.decisland.item.gun.EverlastingWinterFlintlock
@@ -35,7 +20,9 @@ import com.dec.decisland.item.gun.ShortFlintlock
 import com.dec.decisland.item.gun.StarFlintlock
 import com.dec.decisland.item.gun.StormFlintlock
 import com.dec.decisland.tag.ModItemTags
+import net.minecraft.client.data.models.model.ModelTemplate
 import net.minecraft.client.data.models.model.ModelTemplates
+import net.minecraft.tags.ItemTags
 import net.minecraft.tags.TagKey
 import net.minecraft.world.food.FoodProperties
 import net.minecraft.world.item.Item
@@ -44,16 +31,18 @@ import net.minecraft.world.item.Items
 import net.minecraft.world.item.ToolMaterial
 import net.minecraft.world.item.component.Consumables
 import net.neoforged.neoforge.registries.DeferredItem
+import java.util.function.Function
 import java.util.function.Supplier
 
 object Weapon {
-    private val missileWeaponTags: List<TagKey<Item>> = listOf(ModItemTags.WEAPON_MISSILE)
-    private val dartWeaponTags: List<TagKey<Item>> = listOf(ModItemTags.WEAPON_MISSILE, ModItemTags.WEAPON_THROWN_DART)
-    private val sundriesMissileWeaponTags: List<TagKey<Item>> = listOf(ModItemTags.WEAPON_MISSILE, ModItemTags.WEAPON_THROWN_SUNDRIES)
-    private val gunWeaponTags: List<TagKey<Item>> = listOf(ModItemTags.WEAPON_GUN)
-    private val staffWeaponTags: List<TagKey<Item>> = listOf(ModItemTags.WEAPON_MAGIC_STAFF)
-    private val swordWeaponTags: List<TagKey<Item>> = listOf(ModItemTags.WEAPON_MELEE_SWORD)
-    private val katanaWeaponTags: List<TagKey<Item>> = listOf(ModItemTags.WEAPON_MELEE_KATANA)
+    private val thrownWeaponTags: List<TagKey<Item>> = listOf(ModItemTags.THROWN_WEAPON)
+    private val dartWeaponTags: List<TagKey<Item>> = listOf(ModItemTags.THROWN_WEAPON, ModItemTags.DART)
+    private val sundriesThrownWeaponTags: List<TagKey<Item>> = listOf(ModItemTags.THROWN_WEAPON, ModItemTags.SUNDRIES)
+    private val gunWeaponTags: List<TagKey<Item>> = listOf(ModItemTags.RANGE_WEAPON, ModItemTags.GUN)
+    private val staffWeaponTags: List<TagKey<Item>> = listOf(ModItemTags.MAGIC_WEAPON, ModItemTags.STAFF)
+    private val magicBookWeaponTags: List<TagKey<Item>> = listOf(ModItemTags.MAGIC_WEAPON, ModItemTags.MAGIC_BOOK)
+    private val swordWeaponTags: List<TagKey<Item>> = listOf(ModItemTags.MELEE_WEAPON, ModItemTags.SWORD)
+    private val katanaWeaponTags: List<TagKey<Item>> = listOf(ModItemTags.MELEE_WEAPON, ModItemTags.KATANA)
 
     @JvmField
     val AMETHYST_DART: DeferredItem<Item> = registerDart(ModDarts.AMETHYST_DART)
@@ -104,6 +93,174 @@ object Weapon {
     val WOOD_DART: DeferredItem<Item> = registerDart(ModDarts.WOOD_DART)
 
     @JvmField
+    val WOODEN_STAFF: DeferredItem<Item> = registerStaff(
+        "wooden_staff",
+        ::WoodenStaff,
+        durability = 60,
+        cooldown = 0.8f,
+        enchantability = 15,
+        repairTag = ItemTags.PLANKS,
+        burnTime = 10,
+    )
+
+    @JvmField
+    val AMETHYST_RAY_STAFF: DeferredItem<Item> = registerStaff(
+        "amethyst_ray_staff",
+        ::AmethystRayStaff,
+        durability = 354,
+        cooldown = 1.0f,
+        enchantability = 20,
+        repairItem = Supplier { Items.AMETHYST_SHARD },
+    )
+
+    @JvmField
+    val BLIZZARD_STAFF: DeferredItem<Item> = registerStaff(
+        "blizzard_staff",
+        ::BlizzardStaff,
+        durability = 855,
+        cooldown = 0.7f,
+        enchantability = 24,
+        repairItem = Supplier { Material.ICE_INGOT.get() },
+    )
+
+    @JvmField
+    val DEEP_STAFF: DeferredItem<Item> = registerStaff(
+        "deep_staff",
+        ::DeepStaff,
+        durability = 1045,
+        cooldown = 1.0f,
+        enchantability = 17,
+    )
+
+    @JvmField
+    val DIAMOND_STAFF: DeferredItem<Item> = registerStaff(
+        "diamond_staff",
+        ::DiamondStaff,
+        durability = 1671,
+        cooldown = 1.8f,
+    )
+
+    @JvmField
+    val EMERALD_STAFF: DeferredItem<Item> = registerStaff(
+        "emerald_staff",
+        ::EmeraldStaff,
+        durability = 326,
+        cooldown = 0.5f,
+        enchantability = 27,
+        repairItem = Supplier { Items.EMERALD },
+    )
+
+    @JvmField
+    val EVERLASTING_WINTER_STAFF: DeferredItem<Item> = registerStaff(
+        "everlasting_winter_staff",
+        ::EverlastingWinterStaff,
+        durability = 1700,
+        cooldown = 1.0f,
+        enchantability = 27,
+        repairItem = Supplier { Material.ICE_INGOT.get() },
+    )
+
+    @JvmField
+    val FLARE_MAGIC_BOOK: DeferredItem<Item> = registerMagicBook(
+        "flare_magic_book",
+        ::FlareMagicBook,
+        durability = 4096,
+        enchantability = 20,
+        repairItem = Supplier { Material.STAR_DEBRIS.get() },
+        burnTime = 20,
+    )
+
+    @JvmField
+    val FROZEN_RAY_STAFF: DeferredItem<Item> = registerStaff(
+        "frozen_ray_staff",
+        ::FrozenRayStaff,
+        durability = 476,
+        cooldown = 0.6f,
+        enchantability = 15,
+        repairItem = Supplier { Material.ICE_INGOT.get() },
+    )
+
+    @JvmField
+    val GIANT_IVY: DeferredItem<Item> = registerStaff(
+        "giant_ivy",
+        ::GiantIvy,
+        durability = 288,
+        cooldown = 0.2f,
+        enchantability = 25,
+    )
+
+    @JvmField
+    val GOLDEN_STAFF: DeferredItem<Item> = registerStaff(
+        "golden_staff",
+        ::GoldenStaff,
+        durability = 33,
+        cooldown = 0.6f,
+        enchantability = 35,
+    )
+
+    @JvmField
+    val IRON_STAFF: DeferredItem<Item> = registerStaff(
+        "iron_staff",
+        ::IronStaff,
+        durability = 251,
+        cooldown = 1.25f,
+        enchantability = 17,
+        repairItem = Supplier { Items.IRON_INGOT },
+    )
+
+    @JvmField
+    val LAPIS_MAGIC_BOOK: DeferredItem<Item> = registerMagicBook(
+        "lapis_magic_book",
+        ::LapisMagicBook,
+        durability = 156,
+        cooldown = 0.05f,
+        repairItem = Supplier { Items.LAPIS_LAZULI },
+        burnTime = 10,
+        tags = emptyList(),
+    )
+
+    @JvmField
+    val SNOWBALL_MAGIC_BOOK: DeferredItem<Item> = registerMagicBook(
+        "snowball_magic_book",
+        ::SnowballMagicBook,
+        durability = 436,
+        cooldown = 0.5f,
+        enchantability = 5,
+        repairItem = Supplier { Material.ICE_INGOT.get() },
+        burnTime = 10,
+    )
+
+    @JvmField
+    val STORM_STAFF: DeferredItem<Item> = registerStaff(
+        "storm_staff",
+        ::StormStaff,
+        durability = 434,
+        cooldown = 0.8f,
+        enchantability = 24,
+        repairItem = Supplier { Material.STREAM_STONE.get() },
+    )
+
+    @JvmField
+    val THUNDER_STAFF: DeferredItem<Item> = registerStaff(
+        "thunder_staff",
+        ::ThunderStaff,
+        durability = 34,
+        cooldown = 1.5f,
+        enchantability = 1,
+    )
+
+    @JvmField
+    val WAVE_MAGIC_BOOK: DeferredItem<Item> = registerMagicBook(
+        "wave_magic_book",
+        ::WaveMagicBook,
+        durability = 533,
+        cooldown = 0.6f,
+        enchantability = 18,
+        repairItem = Supplier { Material.STREAM_STONE.get() },
+        burnTime = 10,
+    )
+
+    @JvmField
     val FLINTLOCK_BULLET: DeferredItem<Item> = ModItems.registerItem(
         ItemConfig.Builder("flintlock_bullet", Lang.item.get("flintlock_bullet"))
             .func(::FlintlockBullet)
@@ -116,7 +273,7 @@ object Weapon {
         ItemConfig.Builder("sticky_ash", Lang.item.get("sticky_ash"))
             .func(::StickyAsh)
             .props { Item.Properties().stacksTo(64).useCooldown(0.05f) }
-            .tags(sundriesMissileWeaponTags)
+            .tags(sundriesThrownWeaponTags)
             .customProp(CustomItemProperties.Builder().burnTime(20).build())
             .modelTemplate(ModelTemplates.FLAT_ITEM)
             .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
@@ -127,7 +284,7 @@ object Weapon {
     val FROZEN_BALL: DeferredItem<Item> = ModItems.registerItem(
         ItemConfig.Builder("frozen_ball", Lang.item.get("frozen_ball"))
             .func(::FrozenBall)
-            .tags(sundriesMissileWeaponTags)
+            .tags(sundriesThrownWeaponTags)
             .modelTemplate(ModelTemplates.FLAT_ITEM)
             .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
             .build(),
@@ -137,7 +294,7 @@ object Weapon {
     val MIND_CONTROLLER: DeferredItem<Item> = ModItems.registerItem(
         ItemConfig.Builder("mind_controller", Lang.item.get("mind_controller"))
             .func(::MindController)
-            .tags(sundriesMissileWeaponTags)
+            .tags(sundriesThrownWeaponTags)
             .modelTemplate(ModelTemplates.FLAT_ITEM)
             .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
             .build(),
@@ -148,7 +305,7 @@ object Weapon {
         ItemConfig.Builder("muddy_ball", Lang.item.get("muddy_ball"))
             .func(::MuddyBall)
             .props { Item.Properties().stacksTo(64).useCooldown(1.0f) }
-            .tags(missileWeaponTags)
+            .tags(thrownWeaponTags)
             .modelTemplate(ModelTemplates.FLAT_ITEM)
             .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
             .build(),
@@ -159,7 +316,7 @@ object Weapon {
         ItemConfig.Builder("firefly_bottle", Lang.item.get("firefly_bottle"))
             .func(::FireflyBottle)
             .props { Item.Properties().stacksTo(64) }
-            .tags(missileWeaponTags)
+            .tags(thrownWeaponTags)
             .modelTemplate(ModelTemplates.FLAT_ITEM)
             .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
             .build(),
@@ -170,7 +327,7 @@ object Weapon {
         ItemConfig.Builder("smoke_bomb", Lang.item.get("smoke_bomb"))
             .func(::SmokeBomb)
             .props { Item.Properties().stacksTo(64).useCooldown(3.0f) }
-            .tags(missileWeaponTags)
+            .tags(thrownWeaponTags)
             .modelTemplate(ModelTemplates.FLAT_ITEM)
             .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
             .build(),
@@ -181,7 +338,7 @@ object Weapon {
         ItemConfig.Builder("gas_bomb", Lang.item.get("gas_bomb"))
             .func(::GasBomb)
             .props { Item.Properties().stacksTo(64).useCooldown(4.0f) }
-            .tags(sundriesMissileWeaponTags)
+            .tags(sundriesThrownWeaponTags)
             .modelTemplate(ModelTemplates.FLAT_ITEM)
             .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
             .build(),
@@ -192,7 +349,7 @@ object Weapon {
         ItemConfig.Builder("throwable_bomb", Lang.item.get("throwable_bomb"))
             .func(::ThrowableBomb)
             .props { Item.Properties().stacksTo(64).useCooldown(1.2f) }
-            .tags(sundriesMissileWeaponTags)
+            .tags(sundriesThrownWeaponTags)
             .modelTemplate(ModelTemplates.FLAT_ITEM)
             .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
             .build(),
@@ -578,6 +735,95 @@ object Weapon {
                 }
                 .tags(tags)
                 .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
+                .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
+                .build(),
+        )
+
+    private fun registerStaff(
+        name: String,
+        func: Function<Item.Properties, out Item>,
+        durability: Int,
+        cooldown: Float? = null,
+        enchantability: Int? = null,
+        repairItem: Supplier<Item>? = null,
+        repairTag: TagKey<Item>? = null,
+        burnTime: Int? = null,
+    ): DeferredItem<Item> =
+        registerMagicWeapon(
+            name = name,
+            func = func,
+            durability = durability,
+            cooldown = cooldown,
+            enchantability = enchantability,
+            repairItem = repairItem,
+            repairTag = repairTag,
+            burnTime = burnTime,
+            tags = staffWeaponTags,
+            modelTemplate = ModelTemplates.FLAT_HANDHELD_ITEM,
+        )
+
+    private fun registerMagicBook(
+        name: String,
+        func: Function<Item.Properties, out Item>,
+        durability: Int,
+        cooldown: Float? = null,
+        enchantability: Int? = null,
+        repairItem: Supplier<Item>? = null,
+        repairTag: TagKey<Item>? = null,
+        burnTime: Int? = null,
+        tags: List<TagKey<Item>> = magicBookWeaponTags,
+    ): DeferredItem<Item> =
+        registerMagicWeapon(
+            name = name,
+            func = func,
+            durability = durability,
+            cooldown = cooldown,
+            enchantability = enchantability,
+            repairItem = repairItem,
+            repairTag = repairTag,
+            burnTime = burnTime,
+            tags = tags,
+            modelTemplate = ModelTemplates.FLAT_ITEM,
+        )
+
+    private fun registerMagicWeapon(
+        name: String,
+        func: Function<Item.Properties, out Item>,
+        durability: Int,
+        cooldown: Float?,
+        enchantability: Int?,
+        repairItem: Supplier<Item>?,
+        repairTag: TagKey<Item>?,
+        burnTime: Int?,
+        tags: List<TagKey<Item>>,
+        modelTemplate: ModelTemplate,
+    ): DeferredItem<Item> =
+        ModItems.registerItem(
+            ItemConfig.Builder(name, Lang.item.get(name))
+                .func(func)
+                .props {
+                    var properties = Item.Properties().stacksTo(1).durability(durability)
+                    if (cooldown != null) {
+                        properties = properties.useCooldown(cooldown)
+                    }
+                    if (enchantability != null) {
+                        properties = properties.enchantable(enchantability)
+                    }
+                    when {
+                        repairItem != null -> properties = properties.repairable(repairItem.get())
+                        repairTag != null -> properties = properties.repairable(repairTag)
+                    }
+                    properties
+                }
+                .tags(tags)
+                .customProp(
+                    CustomItemProperties.Builder().apply {
+                        if (burnTime != null) {
+                            burnTime(burnTime)
+                        }
+                    }.build(),
+                )
+                .modelTemplate(modelTemplate)
                 .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
                 .build(),
         )

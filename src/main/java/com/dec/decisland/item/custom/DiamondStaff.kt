@@ -17,26 +17,30 @@ import net.minecraft.world.level.Level
 class DiamondStaff(properties: Properties) : ProjectileStaff(properties) {
     override val manaCost: Float = 6.0f
 
-    override fun getMaxAttackCount(): Int = Int.MAX_VALUE
-
     override fun judge(level: Level, player: Player): Boolean = ManaManager.getCurrentMana(player) >= manaCost
 
     override fun shoot(attackCounter: Int, serverLevel: ServerLevel, source: LivingEntity, stack: ItemStack) {
         if (source is Player && spawnProjectile(serverLevel, source, stack, ::StreamEnergyBall, 1.45f, 1.3f)) {
             ManaManager.reduceMana(source, manaCost)
-            scheduleFollowUpShot(stack, serverLevel.gameTime + FOLLOW_UP_DELAY_TICKS)
+            scheduleFollowUpShot(stack, serverLevel.gameTime + BURST_SHOT_DELAY_TICKS)
         }
     }
 
     override fun inventoryTick(stack: ItemStack, level: ServerLevel, entity: Entity, slot: EquipmentSlot?) {
         super.inventoryTick(stack, level, entity, slot)
 
-        if (entity !is Player || !hasPendingFollowUpShot(stack) || level.gameTime < getFollowUpShotTime(stack)) {
+        if (entity !is Player || !hasPendingFollowUpShot(stack)) {
+            return
+        }
+
+        if (!isHeldBy(entity, stack) || level.gameTime < getFollowUpShotTime(stack)) {
+            if (!isHeldBy(entity, stack)) {
+                clearFollowUpShot(stack)
+            }
             return
         }
 
         clearFollowUpShot(stack)
-
         if (spawnProjectile(level, entity, stack, ::StreamEnergyBall, 1.45f, 1.3f)) {
             level.playSound(
                 null,
@@ -50,6 +54,8 @@ class DiamondStaff(properties: Properties) : ProjectileStaff(properties) {
             )
         }
     }
+
+    private fun isHeldBy(player: Player, stack: ItemStack): Boolean = player.mainHandItem === stack || player.offhandItem === stack
 
     private fun hasPendingFollowUpShot(stack: ItemStack): Boolean = readTag(stack).contains(FOLLOW_UP_SHOT_TIME_KEY)
 
@@ -74,7 +80,7 @@ class DiamondStaff(properties: Properties) : ProjectileStaff(properties) {
     }
 
     companion object {
-        private const val FOLLOW_UP_DELAY_TICKS: Long = 3L
+        private const val BURST_SHOT_DELAY_TICKS: Long = 6L
         private const val FOLLOW_UP_SHOT_TIME_KEY: String = "DiamondFollowUpShotTime"
     }
 }

@@ -15,6 +15,7 @@ class ItemConfig private constructor(builder: Builder) {
         GUN,
         CATAPULT,
         MAGIC_BOOK,
+        STAFF,
         MISSILE,
     }
 

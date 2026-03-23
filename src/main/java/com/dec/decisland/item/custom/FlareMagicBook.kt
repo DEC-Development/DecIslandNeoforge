@@ -23,17 +23,21 @@ import net.minecraft.world.item.component.CustomData
 import net.minecraft.world.level.Level
 
 class FlareMagicBook(properties: Properties) : MagicWeapon(properties) {
+    override fun shouldCauseReequipAnimation(oldStack: ItemStack, newStack: ItemStack, slotChanged: Boolean): Boolean =
+        slotChanged || !newStack.`is`(oldStack.item)
+
     override fun use(level: Level, player: Player, hand: InteractionHand): InteractionResult {
+        val stack = player.getItemInHand(hand)
         if (level.isClientSide) {
-            return InteractionResult.SUCCESS
+            return if (shouldAnimateMainProjectile(player, stack)) InteractionResult.CONSUME else InteractionResult.PASS
         }
 
         val serverLevel = level as? ServerLevel ?: return InteractionResult.PASS
-        val stack = player.getItemInHand(hand)
         var skillCount = getSkillCount(stack)
+        val shouldAnimateMainProjectile = shouldAnimateMainProjectile(player, stack)
         var firedMainProjectile = false
 
-        if (skillCount > MAIN_SHOT_THRESHOLD && ManaManager.getCurrentMana(player) > MANA_COST) {
+        if (shouldFireMainProjectile(player, stack)) {
             if (spawnProjectile(serverLevel, player, stack, ::SpotsByBook, 1.5f, 1.3f)) {
                 firedMainProjectile = true
                 ManaManager.reduceMana(player, MANA_COST)
@@ -59,10 +63,7 @@ class FlareMagicBook(properties: Properties) : MagicWeapon(properties) {
         }
 
         setSkillCount(stack, skillCount)
-        if (firedMainProjectile) {
-            player.swing(hand, true)
-        }
-        return InteractionResult.SUCCESS_SERVER
+        return if (shouldAnimateMainProjectile && firedMainProjectile) InteractionResult.SUCCESS_SERVER else InteractionResult.CONSUME
     }
 
     override fun inventoryTick(stack: ItemStack, level: ServerLevel, entity: Entity, slot: EquipmentSlot?) {
@@ -169,6 +170,12 @@ class FlareMagicBook(properties: Properties) : MagicWeapon(properties) {
         tag.remove(NEXT_OVERFLOW_SHOT_TIME_KEY)
         writeTag(stack, tag)
     }
+
+    private fun shouldFireMainProjectile(player: Player, stack: ItemStack): Boolean =
+        getSkillCount(stack) > MAIN_SHOT_THRESHOLD && ManaManager.getCurrentMana(player) > MANA_COST
+
+    private fun shouldAnimateMainProjectile(player: Player, stack: ItemStack): Boolean =
+        getSkillCount(stack) == MAIN_SHOT_THRESHOLD + 1 && shouldFireMainProjectile(player, stack)
 
     private fun readTag(stack: ItemStack): CompoundTag = stack.get(DataComponents.CUSTOM_DATA)?.copyTag() ?: CompoundTag()
 

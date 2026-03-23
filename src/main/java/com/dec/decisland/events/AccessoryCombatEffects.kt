@@ -101,12 +101,12 @@ object AccessoryCombatEffects {
             return null
         }
 
-        val item = stack.item
         return when {
-            stack.`is`(ModItemTags.WEAPON_GUN) -> WeaponCooldownCategory.GUN
-            stack.`is`(ModItemTags.WEAPON_CATAPULT) -> WeaponCooldownCategory.CATAPULT
-            stack.`is`(ModItemTags.WEAPON_MAGIC_BOOK) -> WeaponCooldownCategory.MAGIC_BOOK
-            stack.`is`(ModItemTags.WEAPON_MISSILE) -> WeaponCooldownCategory.MISSILE
+            stack.hasAllTags(ModItemTags.RANGE_WEAPON, ModItemTags.GUN) -> WeaponCooldownCategory.GUN
+            stack.hasAllTags(ModItemTags.RANGE_WEAPON, ModItemTags.CATAPULT) -> WeaponCooldownCategory.CATAPULT
+            stack.hasAllTags(ModItemTags.MAGIC_WEAPON, ModItemTags.MAGIC_BOOK) -> WeaponCooldownCategory.MAGIC_BOOK
+            stack.hasAllTags(ModItemTags.MAGIC_WEAPON, ModItemTags.STAFF) -> WeaponCooldownCategory.STAFF
+            stack.`is`(ModItemTags.THROWN_WEAPON) -> WeaponCooldownCategory.MISSILE
             else -> null
         }
     }
@@ -186,6 +186,9 @@ object AccessoryCombatEffects {
                 EquippedAccessory(hand, stack, bonus)
             }
             .maxByOrNull { it.bonus.ticksPerFourTicks }
+
+    private fun ItemStack.hasAllTags(vararg tags: net.minecraft.tags.TagKey<net.minecraft.world.item.Item>): Boolean =
+        tags.all(this::`is`)
 
     private fun itemPath(stack: ItemStack): String = BuiltInRegistries.ITEM.getKey(stack.item).path
 }
