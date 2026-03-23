@@ -12,6 +12,7 @@ import com.dec.decisland.item.category.Food
 import com.dec.decisland.item.category.Fish
 import com.dec.decisland.item.category.Mask
 import com.dec.decisland.item.category.Material
+import com.dec.decisland.item.category.SummonItem
 import com.dec.decisland.item.category.Weapon
 import com.dec.decisland.particles.ModParticles
 import com.dec.decisland.worldgen.ModWorldgen
@@ -42,6 +43,7 @@ class DecIsland(modEventBus: IEventBus, modContainer: ModContainer) {
             Food.load()
             Fish.load()
             Weapon.load()
+            SummonItem.load()
             Mask.load()
             ModItems.register(modEventBus)
 

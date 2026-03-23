@@ -85,9 +85,6 @@ neoForge {
 
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
-            systemProperty 'mixin.debug.export', 'true'
-            systemProperty 'mixin.debug.verbose', 'true'
-            systemProperty 'mixin.debug.countInjections', 'true'
         }
 
         server {
@@ -126,7 +123,19 @@ neoForge {
             // Recommended logging level for the console
             // You can set various levels here.
             // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
-            logLevel = org.slf4j.event.Level.DEBUG
+            logLevel = org.slf4j.event.Level.INFO
+
+            // Keep dev runs conservative on memory so the client does not over-allocate
+            // heap/native space on machines with a small Windows page file.
+            jvmArguments.addAll(
+                    '-Xms128m',
+                    '-Xmx8G',
+                    '-Xss512k',
+                    '-XX:ReservedCodeCacheSize=128m',
+                    '-XX:CICompilerCount=2',
+                    '-XX:+UseSerialGC',
+                    '-XX:HeapBaseMinAddress=6G'
+            )
         }
     }
 

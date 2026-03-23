@@ -4,6 +4,7 @@ import com.dec.decisland.DecIsland
 import com.dec.decisland.entity.projectile.AmethystEnergyBall
 import com.dec.decisland.entity.projectile.AmethystEnergyRay
 import com.dec.decisland.entity.projectile.BlizzardEnergy
+import com.dec.decisland.entity.projectile.ConcentratedSoulBullet
 import com.dec.decisland.entity.projectile.DeepEnergy
 import com.dec.decisland.entity.projectile.EnergyBall
 import com.dec.decisland.entity.projectile.EnergyRay
@@ -15,11 +16,14 @@ import com.dec.decisland.entity.projectile.FrozenRay
 import com.dec.decisland.entity.projectile.GasBombProjectile
 import com.dec.decisland.entity.projectile.GoldenEnergyBall
 import com.dec.decisland.entity.projectile.GrowingEnergyRay
+import com.dec.decisland.entity.projectile.JellyfishStaffProjectile
+import com.dec.decisland.entity.projectile.LapisBullet
 import com.dec.decisland.entity.projectile.MindControllerProjectile
 import com.dec.decisland.entity.projectile.MuddyBallProjectile
 import com.dec.decisland.entity.projectile.NightmareRay
 import com.dec.decisland.entity.projectile.NightmareSpore
 import com.dec.decisland.entity.projectile.PureEnergyBall
+import com.dec.decisland.entity.projectile.SoulWakeBullet
 import com.dec.decisland.entity.projectile.SnowEnergy
 import com.dec.decisland.entity.projectile.SmokeBombProjectile
 import com.dec.decisland.entity.projectile.SpotsByBook
@@ -200,6 +204,30 @@ object ModEntities {
     val GOLDEN_ENERGY_BALL: Supplier<EntityType<GoldenEnergyBall>> =
         ENTITY_TYPES.registerEntityType("golden_energy_ball", ::GoldenEnergyBall, MobCategory.MISC) { builder ->
             builder.sized(0.8f, 0.8f).clientTrackingRange(64).updateInterval(1)
+        }
+
+    @JvmField
+    val LAPIS_BULLET: Supplier<EntityType<LapisBullet>> =
+        ENTITY_TYPES.registerEntityType("lapis_bullet", ::LapisBullet, MobCategory.MISC) { builder ->
+            builder.sized(0.31f, 0.31f).clientTrackingRange(64).updateInterval(1)
+        }
+
+    @JvmField
+    val CONCENTRATED_SOUL_BULLET: Supplier<EntityType<ConcentratedSoulBullet>> =
+        ENTITY_TYPES.registerEntityType("concentrated_soul_bullet", ::ConcentratedSoulBullet, MobCategory.MISC) { builder ->
+            builder.sized(0.8f, 0.8f).clientTrackingRange(64).updateInterval(1)
+        }
+
+    @JvmField
+    val JELLYFISH_BY_JELLYFISH_STAFF: Supplier<EntityType<JellyfishStaffProjectile>> =
+        ENTITY_TYPES.registerEntityType("jellyfish_by_jellyfish_staff", ::JellyfishStaffProjectile, MobCategory.MISC) { builder ->
+            builder.sized(0.31f, 0.31f).clientTrackingRange(64).updateInterval(1)
+        }
+
+    @JvmField
+    val SOUL_WAKE_BULLET: Supplier<EntityType<SoulWakeBullet>> =
+        ENTITY_TYPES.registerEntityType("soul_wake_bullet", ::SoulWakeBullet, MobCategory.MISC) { builder ->
+            builder.sized(0.2f, 0.2f).clientTrackingRange(64).updateInterval(1)
         }
 
     @JvmField

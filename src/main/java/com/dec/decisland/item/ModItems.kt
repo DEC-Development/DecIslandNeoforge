@@ -255,6 +255,86 @@ object ModItems {
             repairItem = LAPIS_LAZULI,
     )
 
+    @JvmField
+    val EXPERIENCE_BOOK: DeferredItem<Item> = registerItem(
+            ItemConfig.Builder("experience_book", mapOf("en_us" to "Experience Book", "zh_cn" to "经验书"))
+                    .func(::ExperienceBookItem)
+                    .props { Item.Properties().stacksTo(64).useCooldown(0.5f) }
+                    .customProp(CustomItemProperties.Builder().burnTime(20).build())
+                    .creativeTab(ModCreativeModeTabs.DECISLAND_MISC_TAB)
+                    .build()
+    )
+
+    @JvmField
+    val EXPERIENCE_BOOK_EMPTY: DeferredItem<Item> = registerItem(
+            ItemConfig.Builder("experience_book_empty", mapOf("en_us" to "Empty Experience Book", "zh_cn" to "空的经验书"))
+                    .func(::ExperienceBookEmptyItem)
+                    .props { Item.Properties().stacksTo(64).useCooldown(0.5f) }
+                    .customProp(CustomItemProperties.Builder().burnTime(10).build())
+                    .creativeTab(ModCreativeModeTabs.DECISLAND_MISC_TAB)
+                    .build()
+    )
+
+    @JvmField
+    val EXPERIENCE_BOOK_PRO_EMPTY: DeferredItem<Item> = registerItem(
+            ItemConfig.Builder("experience_book_pro_empty", mapOf("en_us" to "Empty Experience Book Pro", "zh_cn" to "空的汲取之书"))
+                    .func(::ExperienceBookProEmptyItem)
+                    .props { Item.Properties().stacksTo(64).useCooldown(0.5f) }
+                    .customProp(CustomItemProperties.Builder().burnTime(10).build())
+                    .creativeTab(ModCreativeModeTabs.DECISLAND_MISC_TAB)
+                    .build()
+    )
+
+    @JvmField
+    val GUIDE_BOOK: DeferredItem<Item> = registerItem(
+            ItemConfig.Builder("guide_book", mapOf("en_us" to "Guide Book", "zh_cn" to "指引之书"))
+                    .func(::GuideBookItem)
+                    .props { Item.Properties().stacksTo(64).useCooldown(0.5f) }
+                    .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
+                    .creativeTab(ModCreativeModeTabs.DECISLAND_MISC_TAB)
+                    .build()
+    )
+
+    @JvmField
+    val HUNTER_BOOK: DeferredItem<Item> = registerItem(
+            ItemConfig.Builder("hunter_book", mapOf("en_us" to "Book of Hunter", "zh_cn" to "猎人之书"))
+                    .props { Item.Properties().stacksTo(1) }
+                    .modelTemplate(ModelTemplates.FLAT_ITEM)
+                    .creativeTab(ModCreativeModeTabs.DECISLAND_MISC_TAB)
+                    .build()
+    )
+
+    @JvmField
+    val TIME_COMPASS: DeferredItem<Item> = registerItem(
+            ItemConfig.Builder("time_compass", mapOf("en_us" to "Time Compass", "zh_cn" to "时间指针"))
+                    .func(::TimeCompassItem)
+                    .props { Item.Properties().stacksTo(1) }
+                    .modelTemplate(ModelTemplates.FLAT_ITEM)
+                    .creativeTab(ModCreativeModeTabs.DECISLAND_ACCESSORIES_TAB)
+                    .build()
+    )
+
+    @JvmField
+    val LAPIS_BULLET_RENDER: DeferredItem<Item> = registerItem(
+            ItemConfig.Builder("lapis_bullet_render", mapOf("en_us" to "Lapis Bullet Render", "zh_cn" to "青金石弹渲染"))
+                    .modelTemplate(ModelTemplates.FLAT_ITEM)
+                    .build()
+    )
+
+    @JvmField
+    val SOUL_WAKE_BULLET_RENDER: DeferredItem<Item> = registerItem(
+            ItemConfig.Builder("soul_wake_bullet_render", mapOf("en_us" to "Soul Wake Bullet Render", "zh_cn" to "灵魂尾迹渲染"))
+                    .modelTemplate(ModelTemplates.FLAT_ITEM)
+                    .build()
+    )
+
+    @JvmField
+    val JELLYFISH_STAFF_PROJECTILE_RENDER: DeferredItem<Item> = registerItem(
+            ItemConfig.Builder("jellyfish_staff_projectile_render", mapOf("en_us" to "Jellyfish Staff Projectile Render", "zh_cn" to "水母法杖射弹渲染"))
+                    .modelTemplate(ModelTemplates.FLAT_ITEM)
+                    .build()
+    )
+
 
     @JvmStatic
     fun registerItem(config: ItemConfig): DeferredItem<Item> {

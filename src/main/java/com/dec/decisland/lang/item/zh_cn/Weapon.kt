@@ -65,5 +65,9 @@ object Weapon {
         "smoke_bomb" to "烟雾弹",
         "gas_bomb" to "毒气弹",
         "throwable_bomb" to "炸药包",
+        "frozen_staff" to "冰法杖",
+        "jellyfish_staff" to "水母杖",
+        "lapis_staff" to "青金石法杖",
+        "soul_staff" to "灵魂之息",
     )
 }

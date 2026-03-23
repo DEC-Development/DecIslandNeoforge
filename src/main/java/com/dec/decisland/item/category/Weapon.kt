@@ -181,6 +181,14 @@ object Weapon {
     )
 
     @JvmField
+    val FROZEN_STAFF: DeferredItem<Item> = registerStaff(
+        "frozen_staff",
+        ::FrozenStaff,
+        durability = 436,
+        repairItem = Supplier { Material.ICE_INGOT.get() },
+    )
+
+    @JvmField
     val GIANT_IVY: DeferredItem<Item> = registerStaff(
         "giant_ivy",
         ::GiantIvy,
@@ -206,6 +214,25 @@ object Weapon {
         cooldown = 1.25f,
         enchantability = 17,
         repairItem = Supplier { Items.IRON_INGOT },
+    )
+
+    @JvmField
+    val JELLYFISH_STAFF: DeferredItem<Item> = registerStaff(
+        "jellyfish_staff",
+        ::JellyfishStaff,
+        durability = 275,
+        cooldown = 0.3f,
+        enchantability = 32,
+    )
+
+    @JvmField
+    val LAPIS_STAFF: DeferredItem<Item> = registerStaff(
+        "lapis_staff",
+        ::LapisStaff,
+        durability = 121,
+        cooldown = 0.5f,
+        enchantability = 40,
+        repairItem = Supplier { Items.LAPIS_LAZULI },
     )
 
     @JvmField
@@ -238,6 +265,15 @@ object Weapon {
         cooldown = 0.8f,
         enchantability = 24,
         repairItem = Supplier { Material.STREAM_STONE.get() },
+    )
+
+    @JvmField
+    val SOUL_STAFF: DeferredItem<Item> = registerStaff(
+        "soul_staff",
+        ::SoulStaff,
+        durability = 189,
+        cooldown = 0.9f,
+        enchantability = 14,
     )
 
     @JvmField

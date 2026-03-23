@@ -54,3 +54,6 @@ shulker_bullet_hit_small.particle.json
 sticky_ash.particle.json
 smoke_bomb.particle.json
 gas_bomb.particle.json
+lapis_bullet_boom_particle.particle.json
+concentrated_soul_bullet_wake.particle.json
+concentrated_soul_bullet_hit.particle.json

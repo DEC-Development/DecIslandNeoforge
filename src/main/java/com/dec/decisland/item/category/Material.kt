@@ -4,6 +4,7 @@ import com.dec.decisland.item.CustomItemProperties
 import com.dec.decisland.item.ItemConfig
 import com.dec.decisland.item.ModCreativeModeTabs
 import com.dec.decisland.item.ModItems
+import com.dec.decisland.lang.Lang
 import net.minecraft.world.item.Item
 import net.neoforged.neoforge.registries.DeferredItem
 import java.util.function.Supplier
@@ -11,13 +12,11 @@ import java.util.function.Supplier
 object Material {
     private fun registerMaterial(
         name: String,
-        enUs: String,
-        zhCn: String,
         props: Supplier<Item.Properties> = Supplier { Item.Properties() },
         customProp: CustomItemProperties = CustomItemProperties.Builder().build(),
     ): DeferredItem<Item> =
         ModItems.registerItem(
-            ItemConfig.Builder(name, mapOf("en_us" to enUs, "zh_cn" to zhCn))
+            ItemConfig.Builder(name, Lang.item.get(name))
                 .props(props)
                 .customProp(customProp)
                 .creativeTab(ModCreativeModeTabs.DECISLAND_MATERIALS_TAB)
@@ -25,259 +24,224 @@ object Material {
         )
 
     @JvmField
-    val BLUE_GEM_DEBRIS: DeferredItem<Item> = registerMaterial("blue_gem_debris", "Blue Gem Debris", "蓝宝石碎片")
+    val BLUE_GEM_DEBRIS: DeferredItem<Item> = registerMaterial("blue_gem_debris")
 
     @JvmField
-    val RED_GEM_DEBRIS: DeferredItem<Item> = registerMaterial("red_gem_debris", "Red Gem Debris", "红宝石碎片")
+    val RED_GEM_DEBRIS: DeferredItem<Item> = registerMaterial("red_gem_debris")
 
     @JvmField
-    val BAT_WING: DeferredItem<Item> = registerMaterial("bat_wing", "Incomplete Bat Wing", "残缺蝙蝠翅")
+    val BAT_WING: DeferredItem<Item> = registerMaterial("bat_wing")
 
     @JvmField
-    val GHOST_INGOT: DeferredItem<Item> = registerMaterial("ghost_ingot", "Ghost Ingot", "幽魂锭")
+    val GHOST_INGOT: DeferredItem<Item> = registerMaterial("ghost_ingot")
 
     @JvmField
-    val ICE_INGOT: DeferredItem<Item> = registerMaterial("ice_ingot", "Ice Ingot", "冰锭")
+    val ICE_INGOT: DeferredItem<Item> = registerMaterial("ice_ingot")
 
     @JvmField
-    val LAVA_INGOT: DeferredItem<Item> = registerMaterial("lava_ingot", "Lava Ingot", "岩浆锭")
+    val LAVA_INGOT: DeferredItem<Item> = registerMaterial("lava_ingot")
 
     @JvmField
-    val EVERLASTING_WINTER_INGOT: DeferredItem<Item> =
-        registerMaterial("everlasting_winter_ingot", "Everlasting Winter Ingot", "永冬锭")
+    val EVERLASTING_WINTER_INGOT: DeferredItem<Item> = registerMaterial("everlasting_winter_ingot")
 
     @JvmField
-    val CORAL_INGOT: DeferredItem<Item> = registerMaterial("coral_ingot", "Coral Ingot", "珊瑚锭")
+    val CORAL_INGOT: DeferredItem<Item> = registerMaterial("coral_ingot")
 
     @JvmField
-    val GLASS_INGOT: DeferredItem<Item> = registerMaterial("glass_ingot", "Glass Ingot", "玻璃锭")
+    val GLASS_INGOT: DeferredItem<Item> = registerMaterial("glass_ingot")
 
     @JvmField
-    val PURE_INGOT: DeferredItem<Item> = registerMaterial("pure_ingot", "Pure Ingot", "纯洁之锭")
+    val PURE_INGOT: DeferredItem<Item> = registerMaterial("pure_ingot")
 
     @JvmField
-    val STEEL_INGOT: DeferredItem<Item> = registerMaterial("steel_ingot", "Steel Ingot", "钢锭")
+    val STEEL_INGOT: DeferredItem<Item> = registerMaterial("steel_ingot")
 
     @JvmField
-    val ROUGH_STEEL: DeferredItem<Item> = registerMaterial("rough_steel", "Rough Steel", "粗制钢料")
+    val ROUGH_STEEL: DeferredItem<Item> = registerMaterial("rough_steel")
 
     @JvmField
-    val ALCHEMIC_STONE: DeferredItem<Item> = registerMaterial("alchemic_stone", "Alchemic Stone", "炼金石")
+    val ALCHEMIC_STONE: DeferredItem<Item> = registerMaterial("alchemic_stone")
 
     @JvmField
-    val ASH_KEY: DeferredItem<Item> = registerMaterial("ash_key", "Ash Key", "灰烬钥匙")
+    val COAL_NUGGET: DeferredItem<Item> = registerMaterial("coal_nugget")
 
     @JvmField
-    val BAT_BAIT: DeferredItem<Item> = registerMaterial("bat_bait", "Bat Bait", "蝙蝠诱饵")
+    val COMPLETE_BAT_WING: DeferredItem<Item> = registerMaterial("complete_bat_wing")
 
     @JvmField
-    val COAL_NUGGET: DeferredItem<Item> = registerMaterial("coal_nugget", "Coal Nugget", "煤炭粒")
+    val DARK_DEBRIS: DeferredItem<Item> = registerMaterial("dark_debris")
 
     @JvmField
-    val COMPLETE_BAT_WING: DeferredItem<Item> = registerMaterial("complete_bat_wing", "Complete Bat Wing", "完整蝙蝠翅")
+    val DIAMOND_NUGGET: DeferredItem<Item> = registerMaterial("diamond_nugget")
 
     @JvmField
-    val DARK_DEBRIS: DeferredItem<Item> = registerMaterial("dark_debris", "Dark Debris", "暗夜碎片")
+    val EMERALD_NUGGET: DeferredItem<Item> = registerMaterial("emerald_nugget")
 
     @JvmField
-    val DARK_PEARL: DeferredItem<Item> = registerMaterial("dark_pearl", "Dark Pearl", "暗黑珍珠")
+    val EMPTY_TOTEM: DeferredItem<Item> = registerMaterial("empty_totem")
 
     @JvmField
-    val DARK_STONE: DeferredItem<Item> = registerMaterial("dark_stone", "Dark Stone", "黑暗石")
+    val ENDER_BONE: DeferredItem<Item> = registerMaterial("ender_bone")
 
     @JvmField
-    val DIAMOND_NUGGET: DeferredItem<Item> = registerMaterial("diamond_nugget", "Diamond Nugget", "钻石粒")
+    val ENDER_BREATH: DeferredItem<Item> = registerMaterial("ender_breath")
 
     @JvmField
-    val EMERALD_NUGGET: DeferredItem<Item> = registerMaterial("emerald_nugget", "Emerald Nugget", "绿宝石粒")
+    val ENDER_CORE: DeferredItem<Item> = registerMaterial("ender_core")
 
     @JvmField
-    val EMPTY_TOTEM: DeferredItem<Item> = registerMaterial("empty_totem", "Empty Totem", "空图腾")
+    val ENDER_STONE: DeferredItem<Item> = registerMaterial("ender_stone")
 
     @JvmField
-    val ENDER_BONE: DeferredItem<Item> = registerMaterial("ender_bone", "Ender Bone", "末影骨")
+    val ENDER_POWDER: DeferredItem<Item> = registerMaterial("ender_powder")
 
     @JvmField
-    val ENDER_BREATH: DeferredItem<Item> = registerMaterial("ender_breath", "Ender Breath", "末影之息")
+    val ENDER_SUBSTANCE: DeferredItem<Item> = registerMaterial("ender_substance")
 
     @JvmField
-    val ENDER_CORE: DeferredItem<Item> = registerMaterial("ender_core", "Ender Core", "末影核心")
+    val ENRICHED_URANIUM: DeferredItem<Item> = registerMaterial("enriched_uranium")
 
     @JvmField
-    val ENDER_STONE: DeferredItem<Item> = registerMaterial("ender_stone", "Ender Stone", "末影石")
+    val EYE_OF_NATURE: DeferredItem<Item> = registerMaterial("eye_of_nature")
 
     @JvmField
-    val ENDER_POWDER: DeferredItem<Item> = registerMaterial("ender_powder", "Ender Powder", "末影粉末")
+    val EVERLASTING_WINTER_STICK: DeferredItem<Item> = registerMaterial("everlasting_winter_stick")
 
     @JvmField
-    val ENDER_SUBSTANCE: DeferredItem<Item> = registerMaterial("ender_substance", "Ender Substance", "潜影物质")
+    val FLOWER_ESSENCE: DeferredItem<Item> = registerMaterial("flower_essence")
 
     @JvmField
-    val ENRICHED_URANIUM: DeferredItem<Item> = registerMaterial("enriched_uranium", "Enriched Uranium", "浓缩铀")
+    val FROZEN_POWER_DEBRIS: DeferredItem<Item> = registerMaterial("frozen_power_debris")
 
     @JvmField
-    val ENTITY_SOUL: DeferredItem<Item> = registerMaterial("entity_soul", "Entity Soul", "实体灵魂")
+    val GHOST_ESSENCE: DeferredItem<Item> = registerMaterial("ghost_essence")
 
     @JvmField
-    val EYE_OF_NATURE: DeferredItem<Item> = registerMaterial("eye_of_nature", "Eye Of Nature", "自然之眼")
+    val GOLD_YUANBAO: DeferredItem<Item> = registerMaterial("gold_yuanbao")
 
     @JvmField
-    val EVERLASTING_WINTER_STICK: DeferredItem<Item> =
-        registerMaterial("everlasting_winter_stick", "Everlasting Winter Stick", "永冬棍")
+    val HEALTH_NUGGET: DeferredItem<Item> = registerMaterial("health_nugget")
 
     @JvmField
-    val FLOWER_ESSENCE: DeferredItem<Item> = registerMaterial("flower_essence", "Flower Essence", "花之精华")
+    val HEALTH_STONE: DeferredItem<Item> = registerMaterial("health_stone")
 
     @JvmField
-    val FROZEN_POWER_DEBRIS: DeferredItem<Item> =
-        registerMaterial("frozen_power_debris", "Frozen Power Debris", "冰霜能量碎片")
+    val HEMP_ROPE: DeferredItem<Item> = registerMaterial("hemp_rope")
 
     @JvmField
-    val GHOST_ESSENCE: DeferredItem<Item> = registerMaterial("ghost_essence", "Ghost Essence", "幽魂精华")
+    val HIGH_CONCENTRATION_URANIUM: DeferredItem<Item> = registerMaterial("high_concentration_uranium")
 
     @JvmField
-    val GOLD_YUANBAO: DeferredItem<Item> = registerMaterial("gold_yuanbao", "Gold Yuanbao", "金元宝")
+    val ICE_BRICK: DeferredItem<Item> = registerMaterial("ice_brick")
 
     @JvmField
-    val HEALTH_NUGGET: DeferredItem<Item> = registerMaterial("health_nugget", "Health Nugget", "生命粒")
+    val ICE_HEART: DeferredItem<Item> = registerMaterial("ice_heart")
 
     @JvmField
-    val HEALTH_STONE: DeferredItem<Item> = registerMaterial("health_stone", "Health Stone", "生命石")
+    val ICE_NUGGET: DeferredItem<Item> = registerMaterial("ice_nugget")
 
     @JvmField
-    val HEMP_ROPE: DeferredItem<Item> = registerMaterial("hemp_rope", "Hemp Rope", "麻绳")
+    val ICE_ROD: DeferredItem<Item> = registerMaterial("ice_rod")
 
     @JvmField
-    val HIGH_CONCENTRATION_URANIUM: DeferredItem<Item> =
-        registerMaterial("high_concentration_uranium", "High Concentration Uranium", "高纯度铀")
+    val IRON_KEY: DeferredItem<Item> = registerMaterial("iron_key")
 
     @JvmField
-    val ICE_BRICK: DeferredItem<Item> = registerMaterial("ice_brick", "Ice Brick", "冰砖")
+    val IRON_STICK: DeferredItem<Item> = registerMaterial("iron_stick")
 
     @JvmField
-    val ICE_HEART: DeferredItem<Item> = registerMaterial("ice_heart", "Heart Of Ice", "冰冻之心")
+    val LAPIS_NUGGET: DeferredItem<Item> = registerMaterial("lapis_nugget")
 
     @JvmField
-    val ICE_NUGGET: DeferredItem<Item> = registerMaterial("ice_nugget", "Ice Nugget", "冰粒")
+    val LAVA_ESSENCE: DeferredItem<Item> = registerMaterial("lava_essence")
 
     @JvmField
-    val ICE_ROD: DeferredItem<Item> = registerMaterial("ice_rod", "Ice Rod", "寒霜棍")
+    val LAVA_NUGGET: DeferredItem<Item> = registerMaterial("lava_nugget")
 
     @JvmField
-    val IRON_KEY: DeferredItem<Item> = registerMaterial("iron_key", "Iron Key", "铁钥匙")
+    val LIGHTNING_STONE: DeferredItem<Item> = registerMaterial("lightning_stone")
 
     @JvmField
-    val IRON_STICK: DeferredItem<Item> = registerMaterial("iron_stick", "Iron Stick", "铁棍")
+    val MAGIC_ARTICLE: DeferredItem<Item> = registerMaterial("magic_article")
 
     @JvmField
-    val LAPIS_NUGGET: DeferredItem<Item> = registerMaterial("lapis_nugget", "Lapis Nugget", "青金石粒")
+    val MAGIC_POWDER: DeferredItem<Item> = registerMaterial("magic_powder")
 
     @JvmField
-    val LAVA_ESSENCE: DeferredItem<Item> = registerMaterial("lava_essence", "Lava Essence", "岩浆精华")
+    val MAGIC_SURGE_CORE: DeferredItem<Item> = registerMaterial("magic_surge_core")
 
     @JvmField
-    val LAVA_NUGGET: DeferredItem<Item> = registerMaterial("lava_nugget", "Lava Nugget", "炙热粒")
+    val MYSTERIOUS_KEY_DEBRIS: DeferredItem<Item> = registerMaterial("mysterious_key_debris")
 
     @JvmField
-    val LIGHTNING_STONE: DeferredItem<Item> = registerMaterial("lightning_stone", "Lightning Stone", "雷电石")
+    val PINE_CONE: DeferredItem<Item> = registerMaterial("pine_cone")
 
     @JvmField
-    val MAGIC_CHEST_DEBRIS: DeferredItem<Item> =
-        registerMaterial("magic_chest_debris", "Magic Chest Debris", "魔法箱子碎片")
+    val POISON_GLAND: DeferredItem<Item> = registerMaterial("poison_gland")
 
     @JvmField
-    val MAGIC_ARTICLE: DeferredItem<Item> = registerMaterial("magic_article", "Magic Article", "魔法充能条")
+    val PULSE_STONE: DeferredItem<Item> = registerMaterial("pulse_stone")
 
     @JvmField
-    val MAGIC_POWDER: DeferredItem<Item> = registerMaterial("magic_powder", "Magic Powder", "魔法粉末")
+    val RADIATE_CRYSTAL: DeferredItem<Item> = registerMaterial("radiate_crystal")
 
     @JvmField
-    val MAGIC_SURGE_CORE: DeferredItem<Item> = registerMaterial("magic_surge_core", "Magic Surge Core", "魔法涌动核心")
+    val SHADOW_CRYSTAL: DeferredItem<Item> = registerMaterial("shadow_crystal")
 
     @JvmField
-    val MYSTERIOUS_KEY: DeferredItem<Item> = registerMaterial("mysterious_key", "Mysterious Key", "神秘钥匙")
+    val SHADOW_FEATHER: DeferredItem<Item> = registerMaterial("shadow_feather")
 
     @JvmField
-    val MYSTERIOUS_KEY_DEBRIS: DeferredItem<Item> =
-        registerMaterial("mysterious_key_debris", "Mysterious Key Debris", "神秘钥匙碎片")
+    val SHELL: DeferredItem<Item> = registerMaterial("shell")
 
     @JvmField
-    val NATURE_ESSENCE: DeferredItem<Item> = registerMaterial("nature_essence", "Nature Essence", "自然精华")
+    val SLIVER_YUANBAO: DeferredItem<Item> = registerMaterial("sliver_yuanbao")
 
     @JvmField
-    val PINE_CONE: DeferredItem<Item> = registerMaterial("pine_cone", "Pine Cone", "松果")
+    val SMALL_STONE: DeferredItem<Item> = registerMaterial("small_stone")
 
     @JvmField
-    val POISON_GLAND: DeferredItem<Item> = registerMaterial("poison_gland", "Poison Gland", "剧毒腺体")
+    val SMALL_STONE_BLOCK: DeferredItem<Item> = registerMaterial("small_stone_block")
 
     @JvmField
-    val PULSE_STONE: DeferredItem<Item> = registerMaterial("pulse_stone", "Pulse Stone", "脉冲石")
+    val SOUL: DeferredItem<Item> = registerMaterial("soul")
 
     @JvmField
-    val RADIATE_CRYSTAL: DeferredItem<Item> = registerMaterial("radiate_crystal", "Radiate Crystal", "辐射水晶")
+    val SOUL_BLAZE_ROD: DeferredItem<Item> = registerMaterial("soul_blaze_rod")
 
     @JvmField
-    val SHADOW_CRYSTAL: DeferredItem<Item> = registerMaterial("shadow_crystal", "Shadow Crystal", "暗影水晶")
+    val SPIRAL_SHELL: DeferredItem<Item> = registerMaterial("spiral_shell")
 
     @JvmField
-    val SHADOW_FEATHER: DeferredItem<Item> = registerMaterial("shadow_feather", "Shadow Feather", "暗影羽")
+    val STAR_DEBRIS: DeferredItem<Item> = registerMaterial("star_debris")
 
     @JvmField
-    val SHELL: DeferredItem<Item> = registerMaterial("shell", "Shell", "贝壳")
+    val STEEL_NUGGET: DeferredItem<Item> = registerMaterial("steel_nugget")
 
     @JvmField
-    val SLIVER_YUANBAO: DeferredItem<Item> = registerMaterial("sliver_yuanbao", "Sliver Yuanbao", "银元宝")
+    val STRAW_ROPE: DeferredItem<Item> = registerMaterial("straw_rope")
 
     @JvmField
-    val SMALL_STONE: DeferredItem<Item> = registerMaterial("small_stone", "Small Stone", "小石子")
+    val STREAM_STONE: DeferredItem<Item> = registerMaterial("stream_stone")
 
     @JvmField
-    val SMALL_STONE_BLOCK: DeferredItem<Item> = registerMaterial("small_stone_block", "Small Stone Block", "小石块")
+    val SUN_STONE: DeferredItem<Item> = registerMaterial("sun_stone")
 
     @JvmField
-    val SOUL: DeferredItem<Item> = registerMaterial("soul", "Soul", "灵魂")
+    val URANIUM: DeferredItem<Item> = registerMaterial("uranium")
 
     @JvmField
-    val SOUL_BLAZE_ROD: DeferredItem<Item> = registerMaterial("soul_blaze_rod", "Soul Blaze Rod", "灵魂烈焰棒")
+    val WASTE: DeferredItem<Item> = registerMaterial("waste")
 
     @JvmField
-    val SOUL_KEY: DeferredItem<Item> = registerMaterial("soul_key", "Soul Key", "灵魂钥匙")
+    val WINE_GLASS: DeferredItem<Item> = registerMaterial("wine_glass")
 
     @JvmField
-    val SPIRAL_SHELL: DeferredItem<Item> = registerMaterial("spiral_shell", "Spiral Shell", "螺蛳")
-
-    @JvmField
-    val STAR_DEBRIS: DeferredItem<Item> = registerMaterial("star_debris", "Star Debris", "星体碎片")
-
-    @JvmField
-    val STEEL_NUGGET: DeferredItem<Item> = registerMaterial("steel_nugget", "Steel Nugget", "钢粒")
-
-    @JvmField
-    val STRAW_ROPE: DeferredItem<Item> = registerMaterial("straw_rope", "Straw Rope", "草绳")
-
-    @JvmField
-    val STREAM_STONE: DeferredItem<Item> = registerMaterial("stream_stone", "Stream Stone", "溪流石")
-
-    @JvmField
-    val SUN_STONE: DeferredItem<Item> = registerMaterial("sun_stone", "Sun Stone", "日光石")
-
-    @JvmField
-    val URANIUM: DeferredItem<Item> = registerMaterial("uranium", "Uranium", "铀")
-
-    @JvmField
-    val WASTE: DeferredItem<Item> = registerMaterial("waste", "Waste", "废料")
-
-    @JvmField
-    val WINE_GLASS: DeferredItem<Item> = registerMaterial("wine_glass", "Wine Glass", "酒杯")
-
-    @JvmField
-    val WITHER_SUBSTANCE: DeferredItem<Item> = registerMaterial("wither_substance", "Wither Substance", "凋零物质")
+    val WITHER_SUBSTANCE: DeferredItem<Item> = registerMaterial("wither_substance")
 
     @JvmField
     val OLD_BOOK: DeferredItem<Item> = registerMaterial(
         "old_book",
-        "Ancient Book",
-        "古老的书",
         props = Supplier { Item.Properties().stacksTo(1) },
         customProp = CustomItemProperties.Builder().burnTime(10).build(),
     )

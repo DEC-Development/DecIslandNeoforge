@@ -6,15 +6,19 @@ import com.dec.decisland.client.RecoilClient
 import com.dec.decisland.client.bedrock.BedrockEmitterManager
 import com.dec.decisland.client.renderer.DartRenderer
 import com.dec.decisland.client.renderer.EnergyBallGeckoRenderer
-import com.dec.decisland.client.gui.ClientManaOverlay
-import com.dec.decisland.client.renderer.MagicBallGeckoRenderer
 import com.dec.decisland.client.renderer.EmptyRenderer
+import com.dec.decisland.client.renderer.MagicBallGeckoRenderer
+import com.dec.decisland.client.gui.ClientManaOverlay
 import com.dec.decisland.entity.ModEntities
 import com.dec.decisland.entity.projectile.AmethystEnergyBall
+import com.dec.decisland.entity.projectile.ConcentratedSoulBullet
 import com.dec.decisland.entity.projectile.DeepEnergy
 import com.dec.decisland.entity.projectile.FrozenEnergyBall
 import com.dec.decisland.entity.projectile.GoldenEnergyBall
+import com.dec.decisland.entity.projectile.JellyfishStaffProjectile
+import com.dec.decisland.entity.projectile.LapisBullet
 import com.dec.decisland.entity.projectile.PureEnergyBall
+import com.dec.decisland.entity.projectile.SoulWakeBullet
 import com.dec.decisland.entity.projectile.SpotsByBook
 import com.dec.decisland.entity.projectile.StreamEnergyBall
 import com.dec.decisland.entity.projectile.SpotsOverflow
@@ -77,6 +81,18 @@ object ModClientEvents {
         }
         EntityRenderers.register(ModEntities.GOLDEN_ENERGY_BALL.get()) { context ->
             MagicBallGeckoRenderer<GoldenEnergyBall>(context, entityTexture("golden_energy_ball"), 0.8f)
+        }
+        EntityRenderers.register(ModEntities.LAPIS_BULLET.get()) { context ->
+            ThrownItemRenderer<LapisBullet>(context, 1.0f, false)
+        }
+        EntityRenderers.register(ModEntities.CONCENTRATED_SOUL_BULLET.get()) { context ->
+            MagicBallGeckoRenderer<ConcentratedSoulBullet>(context, entityTexture("concentrated_soul_bullet"), 0.8f)
+        }
+        EntityRenderers.register(ModEntities.JELLYFISH_BY_JELLYFISH_STAFF.get()) { context ->
+            ThrownItemRenderer<JellyfishStaffProjectile>(context, 1.0f, false)
+        }
+        EntityRenderers.register(ModEntities.SOUL_WAKE_BULLET.get()) { context ->
+            ThrownItemRenderer<SoulWakeBullet>(context, 0.5f, false)
         }
         EntityRenderers.register(ModEntities.STREAM_ENERGY_BALL.get()) { context ->
             MagicBallGeckoRenderer<StreamEnergyBall>(context, entityTexture("stream_energy_ball"), 0.8f)

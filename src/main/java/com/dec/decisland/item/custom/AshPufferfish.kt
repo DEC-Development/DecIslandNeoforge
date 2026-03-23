@@ -31,13 +31,26 @@ class AshPufferfish(props: Item.Properties) : Item(props), ProjectileItem {
             0.4f / (level.random.nextFloat() * 0.4f + 0.8f),
         )
         if (level is ServerLevel) {
-            Projectile.spawnProjectileFromRotation(::ThrownAshPufferfish, level, itemStack, player, 0.0f, PROJECTILE_SHOOT_POWER, 1.0f)
+            val projectile = ThrownAshPufferfish(level, player, itemStack.copyWithCount(1))
+            projectile.setPos(player.x, player.eyeY - 0.1, player.z)
+            projectile.shootFromRotation(
+                player,
+                player.xRot,
+                player.yRot,
+                0.0f,
+                PROJECTILE_SHOOT_POWER,
+                PROJECTILE_INACCURACY,
+            )
+            if (!level.addFreshEntity(projectile)) {
+                return InteractionResult.FAIL
+            }
         }
 
         player.awardStat(Stats.ITEM_USED.get(this))
         AccessoryCombatEffects.onSuccessfulWeaponUse(player, itemStack)
+        player.swing(hand, true)
         itemStack.consume(1, player)
-        return InteractionResult.SUCCESS
+        return if (level.isClientSide) InteractionResult.SUCCESS else InteractionResult.SUCCESS_SERVER
     }
 
     override fun asProjectile(level: Level, position: Position, itemStack: ItemStack, direction: Direction): Projectile =
@@ -46,5 +59,8 @@ class AshPufferfish(props: Item.Properties) : Item(props), ProjectileItem {
     companion object {
         @JvmField
         val PROJECTILE_SHOOT_POWER: Float = 0.9f
+
+        @JvmField
+        val PROJECTILE_INACCURACY: Float = 1.0f
     }
 }
