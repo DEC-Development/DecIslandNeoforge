@@ -41,7 +41,7 @@ class BlockConfig private constructor(builder: Builder) {
 
     class Builder(
         @JvmField val name: String,
-        @JvmField val langMap: Map<String, String>,
+        @JvmField val langMap: Map<String, String> = emptyMap(),
     ) {
         @JvmField
         var func: Function<BlockBehaviour.Properties, out Block> = Function { properties -> Block(properties) }

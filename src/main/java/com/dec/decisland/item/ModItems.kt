@@ -36,6 +36,15 @@ object ModItems {
                     Consumables.defaultFood().build()
             ).usingConvertsTo(BOWL)}.creativeTab(ModCreativeModeTabs.DECISLAND_FOODS_TAB).build()
     )
+
+    @JvmField
+    val RICE: DeferredItem<Item> = registerItem(
+            ItemConfig.Builder("rice", mapOf("en_us" to "Rice", "zh_cn" to "米")).props { (Item.Properties()).food(
+                    FoodProperties(1, 0.6F, false),
+                    Consumables.defaultFood().consumeSeconds(1.0F).build()
+            )}.creativeTab(ModCreativeModeTabs.DECISLAND_FOODS_TAB).build()
+    )
+
     @JvmField
     val A_PIECE_OF_SALMON: DeferredItem<Item> = registerItem(
             ItemConfig.Builder("a_piece_of_salmon", mapOf("en_us" to "a Piece of Salmon", "zh_cn" to "生鱼片")).props { (Item.Properties()).food(

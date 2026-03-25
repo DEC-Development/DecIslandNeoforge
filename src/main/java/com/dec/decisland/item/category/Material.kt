@@ -4,7 +4,6 @@ import com.dec.decisland.item.CustomItemProperties
 import com.dec.decisland.item.ItemConfig
 import com.dec.decisland.item.ModCreativeModeTabs
 import com.dec.decisland.item.ModItems
-import com.dec.decisland.lang.Lang
 import net.minecraft.world.item.Item
 import net.neoforged.neoforge.registries.DeferredItem
 import java.util.function.Supplier
@@ -16,7 +15,7 @@ object Material {
         customProp: CustomItemProperties = CustomItemProperties.Builder().build(),
     ): DeferredItem<Item> =
         ModItems.registerItem(
-            ItemConfig.Builder(name, Lang.item.get(name))
+            ItemConfig.Builder(name)
                 .props(props)
                 .customProp(customProp)
                 .creativeTab(ModCreativeModeTabs.DECISLAND_MATERIALS_TAB)

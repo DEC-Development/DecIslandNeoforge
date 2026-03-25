@@ -88,4 +88,19 @@ object ModToolMaterial {
 
     @JvmField
     val LAPIS_SWORD: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, 125, 8.0f, 3.0f, 30, EMPTY_ITEM_TAG)
+
+    @JvmField
+    val BLOOD_SICKLE: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, 302, 8.0f, 4.0f, 15, EMPTY_ITEM_TAG)
+
+    @JvmField
+    val COPPER_SICKLE: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, 251, 8.0f, 4.0f, 15, EMPTY_ITEM_TAG)
+
+    @JvmField
+    val EVERLASTING_WINTER_SICKLE: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, 1645, 8.0f, 7.0f, 5, EMPTY_ITEM_TAG)
+
+    @JvmField
+    val GHOST_SICKLE: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, 2048, 8.0f, 11.0f, 15, EMPTY_ITEM_TAG)
+
+    @JvmField
+    val STEEL_SICKLE: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, 723, 8.0f, 5.0f, 15, EMPTY_ITEM_TAG)
 }

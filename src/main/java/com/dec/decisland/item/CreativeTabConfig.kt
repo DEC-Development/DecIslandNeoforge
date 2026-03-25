@@ -15,7 +15,7 @@ class CreativeTabConfig private constructor(builder: Builder) {
 
     class Builder(
         @JvmField val name: String,
-        @JvmField val langMap: Map<String, String>,
+        @JvmField val langMap: Map<String, String> = emptyMap(),
     ) {
         internal var iconItem: Supplier<Item>? = null
 

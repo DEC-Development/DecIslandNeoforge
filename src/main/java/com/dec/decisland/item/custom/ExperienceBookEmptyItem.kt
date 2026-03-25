@@ -34,7 +34,7 @@ class ExperienceBookEmptyItem(properties: Properties) : Item(properties) {
     }
 
     companion object {
-        const val FAIL_TRANSLATION_KEY: String = "text.dec:experience_book_empty_fail.name"
+        const val FAIL_TRANSLATION_KEY: String = "text.decisland.experience_book_empty_fail"
 
         private const val MIN_LEVEL_REQUIRED: Int = 12
         private const val LEVEL_COST: Int = 2

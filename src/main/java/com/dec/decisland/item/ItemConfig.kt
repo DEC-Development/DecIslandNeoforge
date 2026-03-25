@@ -45,7 +45,7 @@ class ItemConfig private constructor(builder: Builder) {
 
     class Builder(
         @JvmField val name: String,
-        @JvmField val langMap: Map<String, String>,
+        @JvmField val langMap: Map<String, String> = emptyMap(),
     ) {
         internal var func: Function<Item.Properties, out Item> = Function { properties -> Item(properties) }
         internal var props: Supplier<Item.Properties> = Supplier { Item.Properties() }

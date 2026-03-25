@@ -3,7 +3,6 @@ package com.dec.decisland.item.category
 import com.dec.decisland.item.ItemConfig
 import com.dec.decisland.item.ModCreativeModeTabs
 import com.dec.decisland.item.ModItems
-import com.dec.decisland.lang.Lang
 import com.dec.decisland.item.custom.Mask as MaskItem
 import net.minecraft.world.item.CreativeModeTab
 import net.minecraft.world.item.Item
@@ -16,7 +15,7 @@ object Mask {
 
     private fun registerMask(name: String): DeferredItem<Item> =
         ModItems.registerItem(
-            ItemConfig.Builder(name, Lang.item.get(name))
+            ItemConfig.Builder(name)
                 .func(::MaskItem)
                 .creativeTab(creativeTab)
                 .build(),

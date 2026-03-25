@@ -10,7 +10,6 @@ import com.dec.decisland.item.custom.accessory.DiamondRingItem
 import com.dec.decisland.item.custom.accessory.EmeraldRingItem
 import com.dec.decisland.item.custom.accessory.GoldRingItem
 import com.dec.decisland.item.custom.accessory.HeartRingItem
-import com.dec.decisland.lang.Lang
 import net.minecraft.client.data.models.model.ModelTemplates
 import net.minecraft.world.item.CreativeModeTab
 import net.minecraft.world.item.Item
@@ -29,7 +28,7 @@ object Accessory {
         func: Function<Item.Properties, out Item> = Function(::Item),
     ): DeferredItem<Item> =
         ModItems.registerItem(
-            ItemConfig.Builder(name, Lang.item.get(name))
+            ItemConfig.Builder(name)
                 .func(func)
                 .props {
                     var properties = Item.Properties().stacksTo(1)

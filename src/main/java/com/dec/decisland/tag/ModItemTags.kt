@@ -41,6 +41,9 @@ object ModItemTags {
     val SWORD: TagKey<Item> = create("sword")
 
     @JvmField
+    val SICKLE: TagKey<Item> = create("sickle")
+
+    @JvmField
     val KATANA: TagKey<Item> = create("katana")
 
     @JvmField

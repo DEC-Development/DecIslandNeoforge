@@ -4,7 +4,6 @@ import com.dec.decisland.item.ItemConfig
 import com.dec.decisland.item.ModArmorMaterials
 import com.dec.decisland.item.ModCreativeModeTabs
 import com.dec.decisland.item.ModItems
-import com.dec.decisland.lang.Lang
 import net.minecraft.tags.ItemTags
 import net.minecraft.tags.TagKey
 import net.minecraft.world.item.CreativeModeTab
@@ -27,7 +26,7 @@ object Armor {
         repairTag: TagKey<Item>? = null,
     ): DeferredItem<Item> =
         ModItems.registerItem(
-            ItemConfig.Builder(name, Lang.item.get(name))
+            ItemConfig.Builder(name)
                 .props {
                     val properties = Item.Properties().humanoidArmor(material, type)
                     when {

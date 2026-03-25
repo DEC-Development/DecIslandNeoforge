@@ -25,10 +25,10 @@ class GuideBookItem(properties: Properties) : Item(properties) {
 
     companion object {
         private val MESSAGE_KEYS: List<String> = listOf(
-            "text.dec:guide_book_0.name",
-            "text.dec:guide_book_1.name",
-            "text.dec:guide_book_2.name",
-            "text.dec:guide_book_3.name",
+            "text.decisland.guide_book_0",
+            "text.decisland.guide_book_1",
+            "text.decisland.guide_book_2",
+            "text.decisland.guide_book_3",
         )
     }
 }

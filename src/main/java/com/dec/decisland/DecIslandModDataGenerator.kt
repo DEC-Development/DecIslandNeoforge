@@ -6,6 +6,7 @@ import com.dec.decisland.datagen.ModDataMapProvider
 import com.dec.decisland.datagen.ModItemTagsProvider
 import com.dec.decisland.datagen.ModLangProvider
 import com.dec.decisland.datagen.ModModelsProvider
+import com.dec.decisland.datagen.ModRecipeProvider
 import net.minecraft.data.loot.LootTableProvider
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets
 import net.neoforged.bus.api.SubscribeEvent
@@ -19,6 +20,7 @@ object DecIslandModDataGenerator {
     fun gatherData(event: GatherDataEvent.Client) {
         event.createProvider(::ModModelsProvider)
         event.createProvider(::ModDataMapProvider)
+        event.createProvider(::ModRecipeProvider)
 
         arrayOf("en_us", "zh_cn").forEach { locale ->
             event.createProvider { output ->
