@@ -1,6 +1,7 @@
 package com.dec.decisland.events
 
 import com.dec.decisland.DecIsland
+import com.dec.decisland.client.model.ClothesModel
 import com.dec.decisland.client.model.EmptyModel
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState
 import net.minecraft.world.entity.EntityType
@@ -17,6 +18,7 @@ object ModEventBusEvents {
     @JvmStatic
     fun registerLayers(event: EntityRenderersEvent.RegisterLayerDefinitions) {
         event.registerLayerDefinition(EmptyModel.Companion.LAYER_LOCATION) { EmptyModel.createBodyLayer() }
+        event.registerLayerDefinition(ClothesModel.Companion.LAYER_LOCATION) { ClothesModel.createBodyLayer() }
     }
 
     @SubscribeEvent

@@ -21,21 +21,6 @@ group = mod_group_id
 // This is the repositories block in your build.gradle. NOT the one in publishing, or in buildscript. If it does not exist already, create it.
 repositories {
     maven {
-        name = 'GeckoLib'
-        url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
-        content {
-            includeGroupByRegex("software\\.bernie.*")
-            includeGroup("com.eliotlash.mclib")
-        }
-    }
-    maven {
-        name = 'GeckoLib'
-        url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
-        content {
-            includeGroup("software.bernie.geckolib")
-        }
-    }
-    maven {
         name = "Modrinth"
         url = "https://api.modrinth.com/maven"
     }
@@ -48,12 +33,6 @@ repositories {
         // location of a maven mirror for JEI files, as a fallback
         name = "ModMaven"
         url = "https://modmaven.dev"
-    }
-    maven {
-        url "https://cursemaven.com"
-        content {
-            includeGroup "curse.maven"
-        }
     }
     mavenCentral()
 }
@@ -182,10 +161,7 @@ dependencies {
     // For more info:
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
-//    implementation "maven.modrinth:geckolib-neoforge-${minecraft_version}:${geckolib_version}"
-    implementation "curse.maven:geckolib-neoforge-388172:7405440"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-//    implementation "software.bernie.geckolib:geckolib-neoforge-${minecraft_version}:${geckolib_version}"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

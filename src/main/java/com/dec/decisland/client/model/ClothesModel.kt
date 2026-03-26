@@ -1,37 +1,23 @@
 package com.dec.decisland.client.model
 
 import com.dec.decisland.DecIsland
+import com.dec.decisland.client.bedrock.model.BedrockBone
+import com.dec.decisland.client.bedrock.model.BedrockCube
+import com.dec.decisland.client.bedrock.model.BedrockEntityAssets
 import net.minecraft.client.model.HumanoidModel
 import net.minecraft.client.model.geom.ModelLayerLocation
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.client.model.geom.PartPose
-import net.minecraft.client.model.geom.builders.CubeDeformation
 import net.minecraft.client.model.geom.builders.CubeListBuilder
 import net.minecraft.client.model.geom.builders.LayerDefinition
 import net.minecraft.client.model.geom.builders.MeshDefinition
 import net.minecraft.client.renderer.entity.state.HumanoidRenderState
 import net.minecraft.resources.Identifier
+import kotlin.math.PI
 
 class ClothesModel<T : HumanoidRenderState>(root: ModelPart) : HumanoidModel<T>(root) {
     override fun setupAnim(state: T) {
-        head.xRot = 0.0f
-        head.yRot = 0.0f
-        head.zRot = 0.0f
-        body.xRot = 0.0f
-        body.yRot = 0.0f
-        body.zRot = 0.0f
-        rightArm.xRot = 0.0f
-        rightArm.yRot = 0.0f
-        rightArm.zRot = 0.0f
-        leftArm.xRot = 0.0f
-        leftArm.yRot = 0.0f
-        leftArm.zRot = 0.0f
-        rightLeg.xRot = 0.0f
-        rightLeg.yRot = 0.0f
-        rightLeg.zRot = 0.0f
-        leftLeg.xRot = 0.0f
-        leftLeg.yRot = 0.0f
-        leftLeg.zRot = 0.0f
+        super.setupAnim(state)
     }
 
     companion object {
@@ -39,66 +25,95 @@ class ClothesModel<T : HumanoidRenderState>(root: ModelPart) : HumanoidModel<T>(
         val LAYER_LOCATION: ModelLayerLocation =
             ModelLayerLocation(Identifier.fromNamespaceAndPath(DecIsland.MOD_ID, "clothes_model"), "main")
 
+        private val GEOMETRY_LOCATION: Identifier =
+            Identifier.fromNamespaceAndPath(DecIsland.MOD_ID, "bedrock/models/armor/clothes.geometry.json")
+
         @JvmStatic
         fun createBodyLayer(): LayerDefinition {
+            val geometry = BedrockEntityAssets.geometry(GEOMETRY_LOCATION)
             val meshDefinition = MeshDefinition()
             val root = meshDefinition.root
 
             val head = root.addOrReplaceChild(
                 "head",
-                CubeListBuilder.create()
-                    .texOffs(0, 0)
-                    .addBox(-4.0f, -8.0f, -4.0f, 8.0f, 8.0f, 8.0f, CubeDeformation(0.0f)),
-                PartPose.offset(0.0f, 0.0f, 0.0f),
+                cubeListFromBone(geometry.bonesByName.getValue("armorHead")),
+                poseFromBone(geometry.bonesByName.getValue("armorHead")),
             )
-
             head.addOrReplaceChild(
                 "hat",
-                CubeListBuilder.create()
-                    .texOffs(32, 0)
-                    .addBox(-4.0f, -8.0f, -4.0f, 8.0f, 8.0f, 8.0f, CubeDeformation(0.5f)),
+                CubeListBuilder.create(),
                 PartPose.offset(0.0f, 0.0f, 0.0f),
             )
 
             root.addOrReplaceChild(
                 "body",
-                CubeListBuilder.create()
-                    .texOffs(16, 20)
-                    .addBox(-4.0f, 0.0f, -2.0f, 8.0f, 12.0f, 4.0f, CubeDeformation(0.0f)),
-                PartPose.offset(0.0f, 0.0f, 0.0f),
+                cubeListFromBone(geometry.bonesByName.getValue("armorBody")),
+                poseFromBone(geometry.bonesByName.getValue("armorBody")),
             )
-
             root.addOrReplaceChild(
                 "right_arm",
-                CubeListBuilder.create()
-                    .texOffs(40, 37)
-                    .addBox(-3.0f, -2.0f, -2.0f, 4.0f, 12.0f, 4.0f, CubeDeformation(0.0f)),
-                PartPose.offset(-5.0f, 2.0f, 0.0f),
+                cubeListFromBone(geometry.bonesByName.getValue("armorRightArm")),
+                poseFromBone(geometry.bonesByName.getValue("armorRightArm")),
             )
             root.addOrReplaceChild(
                 "left_arm",
-                CubeListBuilder.create()
-                    .texOffs(32, 53)
-                    .addBox(-1.0f, -2.0f, -2.0f, 4.0f, 12.0f, 4.0f, CubeDeformation(0.0f)),
-                PartPose.offset(5.0f, 2.0f, 0.0f),
+                cubeListFromBone(geometry.bonesByName.getValue("armorLeftArm")),
+                poseFromBone(geometry.bonesByName.getValue("armorLeftArm")),
             )
-
             root.addOrReplaceChild(
                 "right_leg",
-                CubeListBuilder.create()
-                    .texOffs(0, 37)
-                    .addBox(-2.0f, 0.0f, -2.0f, 4.0f, 12.0f, 4.0f, CubeDeformation(0.0f)),
-                PartPose.offset(-1.9f, 12.0f, 0.0f),
+                cubeListFromBone(geometry.bonesByName.getValue("armorRightLeg")),
+                poseFromBone(geometry.bonesByName.getValue("armorRightLeg")),
             )
             root.addOrReplaceChild(
                 "left_leg",
-                CubeListBuilder.create()
-                    .texOffs(16, 53)
-                    .addBox(-2.0f, 0.0f, -2.0f, 4.0f, 12.0f, 4.0f, CubeDeformation(0.0f)),
-                PartPose.offset(1.9f, 12.0f, 0.0f),
+                cubeListFromBone(geometry.bonesByName.getValue("armorLeftLeg")),
+                poseFromBone(geometry.bonesByName.getValue("armorLeftLeg")),
             )
 
-            return LayerDefinition.create(meshDefinition, 64, 64)
+            return LayerDefinition.create(meshDefinition, geometry.textureWidth, geometry.textureHeight)
         }
+
+        private fun cubeListFromBone(bone: BedrockBone): CubeListBuilder {
+            val builder = CubeListBuilder.create()
+            bone.cubes.forEach { cube ->
+                appendCube(builder, bone, cube)
+            }
+            return builder
+        }
+
+        private fun appendCube(builder: CubeListBuilder, bone: BedrockBone, cube: BedrockCube) {
+            val uv = cube.uv
+            if (uv != null) {
+                builder.texOffs(uv.first, uv.second)
+            }
+            builder.mirror(cube.mirror)
+            builder.addBox(
+                cube.origin.x - bone.pivot.x,
+                -(cube.origin.y - bone.pivot.y) - cube.size.y,
+                cube.origin.z - bone.pivot.z,
+                cube.size.x,
+                cube.size.y,
+                cube.size.z,
+                net.minecraft.client.model.geom.builders.CubeDeformation(cube.inflate),
+            )
+        }
+
+        private fun poseFromBone(bone: BedrockBone): PartPose = PartPose.offsetAndRotation(
+            bone.pivot.x,
+            24.0f - bone.pivot.y,
+            bone.pivot.z,
+            bone.rotation.x.toModelRadX(),
+            bone.rotation.y.toModelRadY(),
+            bone.rotation.z.toModelRadZ(),
+        )
+
+        private fun Float.toRadians(): Float = (this * PI.toFloat()) / 180.0f
+
+        private fun Float.toModelRadX(): Float = -toRadians()
+
+        private fun Float.toModelRadY(): Float = -toRadians()
+
+        private fun Float.toModelRadZ(): Float = toRadians()
     }
 }

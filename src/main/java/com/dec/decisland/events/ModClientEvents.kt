@@ -4,10 +4,11 @@ import com.dec.decisland.DecIsland
 import com.dec.decisland.client.DizzinessClient
 import com.dec.decisland.client.RecoilClient
 import com.dec.decisland.client.bedrock.BedrockEmitterManager
+import com.dec.decisland.client.renderer.BedrockProjectileRenderer
 import com.dec.decisland.client.renderer.DartRenderer
-import com.dec.decisland.client.renderer.EnergyBallGeckoRenderer
+import com.dec.decisland.client.renderer.EnergyBallBedrockRenderer
 import com.dec.decisland.client.renderer.EmptyRenderer
-import com.dec.decisland.client.renderer.MagicBallGeckoRenderer
+import com.dec.decisland.client.renderer.MaskClientItemExtensions
 import com.dec.decisland.client.gui.ClientManaOverlay
 import com.dec.decisland.entity.ModEntities
 import com.dec.decisland.entity.projectile.AmethystEnergyBall
@@ -26,19 +27,19 @@ import com.dec.decisland.entity.projectile.ThunderBall
 import com.dec.decisland.entity.projectile.WaveEnergy
 import com.dec.decisland.entity.projectile.WinterEnergy
 import com.dec.decisland.entity.projectile.dart.ModDarts
+import com.dec.decisland.item.category.Mask
 import com.dec.decisland.particles.ModParticles
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.entity.EntityRenderers
+import net.minecraft.client.renderer.entity.EntityRendererProvider
 import net.minecraft.client.renderer.entity.ThrownItemRenderer
 import net.minecraft.resources.Identifier
 import net.neoforged.api.distmarker.Dist
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent
-import net.neoforged.neoforge.client.event.ClientTickEvent
 import net.neoforged.neoforge.client.event.EntityRenderersEvent
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent
-import net.neoforged.neoforge.client.event.RenderGuiEvent
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent
 
 @EventBusSubscriber(modid = DecIsland.MOD_ID, value = [Dist.CLIENT])
@@ -75,18 +76,18 @@ object ModClientEvents {
         EntityRenderers.register(ModEntities.THROWABLE_BOMB.get()) { context ->
             ThrownItemRenderer(context, 1.0f, false)
         }
-        EntityRenderers.register(ModEntities.ENERGY_BALL.get(), ::EnergyBallGeckoRenderer)
+        EntityRenderers.register(ModEntities.ENERGY_BALL.get(), ::EnergyBallBedrockRenderer)
         EntityRenderers.register(ModEntities.AMETHYST_ENERGY_BALL.get()) { context ->
-            MagicBallGeckoRenderer<AmethystEnergyBall>(context, entityTexture("amethyst_energy_ball"), 0.8f)
+            ballRenderer<AmethystEnergyBall>(context, "amethyst_energy_ball", 0.8f)
         }
         EntityRenderers.register(ModEntities.GOLDEN_ENERGY_BALL.get()) { context ->
-            MagicBallGeckoRenderer<GoldenEnergyBall>(context, entityTexture("golden_energy_ball"), 0.8f)
+            ballRenderer<GoldenEnergyBall>(context, "golden_energy_ball", 0.8f)
         }
         EntityRenderers.register(ModEntities.LAPIS_BULLET.get()) { context ->
             ThrownItemRenderer<LapisBullet>(context, 1.0f, false)
         }
         EntityRenderers.register(ModEntities.CONCENTRATED_SOUL_BULLET.get()) { context ->
-            MagicBallGeckoRenderer<ConcentratedSoulBullet>(context, entityTexture("concentrated_soul_bullet"), 0.8f)
+            ballRenderer<ConcentratedSoulBullet>(context, "concentrated_soul_bullet", 0.8f)
         }
         EntityRenderers.register(ModEntities.JELLYFISH_BY_JELLYFISH_STAFF.get()) { context ->
             ThrownItemRenderer<JellyfishStaffProjectile>(context, 1.0f, false)
@@ -95,31 +96,33 @@ object ModClientEvents {
             ThrownItemRenderer<SoulWakeBullet>(context, 0.5f, false)
         }
         EntityRenderers.register(ModEntities.STREAM_ENERGY_BALL.get()) { context ->
-            MagicBallGeckoRenderer<StreamEnergyBall>(context, entityTexture("stream_energy_ball"), 0.8f)
+            ballRenderer<StreamEnergyBall>(context, "stream_energy_ball", 0.8f)
         }
         EntityRenderers.register(ModEntities.PURE_ENERGY_BALL.get()) { context ->
-            MagicBallGeckoRenderer<PureEnergyBall>(context, entityTexture("pure_energy_ball"), 0.8f)
+            ballRenderer<PureEnergyBall>(context, "pure_energy_ball", 0.8f)
         }
         EntityRenderers.register(ModEntities.SPOTS_BY_BOOK.get()) { context ->
-            MagicBallGeckoRenderer<SpotsByBook>(
+            BedrockProjectileRenderer<SpotsByBook>(
                 context,
-                Identifier.fromNamespaceAndPath(DecIsland.MOD_ID, "spots"),
+                Identifier.fromNamespaceAndPath(DecIsland.MOD_ID, "bedrock/models/entity/spots.geometry.json"),
+                Identifier.fromNamespaceAndPath(DecIsland.MOD_ID, "bedrock/animations/entity/spots.animation.json"),
+                "animation.spots.spinning",
                 entityTexture("spots"),
                 1.0f,
             )
         }
         EntityRenderers.register(ModEntities.SPOTS_OVERFLOW.get(), ::EmptyRenderer)
         EntityRenderers.register(ModEntities.DEEP_ENERGY.get()) { context ->
-            MagicBallGeckoRenderer<DeepEnergy>(context, entityTexture("deep_energy"), 0.8f)
+            ballRenderer<DeepEnergy>(context, "deep_energy", 0.8f)
         }
         EntityRenderers.register(ModEntities.FROZEN_ENERGY_BALL.get()) { context ->
-            MagicBallGeckoRenderer<FrozenEnergyBall>(context, entityTexture("frozen_energy_ball"), 0.6f)
+            ballRenderer<FrozenEnergyBall>(context, "frozen_energy_ball", 0.6f)
         }
         EntityRenderers.register(ModEntities.WINTER_ENERGY.get()) { context ->
-            MagicBallGeckoRenderer<WinterEnergy>(context, entityTexture("winter_energy"), 0.8f)
+            ballRenderer<WinterEnergy>(context, "winter_energy", 0.8f)
         }
         EntityRenderers.register(ModEntities.THUNDER_BALL.get()) { context ->
-            MagicBallGeckoRenderer<ThunderBall>(context, entityTexture("thunder_ball"), 0.9f)
+            ballRenderer<ThunderBall>(context, "thunder_ball", 0.9f)
         }
         EntityRenderers.register(ModEntities.ENERGY_RAY.get(), ::EmptyRenderer)
         EntityRenderers.register(ModEntities.AMETHYST_ENERGY_RAY.get(), ::EmptyRenderer)
@@ -153,34 +156,26 @@ object ModClientEvents {
     @SubscribeEvent
     @JvmStatic
     fun registerClientExtensions(event: RegisterClientExtensionsEvent) {
+        event.registerItem(MaskClientItemExtensions, *Mask.allItems())
     }
 
     @SubscribeEvent
     @JvmStatic
     fun registerRenderers(event: EntityRenderersEvent.RegisterRenderers) {
     }
-
-    @SubscribeEvent
-    @JvmStatic
-    fun onRenderGuiOverlay(event: RenderGuiEvent.Pre) {
-        val mc = Minecraft.getInstance()
-        RecoilClient.tick(mc)
-        DizzinessClient.tick(mc)
-        ClientManaOverlay.render(
-            event.guiGraphics,
-            mc.window.guiScaledWidth,
-            mc.window.guiScaledHeight,
-        )
-    }
-
-    @SubscribeEvent
-    @JvmStatic
-    fun onClientTick(event: ClientTickEvent.Post) {
-        val mc = Minecraft.getInstance()
-        mc.level?.let(BedrockEmitterManager::tick)
-        mc.player?.let(AccessoryCombatEffects::tickClientPlayer)
-    }
-
     private fun entityTexture(path: String): Identifier =
         Identifier.fromNamespaceAndPath(DecIsland.MOD_ID, "textures/entity/$path.png")
+
+    private fun <T : net.minecraft.world.entity.Entity> ballRenderer(
+        context: EntityRendererProvider.Context,
+        texturePath: String,
+        scale: Float,
+    ): BedrockProjectileRenderer<T> = BedrockProjectileRenderer(
+        context,
+        Identifier.fromNamespaceAndPath(DecIsland.MOD_ID, "bedrock/models/entity/energy_ball.geometry.json"),
+        Identifier.fromNamespaceAndPath(DecIsland.MOD_ID, "bedrock/animations/entity/energy_ball.animation.json"),
+        "animation.energy_ball.fly",
+        entityTexture(texturePath),
+        scale,
+    )
 }

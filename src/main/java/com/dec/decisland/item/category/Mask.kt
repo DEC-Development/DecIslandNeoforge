@@ -13,13 +13,18 @@ object Mask {
     @JvmField
     val creativeTab: Supplier<CreativeModeTab> = ModCreativeModeTabs.DECISLAND_MASKS_TAB
 
+    private val registeredMasks = mutableListOf<DeferredItem<Item>>()
+
     private fun registerMask(name: String): DeferredItem<Item> =
         ModItems.registerItem(
             ItemConfig.Builder(name)
                 .func(::MaskItem)
                 .creativeTab(creativeTab)
                 .build(),
-        )
+        ).also(registeredMasks::add)
+
+    @JvmStatic
+    fun allItems(): Array<Item> = registeredMasks.map { it.get() }.toTypedArray()
 
     @JvmField
     val ABYSSAL_CONTROLLER_MASK: DeferredItem<Item> = registerMask("abyssal_controller_mask")

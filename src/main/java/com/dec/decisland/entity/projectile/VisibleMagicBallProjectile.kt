@@ -10,7 +10,7 @@ abstract class VisibleMagicBallProjectile(
     level: Level,
     wakeParticlePath: String,
     hitParticlePath: String? = null,
-) : GeoParticleRayProjectile(entityType, level) {
+) : VisibleParticleRayProjectile(entityType, level) {
     override val trailDurationTicks: Int = 8
     override val hitParticleDurationTicks: Int = 8
     override val trailSampleSpacing: Double? = 0.12

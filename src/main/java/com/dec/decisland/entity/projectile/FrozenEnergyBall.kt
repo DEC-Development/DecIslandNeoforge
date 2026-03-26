@@ -11,7 +11,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 
 class FrozenEnergyBall(entityType: EntityType<FrozenEnergyBall>, level: Level) :
-    GeoParticleRayProjectile(entityType, level) {
+    VisibleParticleRayProjectile(entityType, level) {
     constructor(level: Level, owner: LivingEntity, spawnedFrom: ItemStack) : this(ModEntities.FROZEN_ENERGY_BALL.get(), level) {
         setSpawnPositionFromOwner(owner)
     }
