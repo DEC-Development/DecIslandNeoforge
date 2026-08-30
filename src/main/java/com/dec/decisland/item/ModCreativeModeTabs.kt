@@ -30,6 +30,14 @@ object ModCreativeModeTabs {
     )
 
     @JvmField
+    val DECISLAND_NATURE_TAB: Supplier<CreativeModeTab> = registerTab(
+        CreativeTabConfig.Builder(
+            "decisland_nature_tab",
+            mapOf("en_us" to "DecIsland Nature", "zh_cn" to "DecIsland \u81ea\u7136"),
+        ).iconItem { ModBlocks.BLUE_GEM_ORE.get().asItem() }.build(),
+    )
+
+    @JvmField
     val DECISLAND_FOODS_TAB: Supplier<CreativeModeTab> = registerTab(
         CreativeTabConfig.Builder(
             "decisland_foods_tab",

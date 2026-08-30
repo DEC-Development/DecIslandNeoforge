@@ -31,12 +31,21 @@ data class BedrockCube(
     val mirror: Boolean,
 )
 
+data class BedrockTextureMesh(
+    val texture: String,
+    val position: BedrockVec3,
+    val rotation: BedrockVec3,
+    val localPivot: BedrockVec3,
+    val scale: BedrockVec3,
+)
+
 data class BedrockBone(
     val name: String,
     val parent: String?,
     val pivot: BedrockVec3,
     val rotation: BedrockVec3,
     val cubes: List<BedrockCube>,
+    val textureMeshes: List<BedrockTextureMesh>,
     val locators: Map<String, BedrockLocator>,
 )
 

@@ -8,10 +8,12 @@ import com.dec.decisland.item.ModCreativeModeTabs
 import com.dec.decisland.item.ModItems
 import com.dec.decisland.item.category.Accessory
 import com.dec.decisland.item.category.Armor
+import com.dec.decisland.item.category.Fashion
 import com.dec.decisland.item.category.Food
 import com.dec.decisland.item.category.Fish
 import com.dec.decisland.item.category.Mask
 import com.dec.decisland.item.category.Material
+import com.dec.decisland.item.category.Crop
 import com.dec.decisland.item.category.SummonItem
 import com.dec.decisland.item.category.Weapon
 import com.dec.decisland.particles.ModParticles
@@ -40,8 +42,10 @@ class DecIsland(modEventBus: IEventBus, modContainer: ModContainer) {
             Material.load()
             Armor.load()
             Accessory.load()
+            Fashion.load()
             Food.load()
             Fish.load()
+            Crop.load()
             Weapon.load()
             SummonItem.load()
             Mask.load()

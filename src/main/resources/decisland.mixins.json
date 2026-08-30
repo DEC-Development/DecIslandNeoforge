@@ -7,6 +7,7 @@
     "ThrowableProjectileMixin"
   ],
   "client": [
+    "client.EquipmentLayerRendererMixin",
     "client.FlintlockAimCameraMixin",
     "client.FlintlockAimCrosshairMixin",
     "client.FlintlockAimFovMixin",

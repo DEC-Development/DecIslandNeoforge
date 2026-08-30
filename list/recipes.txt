@@ -1,0 +1,15 @@
+a_bowl_of_rice
+crab_leg_cooked_from_blasting
+crab_leg_cooked_from_campfire_cooking
+crab_leg_cooked_from_smelting
+crab_leg_cooked_from_smoking
+everlasting_winter_stick
+flintlock_bullet
+frozen_power
+leek_cooked_from_campfire_cooking
+leek_cooked_from_smelting
+leek_cooked_from_smoking
+perch_cooked_from_campfire_cooking
+perch_cooked_from_smelting
+perch_cooked_from_smoking
+rice_wine

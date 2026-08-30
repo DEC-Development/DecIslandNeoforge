@@ -1,0 +1,7 @@
+current_mana
+magic_gap
+mana_level
+mana_regen_level
+max_health_level
+max_mana
+prev_magic

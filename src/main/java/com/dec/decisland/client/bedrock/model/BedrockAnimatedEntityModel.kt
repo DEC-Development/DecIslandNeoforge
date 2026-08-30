@@ -105,6 +105,7 @@ class BedrockAnimatedEntityModel private constructor(
                 geometry.textureWidth,
                 geometry.textureHeight,
             ).bakeRoot()
+            BedrockTextureMeshSupport.attachMeshesToNamedBones(bakedRoot, geometry)
 
             val animatedBones = LinkedHashMap<String, ModelPart>()
             val snapshots = ArrayList<Pair<ModelPart, PartPoseSnapshot>>()

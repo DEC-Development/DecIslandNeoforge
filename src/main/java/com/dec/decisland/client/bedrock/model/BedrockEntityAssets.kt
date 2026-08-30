@@ -1,6 +1,5 @@
 package com.dec.decisland.client.bedrock.model
 
-import com.dec.decisland.DecIsland
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
@@ -28,19 +27,36 @@ object BedrockEntityAssets {
             ?.firstOrNull()
             ?.takeIf(JsonElement::isJsonObject)
             ?.asJsonObject
-            ?: error("Invalid Bedrock geometry file: $resourceId")
 
-        val description = geometryObject.getAsJsonObjectOrNull("description")
-            ?: error("Bedrock geometry description missing in $resourceId")
-        val bones = geometryObject.getAsJsonArrayOrNull("bones")
+        if (geometryObject != null) {
+            val description = geometryObject.getAsJsonObjectOrNull("description")
+                ?: error("Bedrock geometry description missing in $resourceId")
+            val bones = geometryObject.getAsJsonArrayOrNull("bones")
+                ?.mapNotNull { element -> element.takeIf(JsonElement::isJsonObject)?.asJsonObject }
+                ?.map(::parseBone)
+                ?: emptyList()
+
+            return BedrockGeometry(
+                identifier = description.getAsJsonPrimitiveOrNull("identifier")?.asString ?: resourceId.toString(),
+                textureWidth = description.getAsJsonPrimitiveOrNull("texture_width")?.asInt ?: 64,
+                textureHeight = description.getAsJsonPrimitiveOrNull("texture_height")?.asInt ?: 64,
+                bones = bones,
+            )
+        }
+
+        val legacyEntry = root.entrySet()
+            .firstOrNull { (name, value) -> name.startsWith("geometry.") && value.isJsonObject }
+            ?: error("Invalid Bedrock geometry file: $resourceId")
+        val legacyGeometryObject = legacyEntry.value.asJsonObject
+        val bones = legacyGeometryObject.getAsJsonArrayOrNull("bones")
             ?.mapNotNull { element -> element.takeIf(JsonElement::isJsonObject)?.asJsonObject }
             ?.map(::parseBone)
             ?: emptyList()
 
         return BedrockGeometry(
-            identifier = description.getAsJsonPrimitiveOrNull("identifier")?.asString ?: resourceId.toString(),
-            textureWidth = description.getAsJsonPrimitiveOrNull("texture_width")?.asInt ?: 64,
-            textureHeight = description.getAsJsonPrimitiveOrNull("texture_height")?.asInt ?: 64,
+            identifier = legacyEntry.key,
+            textureWidth = legacyGeometryObject.getAsJsonPrimitiveOrNull("texturewidth")?.asInt ?: 64,
+            textureHeight = legacyGeometryObject.getAsJsonPrimitiveOrNull("textureheight")?.asInt ?: 64,
             bones = bones,
         )
     }
@@ -103,6 +119,18 @@ object BedrockEntityAssets {
                     uv = parseUv(cubeObject.get("uv")),
                     inflate = cubeObject.getAsJsonPrimitiveOrNull("inflate")?.asFloat ?: 0.0f,
                     mirror = cubeObject.getAsJsonPrimitiveOrNull("mirror")?.asBoolean ?: false,
+                )
+            }
+            ?: emptyList(),
+        textureMeshes = obj.getAsJsonArrayOrNull("texture_meshes")
+            ?.mapNotNull { it.takeIf(JsonElement::isJsonObject)?.asJsonObject }
+            ?.map { meshObject ->
+                BedrockTextureMesh(
+                    texture = meshObject.getAsJsonPrimitiveOrNull("texture")?.asString ?: "default",
+                    position = parseVec3(meshObject.get("position")),
+                    rotation = parseVec3(meshObject.get("rotation")),
+                    localPivot = parseVec3(meshObject.get("local_pivot")),
+                    scale = parseVec3(meshObject.get("scale"), BedrockVec3(1.0f, 1.0f, 1.0f)),
                 )
             }
             ?: emptyList(),

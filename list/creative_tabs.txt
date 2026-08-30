@@ -1,0 +1,8 @@
+decisland_accessories_tab
+decisland_crops_tab
+decisland_foods_tab
+decisland_masks_tab
+decisland_materials_tab
+decisland_misc_tab
+decisland_nature_tab
+decisland_weapons_tab

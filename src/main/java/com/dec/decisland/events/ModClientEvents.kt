@@ -8,6 +8,7 @@ import com.dec.decisland.client.renderer.BedrockProjectileRenderer
 import com.dec.decisland.client.renderer.DartRenderer
 import com.dec.decisland.client.renderer.EnergyBallBedrockRenderer
 import com.dec.decisland.client.renderer.EmptyRenderer
+import com.dec.decisland.client.renderer.FashionArmorClientItemExtensions
 import com.dec.decisland.client.renderer.MaskClientItemExtensions
 import com.dec.decisland.client.gui.ClientManaOverlay
 import com.dec.decisland.entity.ModEntities
@@ -27,6 +28,7 @@ import com.dec.decisland.entity.projectile.ThunderBall
 import com.dec.decisland.entity.projectile.WaveEnergy
 import com.dec.decisland.entity.projectile.WinterEnergy
 import com.dec.decisland.entity.projectile.dart.ModDarts
+import com.dec.decisland.item.category.Fashion
 import com.dec.decisland.item.category.Mask
 import com.dec.decisland.particles.ModParticles
 import net.minecraft.client.Minecraft
@@ -157,6 +159,7 @@ object ModClientEvents {
     @JvmStatic
     fun registerClientExtensions(event: RegisterClientExtensionsEvent) {
         event.registerItem(MaskClientItemExtensions, *Mask.allItems())
+        event.registerItem(FashionArmorClientItemExtensions, *Fashion.allItems())
     }
 
     @SubscribeEvent

@@ -27,7 +27,10 @@ object BedrockLangResources {
     fun itemName(locale: String, name: String): String? = get(locale, javaItemKey(name))
 
     @JvmStatic
-    fun blockName(locale: String, name: String): String? = get(locale, javaBlockKey(name))
+    fun blockName(locale: String, name: String): String? =
+        get(locale, javaBlockKey(name))
+            ?: get(locale, javaBlockKey("${name}_crop"))
+            ?: itemName(locale, name)
 
     @JvmStatic
     fun itemNames(locale: String): Map<String, String> {

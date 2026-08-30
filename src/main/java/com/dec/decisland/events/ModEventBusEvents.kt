@@ -3,6 +3,7 @@ package com.dec.decisland.events
 import com.dec.decisland.DecIsland
 import com.dec.decisland.client.model.ClothesModel
 import com.dec.decisland.client.model.EmptyModel
+import com.dec.decisland.client.model.FashionArmorModel
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.ai.attributes.Attributes
@@ -19,6 +20,13 @@ object ModEventBusEvents {
     fun registerLayers(event: EntityRenderersEvent.RegisterLayerDefinitions) {
         event.registerLayerDefinition(EmptyModel.Companion.LAYER_LOCATION) { EmptyModel.createBodyLayer() }
         event.registerLayerDefinition(ClothesModel.Companion.LAYER_LOCATION) { ClothesModel.createBodyLayer() }
+        event.registerLayerDefinition(FashionArmorModel.CLOTHES_LAYER_LOCATION) { FashionArmorModel.createClothesBodyLayer() }
+        event.registerLayerDefinition(FashionArmorModel.CLOTHES_WITH_HOOD_LAYER_LOCATION) { FashionArmorModel.createClothesWithHoodBodyLayer() }
+        event.registerLayerDefinition(FashionArmorModel.HAT_LAYER_LOCATION) { FashionArmorModel.createHatBodyLayer() }
+        event.registerLayerDefinition(FashionArmorModel.WITCH_HAT_LAYER_LOCATION) { FashionArmorModel.createWitchHatBodyLayer() }
+        event.registerLayerDefinition(FashionArmorModel.CHRISTMAS_CAP_LAYER_LOCATION) { FashionArmorModel.createChristmasCapBodyLayer() }
+        event.registerLayerDefinition(FashionArmorModel.WINGS_FROM_DEEP_LAYER_LOCATION) { FashionArmorModel.createWingsFromDeepBodyLayer() }
+        event.registerLayerDefinition(FashionArmorModel.GIANT_BAT_WINGS_LAYER_LOCATION) { FashionArmorModel.createGiantBatWingsBodyLayer() }
     }
 
     @SubscribeEvent

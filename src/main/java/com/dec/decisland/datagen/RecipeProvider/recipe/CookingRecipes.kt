@@ -4,6 +4,7 @@ import com.dec.decisland.datagen.RecipeProvider.CookingRecipeConfig
 import com.dec.decisland.datagen.RecipeProvider.RecipeContext
 import com.dec.decisland.datagen.RecipeProvider.RecipeDsl
 import com.dec.decisland.item.category.Fish
+import com.dec.decisland.item.category.Crop
 import net.minecraft.data.recipes.RecipeCategory
 
 object CookingRecipes {
@@ -79,6 +80,36 @@ object CookingRecipes {
         .unlockedBy(Fish.CRAB_LEG.get())
         .build()
 
+    private val LEEK_SMELTING: CookingRecipeConfig = CookingRecipeConfig.Builder("leek_cooked_from_smelting")
+        .category(RecipeCategory.FOOD)
+        .type(CookingRecipeConfig.Type.SMELTING)
+        .ingredient(Crop.LEEK.get())
+        .result(Crop.LEEK_COOKED.get())
+        .experience(DEFAULT_FOOD_EXPERIENCE)
+        .cookingTime(200)
+        .unlockedBy(Crop.LEEK.get())
+        .build()
+
+    private val LEEK_SMOKING: CookingRecipeConfig = CookingRecipeConfig.Builder("leek_cooked_from_smoking")
+        .category(RecipeCategory.FOOD)
+        .type(CookingRecipeConfig.Type.SMOKING)
+        .ingredient(Crop.LEEK.get())
+        .result(Crop.LEEK_COOKED.get())
+        .experience(DEFAULT_FOOD_EXPERIENCE)
+        .cookingTime(100)
+        .unlockedBy(Crop.LEEK.get())
+        .build()
+
+    private val LEEK_CAMPFIRE: CookingRecipeConfig = CookingRecipeConfig.Builder("leek_cooked_from_campfire_cooking")
+        .category(RecipeCategory.FOOD)
+        .type(CookingRecipeConfig.Type.CAMPFIRE)
+        .ingredient(Crop.LEEK.get())
+        .result(Crop.LEEK_COOKED.get())
+        .experience(DEFAULT_FOOD_EXPERIENCE)
+        .cookingTime(600)
+        .unlockedBy(Crop.LEEK.get())
+        .build()
+
     fun build(context: RecipeContext) {
         RecipeDsl.save(context, PERCH_SMELTING)
         RecipeDsl.save(context, PERCH_SMOKING)
@@ -87,5 +118,8 @@ object CookingRecipes {
         RecipeDsl.save(context, CRAB_LEG_BLASTING)
         RecipeDsl.save(context, CRAB_LEG_SMOKING)
         RecipeDsl.save(context, CRAB_LEG_CAMPFIRE)
+        RecipeDsl.save(context, LEEK_SMELTING)
+        RecipeDsl.save(context, LEEK_SMOKING)
+        RecipeDsl.save(context, LEEK_CAMPFIRE)
     }
 }
