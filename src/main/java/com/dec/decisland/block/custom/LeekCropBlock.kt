@@ -9,8 +9,10 @@ import java.util.function.Supplier
 class LeekCropBlock(
     properties: BlockBehaviour.Properties,
     seedItem: Supplier<out ItemLike>,
-) : SimpleCropBlock(properties, seedItem, AGE_TO_STAGE, SHAPES) {
+) : SimpleCropBlock(properties, seedItem, AGE_TO_STAGE, SHAPES, HARVEST_RESET_AGE) {
     companion object {
+        private const val HARVEST_RESET_AGE: Int = 0
+
         private val AGE_TO_STAGE: IntArray = intArrayOf(0, 0, 1, 1, 1, 2, 2, 2)
 
         private val SHAPES: Array<VoxelShape> = arrayOf(

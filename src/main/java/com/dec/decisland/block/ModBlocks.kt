@@ -7,14 +7,19 @@ import com.dec.decisland.block.custom.NightmareBlock
 import com.dec.decisland.block.custom.SimpleCropBlock
 import com.dec.decisland.block.custom.SimplePlantBlock
 import com.dec.decisland.block.custom.SnowPortalBlock
+import com.dec.decisland.block.custom.CornCropBlock
 import com.dec.decisland.datagen.ModBlockLootTablesProvider
 import com.dec.decisland.item.ModCreativeModeTabs
 import com.dec.decisland.item.ModItems
 import com.dec.decisland.item.category.Material
+import com.dec.decisland.item.category.Food
+import com.dec.decisland.item.category.Crop
 import net.minecraft.client.data.models.BlockModelGenerators
 import net.minecraft.client.data.models.model.ModelTemplates
 import net.minecraft.client.data.models.model.TextureMapping
 import net.minecraft.client.data.models.model.TextureSlot
+import net.minecraft.client.data.models.blockstates.MultiVariantGenerator
+import net.minecraft.client.data.models.blockstates.PropertyDispatch
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.Holder
 import net.minecraft.resources.Identifier
@@ -26,11 +31,14 @@ import net.minecraft.world.level.ItemLike
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.CropBlock
+import net.minecraft.world.level.block.DoublePlantBlock
 import net.minecraft.world.level.block.RotatedPillarBlock
 import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.BlockBehaviour
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf
 import net.minecraft.world.level.material.PushReaction
+import net.minecraft.world.level.material.MapColor
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition
 import net.minecraft.advancements.criterion.StatePropertiesPredicate
 import net.neoforged.bus.api.IEventBus
@@ -106,6 +114,7 @@ object ModBlocks {
         val ageToModelStage: IntArray,
         val seedItem: Supplier<out ItemLike>,
         val cropItem: Supplier<out ItemLike>,
+        val crossModel: Boolean,
     )
 
     private data class LootSpec(
@@ -802,6 +811,7 @@ object ModBlocks {
         ageToModelStage: IntArray,
         seedItem: Supplier<out ItemLike>,
         cropItem: Supplier<out ItemLike>,
+        crossModel: Boolean = false,
     ): DeferredBlock<SimpleCropBlock> =
         registerSimpleCrop(
             SimpleCropSpec(
@@ -810,6 +820,7 @@ object ModBlocks {
                 ageToModelStage = ageToModelStage,
                 seedItem = seedItem,
                 cropItem = cropItem,
+                crossModel = crossModel,
             ),
         )
 
@@ -830,6 +841,18 @@ object ModBlocks {
             .shouldRegistryBlockItem(false)
             .blockModelGenerator { blockModels -> generateSimpleCropModel(spec, blockModels) }
             .blockLootTableGenerator { lootTables -> generateSimpleCropLoot(spec, lootTables) }
+
+        return registerBlock(builder.build())
+    }
+
+    @JvmStatic
+    fun registerCornCrop(): DeferredBlock<CornCropBlock> {
+        val builder = BlockConfig.Builder("corn_crop")
+            .func(Function { properties -> CornCropBlock(properties) })
+            .props { simpleCropProperties().mapColor(MapColor.PLANT) }
+            .shouldRegistryBlockItem(false)
+            .blockModelGenerator { blockModels -> generateCornCropModel(blockModels) }
+            .blockLootTableGenerator { lootTables -> generateCornCropLoot(lootTables) }
 
         return registerBlock(builder.build())
     }
@@ -932,7 +955,27 @@ object ModBlocks {
         blockModels: BlockModelGenerators,
     ) {
         val block = getBlockByName("block.${DecIsland.MOD_ID}.${spec.name}").value()
-        blockModels.createCropBlock(block, CropBlock.AGE, *spec.ageToModelStage)
+        if (spec.crossModel) {
+            blockModels.registerSimpleFlatItemModel(spec.seedItem.get().asItem())
+            val stageModels = mutableMapOf<Int, Identifier>()
+            blockModels.blockStateOutput.accept(
+                MultiVariantGenerator.dispatch(block).with(
+                    PropertyDispatch.initial(CropBlock.AGE).generate { age ->
+                        val stage = spec.ageToModelStage[age.toInt()]
+                        val model = stageModels.getOrPut(stage) {
+                            val suffix = "_stage$stage"
+                            val textureMapping = TextureMapping.cross(TextureMapping.getBlockTexture(block, suffix))
+                            BlockModelGenerators.PlantType.NOT_TINTED
+                                .getCross()
+                                .createWithSuffix(block, suffix, textureMapping, blockModels.modelOutput)
+                        }
+                        BlockModelGenerators.plainVariant(model)
+                    },
+                ),
+            )
+        } else {
+            blockModels.createCropBlock(block, CropBlock.AGE, *spec.ageToModelStage)
+        }
     }
 
     private fun blockTexture(name: String): Identifier = Identifier.fromNamespaceAndPath(DecIsland.MOD_ID, "block/$name")
@@ -966,6 +1009,38 @@ object ModBlocks {
                         .hasProperty(CropBlock.AGE, CropBlock.MAX_AGE),
                 ),
         )
+    }
+
+    private fun generateCornCropModel(blockModels: BlockModelGenerators) {
+        val block = getBlockByName("block.${DecIsland.MOD_ID}.corn_crop").value()
+        blockModels.registerSimpleFlatItemModel(Crop.CORN_SEEDS.get().asItem())
+        val stageModels = mutableMapOf<String, Identifier>()
+        blockModels.blockStateOutput.accept(
+            MultiVariantGenerator.dispatch(block).with(
+                PropertyDispatch.initial(CornCropBlock.AGE, DoublePlantBlock.HALF).generate { age, half ->
+                    val stage =
+                        if (half == DoubleBlockHalf.UPPER) {
+                            age.toInt().coerceAtMost(CornCropBlock.UPPER_MAX_AGE)
+                        } else {
+                            age.toInt()
+                        }
+                    val halfName = if (half == DoubleBlockHalf.UPPER) "upper" else "lower"
+                    val suffix = "_${halfName}_stage$stage"
+                    val model = stageModels.getOrPut(suffix) {
+                        val textureMapping = TextureMapping.cross(TextureMapping.getBlockTexture(block, suffix))
+                        BlockModelGenerators.PlantType.NOT_TINTED
+                            .getCross()
+                            .createWithSuffix(block, suffix, textureMapping, blockModels.modelOutput)
+                    }
+                    BlockModelGenerators.plainVariant(model)
+                },
+            ),
+        )
+    }
+
+    private fun generateCornCropLoot(lootTables: ModBlockLootTablesProvider) {
+        val block = getBlockByName("block.${DecIsland.MOD_ID}.corn_crop").value()
+        lootTables.addCornCropDrop(block, Food.CORN.get())
     }
 
     private fun oreSpec(

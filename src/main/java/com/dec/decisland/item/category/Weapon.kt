@@ -604,6 +604,51 @@ object Weapon {
     )
 
     @JvmField
+    val GINGERBREAD_SWORD: DeferredItem<Item> = ModItems.registerItem(
+        ItemConfig.Builder("gingerbread_sword")
+            .props {
+                Item.Properties()
+                    .food(FoodProperties(5, 0.8f, true), Consumables.defaultFood().build())
+                    .sword(ModToolMaterial.GINGERBREAD_SWORD, 2.0f, -2.4f)
+                    .repairable(Food.GINGERBREAD_MAN.get())
+            }
+            .tags(swordWeaponTags)
+            .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
+            .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
+            .build(),
+    )
+
+    @JvmField
+    val LOLLIPOP: DeferredItem<Item> = ModItems.registerItem(
+        ItemConfig.Builder("lollipop")
+            .props {
+                Item.Properties()
+                    .food(FoodProperties(8, 0.8f, false), Consumables.defaultFood().build())
+                    .sword(ModToolMaterial.LOLLIPOP, 1.0f, -3.0f)
+                    .repairable(ModItems.CANDY.get())
+            }
+            .tags(swordWeaponTags)
+            .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
+            .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
+            .build(),
+    )
+
+    @JvmField
+    val LONG_BREAD: DeferredItem<Item> = ModItems.registerItem(
+        ItemConfig.Builder("long_bread")
+            .props {
+                Item.Properties()
+                    .food(FoodProperties(17, 0.8f, false), Consumables.defaultFood().build())
+                    .sword(ModToolMaterial.LONG_BREAD, 0.0f, -2.8f)
+                    .repairable(Items.BREAD)
+            }
+            .tags(swordWeaponTags)
+            .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
+            .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
+            .build(),
+    )
+
+    @JvmField
     val CACTUS_SWORD: DeferredItem<Item> = ModItems.registerItem(
         ItemConfig.Builder("cactus_sword")
             .props { Item.Properties().sword(ModToolMaterial.CACTUS, 2.0f, -2.7f) }

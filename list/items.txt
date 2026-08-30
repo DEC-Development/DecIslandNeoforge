@@ -42,9 +42,11 @@ bat_mask
 bat_wing
 bee_mask
 bizarre_chilli
+bizarre_chilli_seeds
 black_courtesy
 black_flower_block
 black_shoes
+black_shorts
 blaze_mask
 blizzard_staff
 blizzard_sword
@@ -64,6 +66,7 @@ bone_sword
 book_of_deep
 boomber_mask
 bracken
+brain_rice
 breeze_flower
 brown_bear_mask
 brown_mooshroom_mask
@@ -86,14 +89,18 @@ cloud_flower
 coal_fish
 coal_nugget
 cob
+coffee_of_lileyi
 complete_bat_wing
 compress_flower_block
 compressed_ice
+cooked_brain
 copper_dart
 copper_sickle
 coral_dart
 coral_ingot
 coral_sword
+corn
+corn_seeds
 corrupted_sword
 cow_mask
 crab_leg
@@ -196,6 +203,7 @@ evil_snow_man_mask
 experience_book
 experience_book_empty
 experience_book_pro_empty
+experience_flower_seeds
 eye_of_nature
 fan_flower
 fang_mace
@@ -208,11 +216,15 @@ flintlock
 flintlock_bullet
 flintlock_pro
 flower_essence
+following_particle
 formal_style_clothes
 formal_style_pants
 fox_mask
 frank_mask
 fried_egg
+fried_melon_seed
+fritillary
+fritillary_seeds
 frozen_ball
 frozen_boots
 frozen_chestplate
@@ -235,7 +247,9 @@ ghost_ingot
 ghost_sickle
 giant_bat_wings
 giant_ivy
+gingerbread_man
 gingerbread_man_mask
+gingerbread_sword
 glamor_clothes
 glamor_pants
 glamor_shoes
@@ -256,6 +270,7 @@ guardian_mask
 guide_book
 hammer_flower
 hanyi_clothes
+hanyi_hair_accessories
 hanyi_pants
 hanyi_shoes
 hard_bamboo_katana
@@ -269,6 +284,8 @@ hemp_rope
 herb_bag
 high_concentration_uranium
 host_of_deep_mask
+houttuynia
+houttuynia_seeds
 hunter_book
 hunter_bullet_bag
 husk_mask
@@ -289,6 +306,7 @@ illager_sword
 infinite_crystal_nucleus_1
 infinite_crystal_nucleus_2
 infinite_crystal_nucleus_3
+intestine
 iron_apple
 iron_apple_enchanted
 iron_dart
@@ -319,6 +337,7 @@ lava_chestplate
 lava_dart
 lava_essence
 lava_flintlock
+lava_flower_seeds
 lava_helmet
 lava_ingot
 lava_leggings
@@ -335,6 +354,8 @@ lester_pants
 lester_shoes
 light_obsidian
 lightning_stone
+lollipop
+long_bread
 lurk_bud
 lurk_fruit
 lurk_grass
@@ -350,6 +371,7 @@ magic_powder
 magic_surge_core
 magma_cube_mask
 maple_flower
+melon_piece
 mind_controller
 mock_strawberry
 mooli
@@ -392,6 +414,8 @@ perch
 perch_cooked
 phantom_mask
 pig_mask
+piglin_chestplate
+piglin_leggings
 pigzombie_mask
 pine_cone
 pink_dandelion
@@ -405,10 +429,13 @@ poison_fish
 poison_gland
 polar_wolf_mask
 polarbear_mask
+pollution_algae
+potato_rice
 predators_mask
 prehistoric_monster_mask
 pufferfish_mask
 pulse_stone
+pumpkin_candy
 pure_ingot
 radiate_creeper_mask
 radiate_crystal
@@ -424,6 +451,7 @@ redstone_apple
 redstone_apple_enchanted
 resistance_potion
 rice
+rice_seeds
 rice_wine
 rosemary
 rotten_flesh_block
@@ -447,6 +475,7 @@ shadow_zombie_mask
 sharp_coral
 shell
 short_flintlock
+shulker_helmet
 shulker_mask
 skeleton_assassin_mask
 skeleton_fish
@@ -472,6 +501,7 @@ soul_soil_diamond_ore
 soul_staff
 soul_wake_bullet_render
 soul_zombie_mask
+soybean
 spark_flower
 spell_flower
 spider_mask
@@ -503,7 +533,9 @@ stones_bag
 storm_flintlock
 storm_staff
 straw_rope
+stray_chestplate
 stray_helmet
+stray_leggings
 stray_mask
 stream_dart
 stream_ore
@@ -520,8 +552,12 @@ thunder_staff
 thyme
 time_compass
 tnt_creeper_mask
+tofu
 tropical_fish
 tropical_fish_cooked
+turtle_boots
+turtle_chestplate
+turtle_leggings
 turtle_sword
 uniform_clothes
 uniform_pants
@@ -539,6 +575,7 @@ wave_magic_book
 werewolf_mask
 white_flower_block
 white_shoes
+white_t_shirt
 wine_glass
 wings_from_deep
 witch_hat
@@ -558,6 +595,7 @@ wooden_staff
 yellow_butterfly_flower
 yellow_flower_block
 yellow_jellyfish
+zombie_brain
 zombie_fish
 zombie_mask
 zombie_summoner_mask

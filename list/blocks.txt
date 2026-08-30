@@ -3,6 +3,7 @@ ancient_ice
 ash
 baby_blue_eyes_flower
 balloon_flower
+bizarre_chilli_crop
 black_flower_block
 blue_flower_block
 blue_gem_ore
@@ -15,6 +16,7 @@ chiseled_ice_brick
 cloud_flower
 compress_flower_block
 compressed_ice
+corn_crop
 crimson_lamp
 crinum
 dandelion
@@ -29,16 +31,20 @@ end_iron_ore
 end_lapis_ore
 end_ore
 end_redstone_ore
+experience_flower_crop
 fan_flower
 flower_ghost_block
+fritillary_crop
 frozen_mirror_flower
 gold_flower
 golden_lamp
 hammer_flower
+houttuynia_crop
 ice_brick_block
 ice_lantern
 ice_mixed_brick
 lamp_flower
+lava_flower_crop
 lava_ore
 leaves_flower
 leek_crop
@@ -70,6 +76,7 @@ red_flower_block
 red_gem_ore
 red_spider_lily
 red_stonebrick
+rice_crop
 rosemary
 rotten_flesh_block
 russet_grass
@@ -78,6 +85,7 @@ snow_flower
 snow_lotus
 solidified_lava_block
 soul_soil_diamond_ore
+soybean_crop
 spark_flower
 spell_flower
 star_flower

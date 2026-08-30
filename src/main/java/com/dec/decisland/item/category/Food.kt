@@ -1,5 +1,6 @@
 package com.dec.decisland.item.category
 
+import com.dec.decisland.item.CustomItemProperties
 import com.dec.decisland.item.ItemConfig
 import com.dec.decisland.item.ModCreativeModeTabs
 import com.dec.decisland.item.ModItems
@@ -12,14 +13,16 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.component.Consumables
 import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect
+import net.minecraft.world.item.consume_effects.ConsumeEffect
+import net.minecraft.world.item.consume_effects.RemoveStatusEffectsConsumeEffect
 import net.neoforged.neoforge.registries.DeferredItem
 import java.util.function.Supplier
 
 object Food {
     private fun registerConsumable(
         name: String,
-        enUs: String,
-        zhCn: String,
+        enUs: String? = null,
+        zhCn: String? = null,
         nutrition: Int,
         saturation: Float,
         alwaysEat: Boolean = false,
@@ -28,9 +31,17 @@ object Food {
         stackSize: Int = 64,
         convertTo: Supplier<Item>? = null,
         cooldown: Float? = null,
-        effects: List<ApplyStatusEffectsConsumeEffect> = emptyList(),
+        useDurationSeconds: Float = 1.6f,
+        compostableChance: Float = 0.0f,
+        effects: List<ConsumeEffect> = emptyList(),
     ): DeferredItem<Item> {
-        val builder = ItemConfig.Builder(name, mapOf("en_us" to enUs, "zh_cn" to zhCn))
+        val builder = ItemConfig.Builder(
+            name,
+            buildMap {
+                if (enUs != null) put("en_us", enUs)
+                if (zhCn != null) put("zh_cn", zhCn)
+            },
+        )
         if (glint) {
             builder.func(::GlintItem)
         }
@@ -39,6 +50,9 @@ object Food {
             builder
                 .props {
                     var consumable = if (drink) Consumables.defaultDrink() else Consumables.defaultFood()
+                    if (useDurationSeconds != 1.6f) {
+                        consumable = consumable.consumeSeconds(useDurationSeconds)
+                    }
                     effects.forEach { effect ->
                         consumable = consumable.onConsume(effect)
                     }
@@ -56,6 +70,7 @@ object Food {
 
                     properties
                 }
+                .customProp(CustomItemProperties.Builder().compostableChance(compostableChance).build())
                 .modelTemplate(ModelTemplates.FLAT_ITEM)
                 .creativeTab(ModCreativeModeTabs.DECISLAND_FOODS_TAB)
                 .build(),
@@ -302,6 +317,157 @@ object Food {
         effects = listOf(
             ApplyStatusEffectsConsumeEffect(MobEffectInstance(MobEffects.RESISTANCE, 4 * 20, 4)),
             ApplyStatusEffectsConsumeEffect(MobEffectInstance(MobEffects.SLOWNESS, 4 * 20, 4)),
+        ),
+    )
+
+    @JvmField
+    val BRAIN_RICE: DeferredItem<Item> = registerConsumable(
+        "brain_rice",
+        nutrition = 13,
+        saturation = 1.0f,
+        alwaysEat = true,
+    )
+
+    @JvmField
+    val COFFEE_OF_LILEYI: DeferredItem<Item> = registerConsumable(
+        "coffee_of_lileyi",
+        nutrition = 0,
+        saturation = 1.0f,
+        alwaysEat = true,
+        drink = true,
+        effects = listOf(
+            ApplyStatusEffectsConsumeEffect(MobEffectInstance(MobEffects.HERO_OF_THE_VILLAGE, 600 * 20, 0)),
+            ApplyStatusEffectsConsumeEffect(MobEffectInstance(MobEffects.HASTE, 600 * 20, 1)),
+            ApplyStatusEffectsConsumeEffect(MobEffectInstance(MobEffects.SPEED, 600 * 20, 0)),
+            ApplyStatusEffectsConsumeEffect(MobEffectInstance(MobEffects.NIGHT_VISION, 600 * 20, 0)),
+            ApplyStatusEffectsConsumeEffect(MobEffectInstance(MobEffects.STRENGTH, 600 * 20, 0)),
+            ApplyStatusEffectsConsumeEffect(MobEffectInstance(MobEffects.RESISTANCE, 600 * 20, 0)),
+            ApplyStatusEffectsConsumeEffect(MobEffectInstance(MobEffects.FIRE_RESISTANCE, 600 * 20, 0)),
+            ApplyStatusEffectsConsumeEffect(MobEffectInstance(MobEffects.WATER_BREATHING, 600 * 20, 0)),
+            ApplyStatusEffectsConsumeEffect(MobEffectInstance(MobEffects.REGENERATION, 600 * 20, 0)),
+            ApplyStatusEffectsConsumeEffect(MobEffectInstance(MobEffects.ABSORPTION, 600 * 20, 0)),
+        ),
+    )
+
+    @JvmField
+    val COOKED_BRAIN: DeferredItem<Item> = registerConsumable(
+        "cooked_brain",
+        nutrition = 5,
+        saturation = 0.5f,
+        effects = listOf(
+            ApplyStatusEffectsConsumeEffect(MobEffectInstance(MobEffects.NAUSEA, 15 * 20, 0)),
+        ),
+    )
+
+    @JvmField
+    val CORN: DeferredItem<Item> = registerConsumable(
+        "corn",
+        nutrition = 4,
+        saturation = 0.6f,
+        convertTo = Supplier { ModItems.COB.get() },
+        useDurationSeconds = 3.2f,
+        compostableChance = 0.65f,
+    )
+
+    @JvmField
+    val FRIED_MELON_SEED: DeferredItem<Item> = registerConsumable(
+        "fried_melon_seed",
+        nutrition = 1,
+        saturation = 0.5f,
+    )
+
+    @JvmField
+    val FRITILLARY: DeferredItem<Item> = registerConsumable(
+        "fritillary",
+        nutrition = 3,
+        saturation = 0.6f,
+        alwaysEat = true,
+        effects = listOf(
+            RemoveStatusEffectsConsumeEffect(MobEffects.POISON),
+        ),
+    )
+
+    @JvmField
+    val GINGERBREAD_MAN: DeferredItem<Item> = registerConsumable(
+        "gingerbread_man",
+        nutrition = 2,
+        saturation = 0.5f,
+        effects = listOf(
+            ApplyStatusEffectsConsumeEffect(MobEffectInstance(MobEffects.REGENERATION, 5 * 20, 1)),
+        ),
+    )
+
+    @JvmField
+    val HOUTTUYNIA: DeferredItem<Item> = registerConsumable(
+        "houttuynia",
+        nutrition = 1,
+        saturation = 0.5f,
+        alwaysEat = true,
+        effects = listOf(
+            RemoveStatusEffectsConsumeEffect(MobEffects.NAUSEA),
+        ),
+    )
+
+    @JvmField
+    val INTESTINE: DeferredItem<Item> = registerConsumable(
+        "intestine",
+        nutrition = 3,
+        saturation = 0.5f,
+        effects = listOf(
+            ApplyStatusEffectsConsumeEffect(MobEffectInstance(MobEffects.POISON, 10 * 20, 0)),
+            ApplyStatusEffectsConsumeEffect(MobEffectInstance(MobEffects.NAUSEA, 30 * 20, 0)),
+        ),
+    )
+
+    @JvmField
+    val MELON_PIECE: DeferredItem<Item> = registerConsumable(
+        "melon_piece",
+        nutrition = 1,
+        saturation = 0.5f,
+    )
+
+    @JvmField
+    val POLLUTION_ALGAE: DeferredItem<Item> = registerConsumable(
+        "pollution_algae",
+        nutrition = 2,
+        saturation = 0.4f,
+        effects = listOf(
+            ApplyStatusEffectsConsumeEffect(MobEffectInstance(MobEffects.POISON, 10 * 20, 0)),
+            ApplyStatusEffectsConsumeEffect(MobEffectInstance(MobEffects.NAUSEA, 30 * 20, 0)),
+            ApplyStatusEffectsConsumeEffect(MobEffectInstance(MobEffects.WITHER, 10 * 20, 0)),
+        ),
+    )
+
+    @JvmField
+    val POTATO_RICE: DeferredItem<Item> = registerConsumable(
+        "potato_rice",
+        nutrition = 15,
+        saturation = 0.8f,
+        alwaysEat = true,
+    )
+
+    @JvmField
+    val PUMPKIN_CANDY: DeferredItem<Item> = registerConsumable(
+        "pumpkin_candy",
+        nutrition = 2,
+        saturation = 1.5f,
+    )
+
+    @JvmField
+    val TOFU: DeferredItem<Item> = registerConsumable(
+        "tofu",
+        nutrition = 8,
+        saturation = 0.6f,
+    )
+
+    @JvmField
+    val ZOMBIE_BRAIN: DeferredItem<Item> = registerConsumable(
+        "zombie_brain",
+        nutrition = 3,
+        saturation = 0.5f,
+        effects = listOf(
+            ApplyStatusEffectsConsumeEffect(MobEffectInstance(MobEffects.POISON, 15 * 20, 0)),
+            ApplyStatusEffectsConsumeEffect(MobEffectInstance(MobEffects.NAUSEA, 20 * 20, 0)),
         ),
     )
 

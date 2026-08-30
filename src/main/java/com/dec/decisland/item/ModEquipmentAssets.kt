@@ -32,13 +32,22 @@ object ModEquipmentAssets {
     val LAVA: ResourceKey<EquipmentAsset> = createId("lava")
 
     @JvmField
+    val PIGLIN: ResourceKey<EquipmentAsset> = createId("piglin")
+
+    @JvmField
     val RUPERT: ResourceKey<EquipmentAsset> = createId("rupert")
+
+    @JvmField
+    val SHULKER: ResourceKey<EquipmentAsset> = createId("shulker")
 
     @JvmField
     val STEEL: ResourceKey<EquipmentAsset> = createId("steel")
 
     @JvmField
     val STONE: ResourceKey<EquipmentAsset> = createId("stone")
+
+    @JvmField
+    val TURTLE: ResourceKey<EquipmentAsset> = createId("turtle")
 
     @JvmField
     val WOOD: ResourceKey<EquipmentAsset> = createId("wood")

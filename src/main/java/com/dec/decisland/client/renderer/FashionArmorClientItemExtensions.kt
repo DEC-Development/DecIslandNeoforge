@@ -39,6 +39,7 @@ object FashionArmorClientItemExtensions : IClientItemExtensions {
             Fashion.ModelKind.CHRISTMAS_CAP -> FashionArmorModel.CHRISTMAS_CAP_LAYER_LOCATION
             Fashion.ModelKind.WINGS_FROM_DEEP -> FashionArmorModel.WINGS_FROM_DEEP_LAYER_LOCATION
             Fashion.ModelKind.GIANT_BAT_WINGS -> FashionArmorModel.GIANT_BAT_WINGS_LAYER_LOCATION
+            Fashion.ModelKind.FOLLOWING_PARTICLE -> FashionArmorModel.FOLLOWING_PARTICLE_LAYER_LOCATION
             Fashion.ModelKind.VANILLA -> return original
         }
 

@@ -8,6 +8,7 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.item.CreativeModeTab
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.equipment.ArmorMaterial
 import net.minecraft.world.item.equipment.ArmorType
 import net.neoforged.neoforge.registries.DeferredItem
 import java.util.function.Supplier
@@ -22,6 +23,7 @@ object Fashion {
         CHRISTMAS_CAP,
         WINGS_FROM_DEEP,
         GIANT_BAT_WINGS,
+        FOLLOWING_PARTICLE,
     }
 
     data class Definition(
@@ -37,11 +39,19 @@ object Fashion {
     private val registeredItems = mutableListOf<DeferredItem<Item>>()
 
     private fun register(definition: Definition): DeferredItem<Item> {
+        return register(definition, ModArmorMaterials.FASHION, creativeTab)
+    }
+
+    private fun register(
+        definition: Definition,
+        material: ArmorMaterial,
+        tab: Supplier<CreativeModeTab>,
+    ): DeferredItem<Item> {
         definitionsByName[definition.name] = definition
         return ModItems.registerItem(
             ItemConfig.Builder(definition.name)
-                .props { Item.Properties().humanoidArmor(ModArmorMaterials.FASHION, definition.armorType) }
-                .creativeTab(creativeTab)
+                .props { Item.Properties().humanoidArmor(material, definition.armorType) }
+                .creativeTab(tab)
                 .build(),
         ).also(registeredItems::add)
     }
@@ -186,6 +196,32 @@ object Fashion {
 
     @JvmField
     val WHITE_SHOES: DeferredItem<Item> = boots("white_shoes", ModelKind.CLOTHES)
+
+    @JvmField
+    val HANYI_HAIR_ACCESSORIES: DeferredItem<Item> = helmet("hanyi_hair_accessories", ModelKind.CLOTHES)
+
+    @JvmField
+    val FOLLOWING_PARTICLE: DeferredItem<Item> = chest("following_particle", ModelKind.FOLLOWING_PARTICLE)
+
+    @JvmField
+    val WHITE_T_SHIRT: DeferredItem<Item> = chest("white_t_shirt", ModelKind.CLOTHES)
+
+    @JvmField
+    val BLACK_SHORTS: DeferredItem<Item> = legs("black_shorts", ModelKind.CLOTHES)
+
+    @JvmField
+    val STRAY_CHESTPLATE: DeferredItem<Item> = chest("stray_chestplate", ModelKind.CLOTHES)
+
+    @JvmField
+    val STRAY_LEGGINGS: DeferredItem<Item> = legs("stray_leggings", ModelKind.CLOTHES)
+
+    @JvmField
+    val PIGLIN_CHESTPLATE: DeferredItem<Item> =
+        register(Definition("piglin_chestplate", ArmorType.CHESTPLATE, ModelKind.CLOTHES), ModArmorMaterials.PIGLIN, Armor.creativeTab)
+
+    @JvmField
+    val PIGLIN_LEGGINGS: DeferredItem<Item> =
+        register(Definition("piglin_leggings", ArmorType.LEGGINGS, ModelKind.CLOTHES), ModArmorMaterials.PIGLIN, Armor.creativeTab)
 
     @JvmStatic
     fun load() {

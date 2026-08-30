@@ -162,6 +162,21 @@ object ModArmorMaterials {
     )
 
     @JvmField
+    val PIGLIN: ArmorMaterial = createArmorMaterial(
+        durability = 26,
+        boots = 0,
+        leggings = 5,
+        chestplate = 7,
+        helmet = 0,
+        enchantability = 15,
+        equipSound = SoundEvents.ARMOR_EQUIP_IRON,
+        toughness = 2.0f,
+        knockbackResistance = 0.1f,
+        repairTag = EMPTY_REPAIR_TAG,
+        asset = ModEquipmentAssets.PIGLIN,
+    )
+
+    @JvmField
     val RUPERT: ArmorMaterial = createArmorMaterial(
         durability = 24,
         boots = 1,
@@ -174,6 +189,21 @@ object ModArmorMaterials {
         knockbackResistance = 0.0f,
         repairTag = EMPTY_REPAIR_TAG,
         asset = ModEquipmentAssets.RUPERT,
+    )
+
+    @JvmField
+    val SHULKER: ArmorMaterial = createArmorMaterial(
+        durability = 11,
+        boots = 0,
+        leggings = 0,
+        chestplate = 0,
+        helmet = 3,
+        enchantability = 15,
+        equipSound = SoundEvents.ARMOR_EQUIP_CHAIN,
+        toughness = 2.0f,
+        knockbackResistance = 0.0f,
+        repairTag = EMPTY_REPAIR_TAG,
+        asset = ModEquipmentAssets.SHULKER,
     )
 
     @JvmField
@@ -204,6 +234,21 @@ object ModArmorMaterials {
         knockbackResistance = 0.0f,
         repairTag = EMPTY_REPAIR_TAG,
         asset = ModEquipmentAssets.STONE,
+    )
+
+    @JvmField
+    val TURTLE: ArmorMaterial = createArmorMaterial(
+        durability = 35,
+        boots = 3,
+        leggings = 6,
+        chestplate = 6,
+        helmet = 2,
+        enchantability = 9,
+        equipSound = SoundEvents.ARMOR_EQUIP_TURTLE,
+        toughness = 0.0f,
+        knockbackResistance = 0.0f,
+        repairTag = EMPTY_REPAIR_TAG,
+        asset = ModEquipmentAssets.TURTLE,
     )
 
     @JvmField

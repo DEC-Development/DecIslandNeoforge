@@ -62,6 +62,10 @@ class FashionArmorModel<T : HumanoidRenderState>(root: ModelPart) : HumanoidMode
         val GIANT_BAT_WINGS_LAYER_LOCATION: ModelLayerLocation =
             layerLocation("fashion_giant_bat_wings")
 
+        @JvmField
+        val FOLLOWING_PARTICLE_LAYER_LOCATION: ModelLayerLocation =
+            layerLocation("fashion_following_particle")
+
         private val CLOTHES_GEOMETRY: Identifier =
             Identifier.fromNamespaceAndPath(DecIsland.MOD_ID, "bedrock/models/armor/fashion_clothes.geometry.json")
 
@@ -82,6 +86,9 @@ class FashionArmorModel<T : HumanoidRenderState>(root: ModelPart) : HumanoidMode
 
         private val GIANT_BAT_WINGS_GEOMETRY: Identifier =
             Identifier.fromNamespaceAndPath(DecIsland.MOD_ID, "bedrock/models/armor/giant_bat_wings.geometry.json")
+
+        private val FOLLOWING_PARTICLE_GEOMETRY: Identifier =
+            Identifier.fromNamespaceAndPath(DecIsland.MOD_ID, "bedrock/models/armor/following_particle.geometry.json")
 
         @JvmStatic
         fun createClothesBodyLayer(): LayerDefinition =
@@ -110,6 +117,10 @@ class FashionArmorModel<T : HumanoidRenderState>(root: ModelPart) : HumanoidMode
         @JvmStatic
         fun createGiantBatWingsBodyLayer(): LayerDefinition =
             createAttachableBodyLayer(GIANT_BAT_WINGS_GEOMETRY, "body", listOf("right", "left"))
+
+        @JvmStatic
+        fun createFollowingParticleBodyLayer(): LayerDefinition =
+            createBodyAttachmentLayer(FOLLOWING_PARTICLE_GEOMETRY, "body", emptyList())
 
         @JvmStatic
         fun attachTextureMeshes(root: ModelPart, modelKind: Fashion.ModelKind) {

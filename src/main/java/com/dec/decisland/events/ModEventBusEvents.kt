@@ -27,6 +27,7 @@ object ModEventBusEvents {
         event.registerLayerDefinition(FashionArmorModel.CHRISTMAS_CAP_LAYER_LOCATION) { FashionArmorModel.createChristmasCapBodyLayer() }
         event.registerLayerDefinition(FashionArmorModel.WINGS_FROM_DEEP_LAYER_LOCATION) { FashionArmorModel.createWingsFromDeepBodyLayer() }
         event.registerLayerDefinition(FashionArmorModel.GIANT_BAT_WINGS_LAYER_LOCATION) { FashionArmorModel.createGiantBatWingsBodyLayer() }
+        event.registerLayerDefinition(FashionArmorModel.FOLLOWING_PARTICLE_LAYER_LOCATION) { FashionArmorModel.createFollowingParticleBodyLayer() }
     }
 
     @SubscribeEvent

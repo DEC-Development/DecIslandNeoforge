@@ -47,6 +47,7 @@ object DecIslandClientEvents {
             Crop.allBlocks().forEach { block ->
                 ItemBlockRenderTypes.setRenderLayer(block, ChunkSectionLayer.CUTOUT)
             }
+            ItemBlockRenderTypes.setRenderLayer(Crop.CORN_CROP.get(), ChunkSectionLayer.CUTOUT)
         }
     }
 }

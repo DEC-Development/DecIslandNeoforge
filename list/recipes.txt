@@ -12,4 +12,5 @@ leek_cooked_from_smoking
 perch_cooked_from_campfire_cooking
 perch_cooked_from_smelting
 perch_cooked_from_smoking
+rice
 rice_wine

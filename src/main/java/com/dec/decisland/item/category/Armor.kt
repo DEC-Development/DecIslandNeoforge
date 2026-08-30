@@ -168,6 +168,10 @@ object Armor {
         registerArmorPiece("rupert_boots", ModArmorMaterials.RUPERT, ArmorType.BOOTS, repairItem = Supplier { Items.GHAST_TEAR })
 
     @JvmField
+    val SHULKER_HELMET: DeferredItem<Item> =
+        registerArmorPiece("shulker_helmet", ModArmorMaterials.SHULKER, ArmorType.HELMET, repairItem = Supplier { Items.SHULKER_SHELL })
+
+    @JvmField
     val STEEL_HELMET: DeferredItem<Item> =
         registerArmorPiece("steel_helmet", ModArmorMaterials.STEEL, ArmorType.HELMET, repairItem = Supplier { Material.STEEL_INGOT.get() })
 
@@ -198,6 +202,18 @@ object Armor {
     @JvmField
     val STONE_BOOTS: DeferredItem<Item> =
         registerArmorPiece("stone_boots", ModArmorMaterials.STONE, ArmorType.BOOTS, repairItem = Supplier { Items.COBBLESTONE })
+
+    @JvmField
+    val TURTLE_CHESTPLATE: DeferredItem<Item> =
+        registerArmorPiece("turtle_chestplate", ModArmorMaterials.TURTLE, ArmorType.CHESTPLATE, repairItem = Supplier { Items.TURTLE_SCUTE })
+
+    @JvmField
+    val TURTLE_LEGGINGS: DeferredItem<Item> =
+        registerArmorPiece("turtle_leggings", ModArmorMaterials.TURTLE, ArmorType.LEGGINGS, repairItem = Supplier { Items.TURTLE_SCUTE })
+
+    @JvmField
+    val TURTLE_BOOTS: DeferredItem<Item> =
+        registerArmorPiece("turtle_boots", ModArmorMaterials.TURTLE, ArmorType.BOOTS, repairItem = Supplier { Items.TURTLE_SCUTE })
 
     @JvmField
     val WOOD_HELMET: DeferredItem<Item> =

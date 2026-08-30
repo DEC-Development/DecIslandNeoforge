@@ -33,6 +33,15 @@ object ModToolMaterial {
     val HARD_LOLLIPOP: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, 256, 8.0f, 2.0f, 20, EMPTY_ITEM_TAG)
 
     @JvmField
+    val GINGERBREAD_SWORD: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, 123, 8.0f, 2.0f, 30, EMPTY_ITEM_TAG)
+
+    @JvmField
+    val LOLLIPOP: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, 64, 8.0f, 2.0f, 5, EMPTY_ITEM_TAG)
+
+    @JvmField
+    val LONG_BREAD: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, 64, 8.0f, 2.0f, 15, EMPTY_ITEM_TAG)
+
+    @JvmField
     val CACTUS: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, 23, 6.0f, 3.0f, 15, EMPTY_ITEM_TAG)
 
     @JvmField
