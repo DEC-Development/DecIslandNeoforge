@@ -23,6 +23,7 @@ import com.dec.decisland.tag.ModItemTags
 import net.minecraft.client.data.models.model.ModelTemplate
 import net.minecraft.client.data.models.model.ModelTemplates
 import net.minecraft.core.Holder
+import net.minecraft.core.component.DataComponents
 import net.minecraft.resources.Identifier
 import net.minecraft.tags.ItemTags
 import net.minecraft.tags.TagKey
@@ -49,6 +50,8 @@ object Weapon {
     private val sickleWeaponTags: List<TagKey<Item>> = listOf(ModItemTags.MELEE_WEAPON, ModItemTags.SICKLE)
     private val katanaWeaponTags: List<TagKey<Item>> = listOf(ModItemTags.MELEE_WEAPON, ModItemTags.KATANA)
     private val daggerWeaponTags: List<TagKey<Item>> = listOf(ModItemTags.MELEE_WEAPON, ModItemTags.DAGGER)
+    private val battleaxeWeaponTags: List<TagKey<Item>> = listOf(ModItemTags.MELEE_WEAPON, ModItemTags.AXE)
+    private val rapierWeaponTags: List<TagKey<Item>> = listOf(ModItemTags.MELEE_WEAPON, ModItemTags.RAPIER)
 
     @JvmField
     val AMETHYST_DART: DeferredItem<Item> = registerDart(ModDarts.AMETHYST_DART)
@@ -1226,6 +1229,87 @@ object Weapon {
         repairItem = Supplier { Material.WITHER_SUBSTANCE.get() },
     ).also(ModDarts.VOID_WHISPERING_DAGGER::bindItemSupplier)
 
+    @JvmField
+    val COPPER_BATTLEAXE: DeferredItem<Item> = registerBattleaxe(
+        "copper_battleaxe",
+        ToolMaterial.COPPER,
+        config = BattleaxeItem.BattleaxeConfig.Builder(6.0f, 3.0f, id("copper_battleaxe_ring_particle"))
+            .comboThreshold(4)
+            .build(),
+        attackDamage = 4.0f,
+        cooldownSeconds = 8.0f,
+        repairItem = Supplier { Items.COPPER_INGOT },
+    )
+
+    @JvmField
+    val STEEL_BATTLEAXE: DeferredItem<Item> = registerBattleaxe(
+        "steel_battleaxe",
+        ModToolMaterial.STEEL_SWORD,
+        config = BattleaxeItem.BattleaxeConfig.Builder(8.0f, 5.0f, id("steel_battleaxe_ring_particle"))
+            .comboThreshold(3)
+            .build(),
+        attackDamage = 2.0f,
+        cooldownSeconds = 7.0f,
+        repairItem = Supplier { Material.STEEL_INGOT.get() },
+    )
+
+    @JvmField
+    val STORM_BATTLEAXE: DeferredItem<Item> = registerBattleaxe(
+        "storm_battleaxe",
+        ModToolMaterial.STORM_BATTLEAXE,
+        config = BattleaxeItem.BattleaxeConfig.Builder(10.0f, 4.0f, id("bubble_ring_particle"))
+            .aoe(BattleaxeItem.GRID_OFFSETS, 2.0)
+            .particleBursts(skill = 6, combo = 2)
+            .comboThreshold(2)
+            .build(),
+        attackDamage = 4.0f,
+        cooldownSeconds = 6.0f,
+        repairItem = Supplier { Material.STREAM_STONE.get() },
+    )
+
+    @JvmField
+    val RAPIER: DeferredItem<Item> = registerRapier(
+        "rapier",
+        ToolMaterial.IRON,
+        config = RapierItem.RapierConfig.Builder(3.0f, 3.0f)
+            .comboThreshold(4)
+            .build(),
+        attackDamage = 3.0f,
+        cooldownSeconds = 3.3f,
+        repairItem = Supplier { Items.IRON_INGOT },
+    )
+
+    @JvmField
+    val DEAD_WOOD_RAPIER: DeferredItem<Item> = registerRapier(
+        "dead_wood_rapier",
+        ModToolMaterial.DEAD_WOOD_RAPIER,
+        config = RapierItem.RapierConfig.Builder(3.2f, 3.0f)
+            .pulse(skill = 4.0f, combo = 7.0f, magic = true)
+            .trailParticle(id("dead_wood_wake_particle"), 17)
+            .auraEffect(sickleEffect(MobEffects.WITHER, 2, 0))
+            .auraEffect(sickleEffect(MobEffects.POISON, 3, 0))
+            .comboAuraEffect(sickleEffect(MobEffects.WITHER, 4, 0))
+            .comboAuraEffect(sickleEffect(MobEffects.POISON, 6, 0))
+            .comboThreshold(5)
+            .build(),
+        attackDamage = 3.0f,
+        cooldownSeconds = 4.0f,
+    )
+
+    @JvmField
+    val THUNDER_RAPIER: DeferredItem<Item> = registerRapier(
+        "thunder_rapier",
+        ModToolMaterial.THUNDER_RAPIER,
+        config = RapierItem.RapierConfig.Builder(3.4f, 3.0f)
+            .pulse(skill = 7.0f, combo = 15.0f, magic = false)
+            .trailParticle(id("thunder_wake_particle"), 20)
+            .comboThreshold(4)
+            .build(),
+        attackDamage = 4.0f,
+        cooldownSeconds = 4.4f,
+        repairItem = Supplier { Material.LIGHTNING_STONE.get() },
+    )
+
     @JvmStatic
     fun load() {
     }
@@ -1285,6 +1369,8 @@ object Weapon {
         )
 
     private const val DAGGER_ATTACK_SPEED: Float = -2.2f
+    private const val BATTLEAXE_ATTACK_SPEED: Float = -3.4f
+    private const val RAPIER_ATTACK_SPEED: Float = -1.8f
 
     private fun registerDagger(
         name: String,
@@ -1319,6 +1405,60 @@ object Weapon {
                         }
                     }.build(),
                 )
+                .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
+                .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
+                .build(),
+        )
+
+    private fun registerBattleaxe(
+        name: String,
+        material: ToolMaterial,
+        config: BattleaxeItem.BattleaxeConfig,
+        attackDamage: Float,
+        attackSpeed: Float = BATTLEAXE_ATTACK_SPEED,
+        cooldownSeconds: Float,
+        repairItem: Supplier<Item>,
+    ): DeferredItem<Item> =
+        ModItems.registerItem(
+            ItemConfig.Builder(name)
+                .func { properties -> BattleaxeItem(properties, config) }
+                .props {
+                    Item.Properties()
+                        .axe(material, attackDamage, attackSpeed)
+                        .component(DataComponents.WEAPON, net.minecraft.world.item.component.Weapon(1))
+                        .stacksTo(1)
+                        .useCooldown(cooldownSeconds)
+                        .repairable(repairItem.get())
+                }
+                .tags(battleaxeWeaponTags + ItemTags.AXES)
+                .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
+                .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
+                .build(),
+        )
+
+    private fun registerRapier(
+        name: String,
+        material: ToolMaterial,
+        config: RapierItem.RapierConfig,
+        attackDamage: Float,
+        attackSpeed: Float = RAPIER_ATTACK_SPEED,
+        cooldownSeconds: Float,
+        repairItem: Supplier<Item>? = null,
+    ): DeferredItem<Item> =
+        ModItems.registerItem(
+            ItemConfig.Builder(name)
+                .func { properties -> RapierItem(properties, config) }
+                .props {
+                    var properties = Item.Properties()
+                        .sword(material, attackDamage, attackSpeed)
+                        .stacksTo(1)
+                        .useCooldown(cooldownSeconds)
+                    if (repairItem != null) {
+                        properties = properties.repairable(repairItem.get())
+                    }
+                    properties
+                }
+                .tags(rapierWeaponTags)
                 .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
                 .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
                 .build(),

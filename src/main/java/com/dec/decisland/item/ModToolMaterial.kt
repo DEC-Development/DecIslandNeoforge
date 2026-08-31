@@ -132,6 +132,15 @@ object ModToolMaterial {
     val VOID_WHISPERING_DAGGER: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, 562, 8.0f, 0.0f, 15, EMPTY_ITEM_TAG)
 
     @JvmField
+    val STORM_BATTLEAXE: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, 487, 8.0f, 2.0f, 10, EMPTY_ITEM_TAG)
+
+    @JvmField
+    val DEAD_WOOD_RAPIER: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, 322, 8.0f, 0.0f, 10, EMPTY_ITEM_TAG)
+
+    @JvmField
+    val THUNDER_RAPIER: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, 316, 8.0f, 0.0f, 10, EMPTY_ITEM_TAG)
+
+    @JvmField
     val AMETHYST_TOOL: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, AMETHYST_SWORD.durability(), 7.0f, 0.0f, 20, EMPTY_ITEM_TAG)
 
     @JvmField

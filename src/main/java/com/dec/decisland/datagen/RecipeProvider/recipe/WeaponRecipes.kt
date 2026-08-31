@@ -14,6 +14,7 @@ import net.minecraft.world.level.ItemLike
 
 object WeaponRecipes {
     private const val DAGGER_EXPERIENCE: Float = 0.1f
+    private const val BATTLEAXE_EXPERIENCE: Float = 0.1f
 
     private fun daggerRecipe(
         name: String,
@@ -54,6 +55,31 @@ object WeaponRecipes {
             .experience(DAGGER_EXPERIENCE)
             .cookingTime(100)
             .unlockedBy(dagger)
+            .build(),
+    )
+
+    private fun battleaxeRecycleRecipes(
+        name: String,
+        battleaxe: ItemLike,
+        ingot: ItemLike,
+    ): List<CookingRecipeConfig> = listOf(
+        CookingRecipeConfig.Builder("furnace_$name")
+            .category(RecipeCategory.MISC)
+            .type(CookingRecipeConfig.Type.SMELTING)
+            .ingredient(battleaxe)
+            .result(ingot)
+            .experience(BATTLEAXE_EXPERIENCE)
+            .cookingTime(200)
+            .unlockedBy(battleaxe)
+            .build(),
+        CookingRecipeConfig.Builder("blast_furnace_$name")
+            .category(RecipeCategory.MISC)
+            .type(CookingRecipeConfig.Type.BLASTING)
+            .ingredient(battleaxe)
+            .result(ingot)
+            .experience(BATTLEAXE_EXPERIENCE)
+            .cookingTime(100)
+            .unlockedBy(battleaxe)
             .build(),
     )
 
@@ -106,5 +132,56 @@ object WeaponRecipes {
         daggerNuggetRecipes("emerald_dagger", Weapon.EMERALD_DAGGER.get(), Material.EMERALD_NUGGET.get()).forEach { RecipeDsl.save(context, it) }
         daggerNuggetRecipes("golden_dagger", Weapon.GOLDEN_DAGGER.get(), Items.GOLD_NUGGET).forEach { RecipeDsl.save(context, it) }
         daggerNuggetRecipes("steel_dagger", Weapon.STEEL_DAGGER.get(), Material.STEEL_NUGGET.get()).forEach { RecipeDsl.save(context, it) }
+
+        RecipeDsl.save(
+            context,
+            ShapedRecipeConfig.Builder("copper_battleaxe")
+                .category(RecipeCategory.COMBAT)
+                .result(Weapon.COPPER_BATTLEAXE.get())
+                .pattern(
+                    "XXX",
+                    " #X",
+                    " # ",
+                )
+                .define('X', Items.COPPER_INGOT)
+                .define('#', Material.IRON_STICK.get())
+                .unlockedBy(Items.COPPER_INGOT)
+                .build(),
+        )
+        RecipeDsl.save(
+            context,
+            ShapedRecipeConfig.Builder("steel_battleaxe")
+                .category(RecipeCategory.COMBAT)
+                .result(Weapon.STEEL_BATTLEAXE.get())
+                .pattern(
+                    "BB",
+                    "AB",
+                    "X ",
+                )
+                .define('B', Material.STEEL_INGOT.get())
+                .define('A', Items.IRON_AXE)
+                .define('X', Material.IRON_STICK.get())
+                .unlockedBy(Material.STEEL_INGOT.get())
+                .build(),
+        )
+        RecipeDsl.save(
+            context,
+            ShapedRecipeConfig.Builder("thunder_rapier")
+                .category(RecipeCategory.COMBAT)
+                .result(Weapon.THUNDER_RAPIER.get())
+                .pattern(
+                    "DD#",
+                    "B#D",
+                    "XB#",
+                )
+                .define('D', Items.COPPER_BLOCK)
+                .define('B', Items.LAPIS_LAZULI)
+                .define('#', Material.LIGHTNING_STONE.get())
+                .define('X', Material.IRON_STICK.get())
+                .unlockedBy(Material.LIGHTNING_STONE.get())
+                .build(),
+        )
+        battleaxeRecycleRecipes("copper_battleaxe", Weapon.COPPER_BATTLEAXE.get(), Items.COPPER_INGOT).forEach { RecipeDsl.save(context, it) }
+        battleaxeRecycleRecipes("steel_battleaxe", Weapon.STEEL_BATTLEAXE.get(), Material.STEEL_INGOT.get()).forEach { RecipeDsl.save(context, it) }
     }
 }

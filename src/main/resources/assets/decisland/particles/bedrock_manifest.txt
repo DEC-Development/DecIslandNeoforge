@@ -71,3 +71,7 @@ gas_bomb.particle.json
 lapis_bullet_boom_particle.particle.json
 concentrated_soul_bullet_wake.particle.json
 concentrated_soul_bullet_hit.particle.json
+copper_battleaxe_ring.particle.json
+steel_battleaxe_ring.particle.json
+bubble_ring.particle.json
+dead_wood_wake.particle.json

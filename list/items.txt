@@ -96,6 +96,7 @@ complete_bat_wing
 compress_flower_block
 compressed_ice
 cooked_brain
+copper_battleaxe
 copper_dagger
 copper_dart
 copper_sickle
@@ -129,6 +130,7 @@ dark_stone
 dark_werewolf_mask
 dark_zombie_mask
 dead_wood_dagger
+dead_wood_rapier
 deep_dandelion
 deep_staff
 depart_grass
@@ -459,6 +461,7 @@ pure_ingot
 radiate_creeper_mask
 radiate_crystal
 radiate_enderman_mask
+rapier
 red_flower_block
 red_gem
 red_gem_debris
@@ -532,6 +535,7 @@ squid_mask
 star_debris
 star_flintlock
 star_flower
+steel_battleaxe
 steel_block
 steel_boots
 steel_chestplate
@@ -553,6 +557,7 @@ stone_dart
 stone_helmet
 stone_leggings
 stones_bag
+storm_battleaxe
 storm_flintlock
 storm_staff
 straw_rope
@@ -571,6 +576,7 @@ swamp_golem_mask
 sword_fish
 the_blade
 throwable_bomb
+thunder_rapier
 thunder_staff
 thyme
 time_compass
