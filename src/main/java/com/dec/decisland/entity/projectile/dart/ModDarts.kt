@@ -228,6 +228,26 @@ object ModDarts {
     )
 
     @JvmField
+    val VOID_WHISPERING_DAGGER: DartDefinition = DartDefinition(
+        path = "void_whispering_dagger",
+        entitySettings = DartSettings(
+            baseDamage = 10.0f,
+            gravity = 0.035,
+            applyKnockback = false,
+            igniteSecondsOnHit = 5.0f,
+        ),
+        itemSettings = DartItemSettings(
+            power = 1.5f,
+            uncertainty = 8.0f,
+            cooldownTicks = 0,
+        ),
+        onHitServer = {
+            explodeDamage(radius = 2.0, damage = 2.0f)
+            playHitSound(SoundEvents.GENERIC_EXPLODE.value())
+        },
+    )
+
+    @JvmField
     val ALL: List<DartDefinition> = listOf(
         AMETHYST_DART,
         COPPER_DART,
@@ -245,6 +265,7 @@ object ModDarts {
         STONE_DART,
         STREAM_DART,
         WOOD_DART,
+        VOID_WHISPERING_DAGGER,
     )
 
     private fun id(path: String): Identifier = Identifier.fromNamespaceAndPath(DecIsland.MOD_ID, path)

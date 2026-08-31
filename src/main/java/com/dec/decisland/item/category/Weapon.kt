@@ -48,6 +48,7 @@ object Weapon {
     private val swordWeaponTags: List<TagKey<Item>> = listOf(ModItemTags.MELEE_WEAPON, ModItemTags.SWORD)
     private val sickleWeaponTags: List<TagKey<Item>> = listOf(ModItemTags.MELEE_WEAPON, ModItemTags.SICKLE)
     private val katanaWeaponTags: List<TagKey<Item>> = listOf(ModItemTags.MELEE_WEAPON, ModItemTags.KATANA)
+    private val daggerWeaponTags: List<TagKey<Item>> = listOf(ModItemTags.MELEE_WEAPON, ModItemTags.DAGGER)
 
     @JvmField
     val AMETHYST_DART: DeferredItem<Item> = registerDart(ModDarts.AMETHYST_DART)
@@ -1012,6 +1013,219 @@ object Weapon {
         repairItem = Supplier { Material.STEEL_INGOT.get() },
     )
 
+    @JvmField
+    val WOODEN_DAGGER: DeferredItem<Item> = registerDagger(
+        "wooden_dagger",
+        ToolMaterial.WOOD,
+        config = DaggerItem.DaggerConfig.Builder("wooden_dagger", 12.0f)
+            .movementSpeedAddition(0.01)
+            .build(),
+        attackDamage = 2.0f,
+        cooldownSeconds = 3.0f,
+        repairTag = ItemTags.PLANKS,
+        burnTime = 10,
+    )
+
+    @JvmField
+    val STONE_DAGGER: DeferredItem<Item> = registerDagger(
+        "stone_dagger",
+        ToolMaterial.STONE,
+        config = DaggerItem.DaggerConfig.Builder("stone_dagger", 13.0f)
+            .movementSpeedAddition(0.01)
+            .build(),
+        attackDamage = 2.0f,
+        cooldownSeconds = 3.0f,
+        repairTag = ItemTags.STONE_CRAFTING_MATERIALS,
+    )
+
+    @JvmField
+    val COPPER_DAGGER: DeferredItem<Item> = registerDagger(
+        "copper_dagger",
+        ToolMaterial.COPPER,
+        config = DaggerItem.DaggerConfig.Builder("copper_dagger", 15.0f)
+            .movementSpeedAddition(0.01)
+            .build(),
+        attackDamage = 2.0f,
+        cooldownSeconds = 4.0f,
+        repairItem = Supplier { Items.COPPER_INGOT },
+    )
+
+    @JvmField
+    val IRON_DAGGER: DeferredItem<Item> = registerDagger(
+        "iron_dagger",
+        ToolMaterial.IRON,
+        config = DaggerItem.DaggerConfig.Builder("iron_dagger", 16.0f)
+            .movementSpeedAddition(0.01)
+            .build(),
+        attackDamage = 2.0f,
+        cooldownSeconds = 3.0f,
+        repairItem = Supplier { Items.IRON_INGOT },
+    )
+
+    @JvmField
+    val GOLDEN_DAGGER: DeferredItem<Item> = registerDagger(
+        "golden_dagger",
+        ToolMaterial.GOLD,
+        config = DaggerItem.DaggerConfig.Builder("golden_dagger", 11.0f)
+            .movementSpeedAddition(0.017)
+            .build(),
+        attackDamage = 3.0f,
+        cooldownSeconds = 3.0f,
+        repairItem = Supplier { Items.GOLD_INGOT },
+    )
+
+    @JvmField
+    val DIAMOND_DAGGER: DeferredItem<Item> = registerDagger(
+        "diamond_dagger",
+        ToolMaterial.DIAMOND,
+        config = DaggerItem.DaggerConfig.Builder("diamond_dagger", 18.0f)
+            .movementSpeedAddition(0.01)
+            .build(),
+        attackDamage = 2.0f,
+        cooldownSeconds = 3.0f,
+        repairItem = Supplier { Items.DIAMOND },
+    )
+
+    @JvmField
+    val NETHERITE_DAGGER: DeferredItem<Item> = registerDagger(
+        "netherite_dagger",
+        ToolMaterial.NETHERITE,
+        config = DaggerItem.DaggerConfig.Builder("netherite_dagger", 22.0f)
+            .movementSpeedAddition(0.01)
+            .build(),
+        attackDamage = 2.0f,
+        cooldownSeconds = 3.0f,
+        repairItem = Supplier { Items.NETHERITE_INGOT },
+    )
+
+    @JvmField
+    val EMERALD_DAGGER: DeferredItem<Item> = registerDagger(
+        "emerald_dagger",
+        ModToolMaterial.EMERALD_SWORD,
+        config = DaggerItem.DaggerConfig.Builder("emerald_dagger", 16.0f)
+            .movementSpeedAddition(0.015)
+            .build(),
+        attackDamage = 1.0f,
+        cooldownSeconds = 2.0f,
+        repairItem = Supplier { Items.EMERALD },
+    )
+
+    @JvmField
+    val LAPIS_DAGGER: DeferredItem<Item> = registerDagger(
+        "lapis_dagger",
+        ModToolMaterial.LAPIS_SWORD,
+        config = DaggerItem.DaggerConfig.Builder("lapis_dagger", 13.0f)
+            .movementSpeedAddition(0.019)
+            .build(),
+        attackDamage = 0.0f,
+        cooldownSeconds = 3.0f,
+        repairItem = Supplier { Items.LAPIS_LAZULI },
+    )
+
+    @JvmField
+    val AMETHYST_DAGGER: DeferredItem<Item> = registerDagger(
+        "amethyst_dagger",
+        ModToolMaterial.AMETHYST_SWORD,
+        config = DaggerItem.DaggerConfig.Builder("amethyst_dagger", 12.0f)
+            .movementSpeedAddition(0.013)
+            .build(),
+        attackDamage = 0.0f,
+        cooldownSeconds = 3.0f,
+        repairItem = Supplier { Items.AMETHYST_SHARD },
+    )
+
+    @JvmField
+    val STEEL_DAGGER: DeferredItem<Item> = registerDagger(
+        "steel_dagger",
+        ModToolMaterial.STEEL_SWORD,
+        config = DaggerItem.DaggerConfig.Builder("steel_dagger", 18.0f)
+            .movementSpeedAddition(0.01)
+            .build(),
+        attackDamage = 0.0f,
+        cooldownSeconds = 3.0f,
+        repairItem = Supplier { Material.STEEL_INGOT.get() },
+    )
+
+    @JvmField
+    val DEAD_WOOD_DAGGER: DeferredItem<Item> = registerDagger(
+        "dead_wood_dagger",
+        ModToolMaterial.DEAD_WOOD_DAGGER,
+        config = DaggerItem.DaggerConfig.Builder("dead_wood_dagger", 14.0f)
+            .movementSpeedAddition(0.01)
+            .targetEffect(sickleEffect(MobEffects.POISON, 14, 1))
+            .targetEffect(sickleEffect(MobEffects.WITHER, 5, 0))
+            .build(),
+        attackDamage = 5.0f,
+        cooldownSeconds = 3.0f,
+    )
+
+    @JvmField
+    val LEAVES_DAGGER: DeferredItem<Item> = registerDagger(
+        "leaves_dagger",
+        ModToolMaterial.LEAVES_DAGGER,
+        config = DaggerItem.DaggerConfig.Builder("leaves_dagger", 7.0f)
+            .movementSpeedAddition(0.01)
+            .build(),
+        attackDamage = 5.0f,
+        cooldownSeconds = 0.5f,
+        repairTag = ItemTags.LEAVES,
+    )
+
+    @JvmField
+    val GHOST_DAGGER: DeferredItem<Item> = registerDagger(
+        "ghost_dagger",
+        ModToolMaterial.GHOST_DAGGER,
+        config = DaggerItem.DaggerConfig.Builder("ghost_dagger", 22.0f)
+            .movementSpeedAddition(0.01)
+            .targetEffect(sickleEffect(MobEffects.INVISIBILITY, 3, 0))
+            .targetParticleId(id("ghost_sickle_particle"))
+            .build(),
+        attackDamage = 10.0f,
+        cooldownSeconds = 3.0f,
+        repairItem = Supplier { Material.GHOST_INGOT.get() },
+    )
+
+    @JvmField
+    val WIND_DAGGER: DeferredItem<Item> = registerDagger(
+        "wind_dagger",
+        ModToolMaterial.WIND_DAGGER,
+        config = DaggerItem.DaggerConfig.Builder("wind_dagger", 15.0f)
+            .movementSpeedAddition(0.015)
+            .build(),
+        attackDamage = 4.0f,
+        cooldownSeconds = 1.0f,
+        repairItem = Supplier { Material.STREAM_STONE.get() },
+    )
+
+    @JvmField
+    val EVERLASTING_WINTER_DAGGER: DeferredItem<Item> = registerDagger(
+        "everlasting_winter_dagger",
+        ModToolMaterial.EVERLASTING_WINTER_DAGGER,
+        config = DaggerItem.DaggerConfig.Builder("everlasting_winter_dagger", 21.0f)
+            .movementSpeedAddition(0.01)
+            .aura(4.0, sickleEffect(MobEffects.SLOWNESS, 3, 1))
+            .casterParticleId(id("everlasting_winter_seep_particle"))
+            .targetEffect(sickleEffect(MobEffects.SLOWNESS, 3, 6))
+            .targetParticleId(id("everlasting_winter_seep_particle"))
+            .build(),
+        attackDamage = 6.0f,
+        cooldownSeconds = 4.0f,
+        repairItem = Supplier { Material.ICE_INGOT.get() },
+    )
+
+    @JvmField
+    val VOID_WHISPERING_DAGGER: DeferredItem<Item> = registerDagger(
+        "void_whispering_dagger",
+        ModToolMaterial.VOID_WHISPERING_DAGGER,
+        config = DaggerItem.DaggerConfig.Builder("void_whispering_dagger", 15.0f)
+            .movementSpeedAddition(0.01)
+            .build(),
+        attackDamage = 4.0f,
+        cooldownSeconds = 2.0f,
+        itemFactory = { properties, daggerConfig -> VoidWhisperingDaggerItem(properties, daggerConfig) },
+        repairItem = Supplier { Material.WITHER_SUBSTANCE.get() },
+    ).also(ModDarts.VOID_WHISPERING_DAGGER::bindItemSupplier)
+
     @JvmStatic
     fun load() {
     }
@@ -1065,6 +1279,46 @@ object Weapon {
                     properties
                 }
                 .tags(sickleWeaponTags)
+                .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
+                .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
+                .build(),
+        )
+
+    private const val DAGGER_ATTACK_SPEED: Float = -2.2f
+
+    private fun registerDagger(
+        name: String,
+        material: ToolMaterial,
+        config: DaggerItem.DaggerConfig,
+        attackDamage: Float,
+        cooldownSeconds: Float,
+        itemFactory: ((Item.Properties, DaggerItem.DaggerConfig) -> Item)? = null,
+        repairItem: Supplier<Item>? = null,
+        repairTag: TagKey<Item>? = null,
+        burnTime: Int? = null,
+    ): DeferredItem<Item> =
+        ModItems.registerItem(
+            ItemConfig.Builder(name)
+                .func { properties -> itemFactory?.invoke(properties, config) ?: DaggerItem(properties, config) }
+                .props {
+                    var properties = Item.Properties()
+                        .sword(material, attackDamage, DAGGER_ATTACK_SPEED)
+                        .stacksTo(1)
+                        .useCooldown(cooldownSeconds)
+                    when {
+                        repairItem != null -> properties = properties.repairable(repairItem.get())
+                        repairTag != null -> properties = properties.repairable(repairTag)
+                    }
+                    properties
+                }
+                .tags(daggerWeaponTags)
+                .customProp(
+                    CustomItemProperties.Builder().apply {
+                        if (burnTime != null) {
+                            burnTime(burnTime)
+                        }
+                    }.build(),
+                )
                 .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
                 .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
                 .build(),

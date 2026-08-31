@@ -135,6 +135,10 @@ object ModEntities {
         registerDartEntity(ModDarts.WOOD_DART)
 
     @JvmField
+    val VOID_WHISPERING_DAGGER: Supplier<EntityType<DartEntity>> =
+        registerDartEntity(ModDarts.VOID_WHISPERING_DAGGER)
+
+    @JvmField
     val THROWN_ASH_PUFFERFISH: Supplier<EntityType<ThrownAshPufferfish>> =
         ENTITY_TYPES.registerEntityType("thrown_ash_pufferfish", ::ThrownAshPufferfish, MobCategory.MISC) { builder ->
             builder.sized(0.1f, 0.1f)

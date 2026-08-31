@@ -53,6 +53,7 @@ stream_energy_ball
 throwable_bomb
 thrown_ash_pufferfish
 thunder_ball
+void_whispering_dagger
 wave_energy
 winter_energy
 wood_dart

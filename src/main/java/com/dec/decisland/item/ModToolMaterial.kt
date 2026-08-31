@@ -112,4 +112,22 @@ object ModToolMaterial {
 
     @JvmField
     val STEEL_SICKLE: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, 723, 8.0f, 5.0f, 15, EMPTY_ITEM_TAG)
+
+    @JvmField
+    val DEAD_WOOD_DAGGER: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, 281, 8.0f, 0.0f, 4, EMPTY_ITEM_TAG)
+
+    @JvmField
+    val LEAVES_DAGGER: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, 341, 8.0f, 0.0f, 15, EMPTY_ITEM_TAG)
+
+    @JvmField
+    val GHOST_DAGGER: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, 2048, 8.0f, 0.0f, 15, EMPTY_ITEM_TAG)
+
+    @JvmField
+    val WIND_DAGGER: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, 128, 8.0f, 0.0f, 20, EMPTY_ITEM_TAG)
+
+    @JvmField
+    val EVERLASTING_WINTER_DAGGER: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, 1645, 8.0f, 0.0f, 5, EMPTY_ITEM_TAG)
+
+    @JvmField
+    val VOID_WHISPERING_DAGGER: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, 562, 8.0f, 0.0f, 15, EMPTY_ITEM_TAG)
 }

@@ -9,6 +9,7 @@ allay_mask
 amethyst_axe
 amethyst_boots
 amethyst_chestplate
+amethyst_dagger
 amethyst_dart
 amethyst_helmet
 amethyst_lantern
@@ -94,6 +95,7 @@ complete_bat_wing
 compress_flower_block
 compressed_ice
 cooked_brain
+copper_dagger
 copper_dart
 copper_sickle
 coral_dart
@@ -123,6 +125,7 @@ dark_snow_man_mask
 dark_stone
 dark_werewolf_mask
 dark_zombie_mask
+dead_wood_dagger
 deep_dandelion
 deep_staff
 depart_grass
@@ -130,6 +133,7 @@ desert_fan_flower
 diamond_apple
 diamond_apple_enchanted
 diamond_crystal_nucleus
+diamond_dagger
 diamond_dart
 diamond_fish
 diamond_nugget
@@ -151,6 +155,7 @@ emerald_apple
 emerald_apple_enchanted
 emerald_boots
 emerald_chestplate
+emerald_dagger
 emerald_dart
 emerald_fish
 emerald_helmet
@@ -190,6 +195,7 @@ es_pants
 es_shoes
 everlasting_winter_boots
 everlasting_winter_chestplate
+everlasting_winter_dagger
 everlasting_winter_dart
 everlasting_winter_flintlock
 everlasting_winter_ghast_mask
@@ -241,6 +247,7 @@ frozen_staff
 gargoyle_mask
 gas_bomb
 ghast_mask
+ghost_dagger
 ghost_essence
 ghost_flintlock
 ghost_ingot
@@ -262,6 +269,7 @@ gold_flower
 gold_ring
 gold_sickle
 gold_yuanbao
+golden_dagger
 golden_lamp
 golden_staff
 gray_shoes
@@ -309,6 +317,7 @@ infinite_crystal_nucleus_3
 intestine
 iron_apple
 iron_apple_enchanted
+iron_dagger
 iron_dart
 iron_fish
 iron_golem_mask
@@ -327,6 +336,7 @@ lamp_flower
 lamprey
 lapis_apple
 lapis_bullet_render
+lapis_dagger
 lapis_magic_book
 lapis_nugget
 lapis_staff
@@ -344,6 +354,7 @@ lava_leggings
 lava_nugget
 lava_ore
 lava_sword
+leaves_dagger
 leaves_flower
 leaves_golem_mask
 leek
@@ -403,6 +414,7 @@ nether_redstone_ore
 nether_skeleton_mask
 nether_skeleton_wizard_mask
 nether_stick_flower
+netherite_dagger
 netherite_dart
 netherite_sickle
 night_sword
@@ -514,6 +526,7 @@ star_flower
 steel_block
 steel_boots
 steel_chestplate
+steel_dagger
 steel_dart
 steel_helmet
 steel_ingot
@@ -526,6 +539,7 @@ stick_flower
 sticky_ash
 stone_boots
 stone_chestplate
+stone_dagger
 stone_dart
 stone_helmet
 stone_leggings
@@ -568,6 +582,7 @@ uranium_ore
 vengeful_ghost_mask
 vex_mask
 villager_mask
+void_whispering_dagger
 wandering_trader_mask
 warped_skeleton_mask
 waste
@@ -576,6 +591,7 @@ werewolf_mask
 white_flower_block
 white_shoes
 white_t_shirt
+wind_dagger
 wine_glass
 wings_from_deep
 witch_hat
@@ -591,6 +607,7 @@ wood_chestplate
 wood_dart
 wood_helmet
 wood_leggings
+wooden_dagger
 wooden_staff
 yellow_butterfly_flower
 yellow_flower_block
