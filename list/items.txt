@@ -14,6 +14,7 @@ amethyst_dart
 amethyst_helmet
 amethyst_lantern
 amethyst_leggings
+amethyst_pickaxe
 amethyst_ray_staff
 amethyst_sword
 ancient_ice
@@ -98,8 +99,10 @@ cooked_brain
 copper_dagger
 copper_dart
 copper_sickle
+coral_axe
 coral_dart
 coral_ingot
+coral_pickaxe
 coral_sword
 corn
 corn_seeds
@@ -153,6 +156,7 @@ elf_of_deep_mask
 elf_of_leaves_mask
 emerald_apple
 emerald_apple_enchanted
+emerald_axe
 emerald_boots
 emerald_chestplate
 emerald_dagger
@@ -161,6 +165,7 @@ emerald_fish
 emerald_helmet
 emerald_leggings
 emerald_nugget
+emerald_pickaxe
 emerald_ring
 emerald_staff
 emerald_sword
@@ -260,7 +265,9 @@ gingerbread_sword
 glamor_clothes
 glamor_pants
 glamor_shoes
+glass_axe
 glass_ingot
+glass_pickaxe
 glass_tank
 goblin_mask
 gold_dart
@@ -493,7 +500,9 @@ skeleton_assassin_mask
 skeleton_fish
 skeleton_knight_mask
 skeleton_mask
+slime_axe
 slime_mask
+slime_pickaxe
 sliver_yuanbao
 small_stone
 small_stone_block

@@ -8,7 +8,6 @@ import net.minecraft.core.Holder
 import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.effect.MobEffects
 import net.minecraft.world.food.FoodProperties
-import net.minecraft.world.item.AxeItem
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.Items.*
 import net.minecraft.world.item.ToolMaterial
@@ -67,14 +66,6 @@ object ModItems {
                     FoodProperties(2, 0.0f, false),
                     Consumables.defaultDrink().onConsume(ApplyStatusEffectsConsumeEffect(MobEffectInstance(MobEffects.REGENERATION, 20 * 20, 1))).build()
             )}.creativeTab(ModCreativeModeTabs.DECISLAND_FOODS_TAB).build()
-    )
-
-    @JvmField
-    val AMETHYST_AXE: DeferredItem<Item> = registerItem(
-            ItemConfig.Builder("amethyst_axe", mapOf("en_us" to "Amethyst Axe", "zh_cn" to "紫水晶斧")).func { p -> AxeItem(ToolMaterial.DIAMOND, 0.0F, -3.2F, p)}
-                    .tags(listOf(ModItemTags.MELEE_WEAPON, ModItemTags.AXE))
-                    .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
-                    .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM).build()
     )
 
     @JvmField

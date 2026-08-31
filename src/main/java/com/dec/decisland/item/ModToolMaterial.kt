@@ -130,4 +130,19 @@ object ModToolMaterial {
 
     @JvmField
     val VOID_WHISPERING_DAGGER: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, 562, 8.0f, 0.0f, 15, EMPTY_ITEM_TAG)
+
+    @JvmField
+    val AMETHYST_TOOL: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, AMETHYST_SWORD.durability(), 7.0f, 0.0f, 20, EMPTY_ITEM_TAG)
+
+    @JvmField
+    val CORAL_TOOL: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, CORAL_SWORD.durability(), 5.0f, 0.0f, 16, EMPTY_ITEM_TAG)
+
+    @JvmField
+    val EMERALD_TOOL: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, EMERALD_SWORD.durability(), 7.0f, 0.0f, 21, EMPTY_ITEM_TAG)
+
+    @JvmField
+    val GLASS_TOOL: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, 64, 10.0f, 0.0f, 2, EMPTY_ITEM_TAG)
+
+    @JvmField
+    val SLIME_TOOL: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, 537, 3.0f, 0.0f, 50, EMPTY_ITEM_TAG)
 }

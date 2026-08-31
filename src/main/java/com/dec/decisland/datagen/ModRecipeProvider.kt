@@ -6,6 +6,7 @@ import com.dec.decisland.datagen.RecipeProvider.recipe.FishRecipes
 import com.dec.decisland.datagen.RecipeProvider.recipe.FoodRecipes
 import com.dec.decisland.datagen.RecipeProvider.recipe.MaterialRecipes
 import com.dec.decisland.datagen.RecipeProvider.recipe.SummonItemRecipes
+import com.dec.decisland.datagen.RecipeProvider.recipe.ToolRecipes
 import com.dec.decisland.datagen.RecipeProvider.recipe.WeaponRecipes
 import net.minecraft.core.HolderLookup
 import net.minecraft.data.PackOutput
@@ -34,6 +35,7 @@ class ModRecipeProvider(
             FoodRecipes.build(context)
             FishRecipes.build(context)
             WeaponRecipes.build(context)
+            ToolRecipes.build(context)
             SummonItemRecipes.build(context)
             CookingRecipes.build(context)
         }
