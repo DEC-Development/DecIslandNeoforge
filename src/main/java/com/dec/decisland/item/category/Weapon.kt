@@ -1,5 +1,7 @@
 package com.dec.decisland.item.category
 
+import com.dec.decisland.block.ModBlocks
+import com.dec.decisland.block.category.SimplePlant
 import com.dec.decisland.DecIsland
 import com.dec.decisland.item.CustomItemProperties
 import com.dec.decisland.item.ItemConfig
@@ -26,6 +28,7 @@ import net.minecraft.core.Holder
 import net.minecraft.core.component.DataComponents
 import net.minecraft.resources.Identifier
 import net.minecraft.tags.ItemTags
+import net.minecraft.util.Unit as McUnit
 import net.minecraft.tags.TagKey
 import net.minecraft.world.food.FoodProperties
 import net.minecraft.world.effect.MobEffect
@@ -564,6 +567,104 @@ object Weapon {
         ItemConfig.Builder("night_sword")
             .func(::NightSword)
             .props { Item.Properties().sword(ModToolMaterial.NIGHT_SWORD, 7.0f, -2.4f).useCooldown(2.0f).stacksTo(1) }
+            .tags(swordWeaponTags)
+            .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
+            .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
+            .build(),
+    )
+
+    @JvmField
+    val DECREPIT_ATLANTIS: DeferredItem<Item> = ModItems.registerItem(
+        ItemConfig.Builder("decrepit_atlantis")
+            .props {
+                Item.Properties()
+                    .sword(ModToolMaterial.DECREPIT_ATLANTIS, 5.0f, -2.4f)
+                    .stacksTo(1)
+                    .component(DataComponents.UNBREAKABLE, McUnit.INSTANCE)
+            }
+            .tags(swordWeaponTags)
+            .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
+            .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
+            .build(),
+    )
+
+    @JvmField
+    val SWORD_OF_GUARD: DeferredItem<Item> = ModItems.registerItem(
+        ItemConfig.Builder("sword_of_guard")
+            .func(::SwordOfGuardItem)
+            .props {
+                Item.Properties()
+                    .sword(ModToolMaterial.SWORD_OF_GUARD, 3.0f, -2.4f)
+                    .useCooldown(1.0f)
+                    .stacksTo(1)
+                    .repairable(Items.IRON_INGOT)
+            }
+            .tags(swordWeaponTags)
+            .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
+            .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
+            .build(),
+    )
+
+    @JvmField
+    val SWORD_OF_HALLOWEEN: DeferredItem<Item> = ModItems.registerItem(
+        ItemConfig.Builder("sword_of_halloween")
+            .func(::SwordOfHalloweenItem)
+            .props {
+                Item.Properties()
+                    .sword(ModToolMaterial.SWORD_OF_HALLOWEEN, 3.0f, -2.4f)
+                    .stacksTo(1)
+                    .repairable(Items.IRON_INGOT)
+            }
+            .tags(swordWeaponTags)
+            .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
+            .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
+            .build(),
+    )
+
+    @JvmField
+    val GHOST_SWORD: DeferredItem<Item> = ModItems.registerItem(
+        ItemConfig.Builder("ghost_sword")
+            .func(::GhostSwordItem)
+            .props {
+                Item.Properties()
+                    .sword(ModToolMaterial.GHOST_SWORD, 6.0f, -2.4f)
+                    .stacksTo(1)
+                    .repairable(Material.GHOST_INGOT.get())
+            }
+            .tags(swordWeaponTags)
+            .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
+            .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
+            .build(),
+    )
+
+    @JvmField
+    val DUST_DESTROYER: DeferredItem<Item> = ModItems.registerItem(
+        ItemConfig.Builder("dust_destroyer")
+            .func(::DustDestroyerItem)
+            .props {
+                Item.Properties()
+                    .sword(ModToolMaterial.DUST_DESTROYER, 9.0f, -2.4f)
+                    .useCooldown(0.5f)
+                    .stacksTo(1)
+                    .repairable(ModBlocks.ASH.get().asItem())
+            }
+            .tags(swordWeaponTags)
+            .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
+            .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
+            .build(),
+    )
+
+    @JvmField
+    val GROWTH: DeferredItem<Item> = ModItems.registerItem(
+        ItemConfig.Builder("growth")
+            .func(::GrowthItem)
+            .props {
+                Item.Properties()
+                    .sword(ModToolMaterial.GROWTH_SWORD, 4.0f, -2.4f)
+                    .useCooldown(1.0f)
+                    .stacksTo(1)
+                    .repairable(SimplePlant.DANDELION.get().asItem())
+            }
             .tags(swordWeaponTags)
             .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
             .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
@@ -1272,6 +1373,7 @@ object Weapon {
         "rapier",
         ToolMaterial.IRON,
         config = RapierItem.RapierConfig.Builder(3.0f, 3.0f)
+            .pulse(skill = 3.0f, combo = 6.0f, magic = false)
             .comboThreshold(4)
             .build(),
         attackDamage = 3.0f,

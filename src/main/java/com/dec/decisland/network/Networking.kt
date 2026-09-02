@@ -41,6 +41,17 @@ object Networking {
             SpawnBedrockEmitterPayload.STREAM_CODEC,
             ClientPayloadHandler::handleSpawnBedrockEmitter,
         )
+
+        registrar.playToClient(
+            DashPayload.TYPE,
+            DashPayload.STREAM_CODEC,
+            ClientPayloadHandler::handleDash,
+        )
+    }
+
+    @JvmStatic
+    fun sendDash(player: ServerPlayer, power: Float) {
+        PacketDistributor.sendToPlayer(player, DashPayload(power))
     }
 
     @JvmStatic

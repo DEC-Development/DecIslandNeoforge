@@ -1,6 +1,8 @@
 package com.dec.decisland.entity
 
 import com.dec.decisland.DecIsland
+import com.dec.decisland.entity.custom.PumpkinBombEntity
+import com.dec.decisland.entity.custom.WitherCloudEntity
 import com.dec.decisland.entity.projectile.AmethystEnergyBall
 import com.dec.decisland.entity.projectile.AmethystEnergyRay
 import com.dec.decisland.entity.projectile.BlizzardEnergy
@@ -398,6 +400,18 @@ object ModEntities {
             ),
         ),
     )
+
+    @JvmField
+    val PUMPKIN_BOMB: Supplier<EntityType<PumpkinBombEntity>> =
+        ENTITY_TYPES.registerEntityType("pumpkin_bomb", ::PumpkinBombEntity, MobCategory.MISC) { builder ->
+            builder.sized(0.5f, 0.5f).clientTrackingRange(8).updateInterval(10)
+        }
+
+    @JvmField
+    val WITHER_CLOUD: Supplier<EntityType<WitherCloudEntity>> =
+        ENTITY_TYPES.registerEntityType("wither_cloud", ::WitherCloudEntity, MobCategory.MISC) { builder ->
+            builder.sized(0.5f, 0.5f).clientTrackingRange(8).updateInterval(10)
+        }
 
     @JvmStatic
     fun registry(eventBus: IEventBus) {

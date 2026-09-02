@@ -181,6 +181,38 @@ object WeaponRecipes {
                 .unlockedBy(Material.LIGHTNING_STONE.get())
                 .build(),
         )
+        RecipeDsl.save(
+            context,
+            ShapedRecipeConfig.Builder("ghost_sword")
+                .category(RecipeCategory.COMBAT)
+                .result(Weapon.GHOST_SWORD.get())
+                .pattern(
+                    "A",
+                    "A",
+                    "X",
+                )
+                .define('A', Material.GHOST_INGOT.get())
+                .define('X', Material.ICE_ROD.get())
+                .unlockedBy(Material.GHOST_INGOT.get())
+                .build(),
+        )
+        RecipeDsl.save(
+            context,
+            ShapedRecipeConfig.Builder("growth")
+                .category(RecipeCategory.COMBAT)
+                .result(Weapon.GROWTH.get())
+                .pattern(
+                    "AXA",
+                    "AXA",
+                    "B#B",
+                )
+                .define('X', Material.PURE_INGOT.get())
+                .define('A', Items.GLOW_BERRIES)
+                .define('B', Items.VINE)
+                .define('#', Material.IRON_STICK.get())
+                .unlockedBy(Material.PURE_INGOT.get())
+                .build(),
+        )
         battleaxeRecycleRecipes("copper_battleaxe", Weapon.COPPER_BATTLEAXE.get(), Items.COPPER_INGOT).forEach { RecipeDsl.save(context, it) }
         battleaxeRecycleRecipes("steel_battleaxe", Weapon.STEEL_BATTLEAXE.get(), Material.STEEL_INGOT.get()).forEach { RecipeDsl.save(context, it) }
     }

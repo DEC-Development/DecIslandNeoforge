@@ -296,8 +296,8 @@ object Molang {
                     }
                 }
                 "math.pow", "pow" -> (args.getOrNull(0) ?: 0.0).pow(args.getOrNull(1) ?: 0.0)
-                "math.sin", "sin" -> sin(args.getOrNull(0) ?: 0.0)
-                "math.cos", "cos" -> cos(args.getOrNull(0) ?: 0.0)
+                "math.sin", "sin" -> sin(Math.toRadians(args.getOrNull(0) ?: 0.0))
+                "math.cos", "cos" -> cos(Math.toRadians(args.getOrNull(0) ?: 0.0))
                 "math.abs", "abs" -> abs(args.getOrNull(0) ?: 0.0)
                 "math.min", "min" -> min(args.getOrNull(0) ?: 0.0, args.getOrNull(1) ?: 0.0)
                 "math.max", "max" -> max(args.getOrNull(0) ?: 0.0, args.getOrNull(1) ?: 0.0)

@@ -1,0 +1,190 @@
+===== bamboo_yataghan
+durability: 60
+damage: 6
+enchant: None
+cooldown: {'category': 'sword', 'duration': 1.5}
+repair: {"repair_items": [{"items": ["minecraft:bamboo"], "repair_amount": "context.other->query.remaining_durability + query.max_durability * 0.6"}]}
+weapon: {"on_hurt_entity": {"event": "attack", "target": "self"}, "on_hit_block": {"event": "attack", "target": "self"}}
+on_use: {"on_use": {"event": "throw", "target": "self"}}
+other components: minecraft:fuel, minecraft:throwable
+EVENTS: {"attack": {"damage": {"type": "magic", "amount": 1}}, "throw": {"sequence": [{"condition": "query.remaining_durability > 7", "sequence": [{"damage": {"type": "magic", "amount": 7}}, {"shoot": {"projectile": "dec:bamboo_yataghan", "launch_power": 1}}]}]}}
+===== blue_of_the_sea
+durability: 412
+damage: 6
+enchant: {'value': 15, 'slot': 'sword'}
+cooldown: {'category': 'sword', 'duration': 0.7}
+repair: {"repair_items": [{"items": ["minecraft:gold_ingot"], "repair_amount": "context.other->query.remaining_durability + query.max_durability * 0.3"}, {"items": ["dec:stream_stone"], "repair_amount": "context.other->query.remaining_durability + query.max_durability * 0.6"}]}
+weapon: {"on_hurt_entity": {"event": "attack", "target": "self"}, "on_hit_block": {"event": "attack", "target": "self"}}
+on_use: {"on_use": {"event": "shoot", "target": "self"}}
+other components: 
+EVENTS: {"attack": {"damage": {"type": "magic", "amount": 1}}, "shoot": {"sequence": [{"condition": "query.scoreboard('magicpoint') > 3", "sequence": [{"run_command": {"command": ["playsound conduit.activate @a ~~~", "scoreboard players remove @s magicpoint 3", "playanimation @s animation.humanoid.staff_use"], "target": "holder"}}, {"shoot": {"projectile": "dec:hard_bubble", "launch_power": 3}}, {"shoot": {"projectile": "dec:hard_bubble", "launch_power": 1}}, {"shoot": {"projectile": "dec:hard_bubble", "launch_power": 0.6}}, {"shoot": {"projectile": "dec:hard_bubble", "launch_power": 0.6}}, {"damage": {"type": "magic", "amount": 1}}]}]}}
+===== decrepit_atlantis
+durability: None
+damage: 6
+enchant: {'value': 15, 'slot': 'sword'}
+cooldown: None
+repair: null
+weapon: {"on_hurt_entity": {"event": "attack", "target": "self"}, "on_hit_block": {"event": "attack", "target": "self"}}
+on_use: null
+other components: 
+EVENTS: {"attack": {"damage": {"type": "magic", "amount": 1}}}
+===== dust_destroyer
+durability: 2045
+damage: 14
+enchant: {'value': 15, 'slot': 'sword'}
+cooldown: {'category': 'dust_destroyer', 'duration': 0.5}
+repair: {"repair_items": [{"items": ["dec:ash"], "repair_amount": "context.other->query.remaining_durability + query.max_durability * 0.05"}]}
+weapon: {"on_hurt_entity": {"event": "attack", "target": "self"}, "on_hit_block": {"event": "attack", "target": "self"}}
+on_use: {"on_use": {"event": "shoot", "target": "self"}}
+other components: 
+EVENTS: {"attack": {"damage": {"type": "magic", "amount": 1}}, "shoot": {"sequence": [{"condition": "query.scoreboard('magicpoint') > 1", "sequence": [{"run_command": {"command": ["function item/dust_destroyer", "playanimation @s animation.humanoid.staff_use"], "target": "holder"}}]}]}}
+===== everlasting_winter_sword
+durability: 1712
+damage: 8
+enchant: {'value': 5, 'slot': 'sword'}
+cooldown: {'category': 'sword', 'duration': 1}
+repair: {"repair_items": [{"items": ["dec:ice_brick"], "repair_amount": "context.other->query.remaining_durability + query.max_durability * 0.05"}, {"items": ["dec:ice_nugget"], "repair_amount": "context.other->query.remaining_durability + query.max_durability * 0.1"}, {"items": ["dec:ice_ingot"], "repair_amount": "context.other->query.remaining_durability + query.max_durability * 0.6"}]}
+weapon: {"on_hurt_entity": {"event": "attack", "target": "self"}, "on_hit_block": {"event": "attack", "target": "self"}}
+on_use: {"on_use": {"event": "everlasting_winter_sword_use", "target": "self"}}
+other components: 
+EVENTS: {"attack": {"damage": {"type": "magic", "amount": 1}}, "everlasting_winter_sword_use": {"sequence": [{"condition": "query.scoreboard('magicpoint') > 1", "sequence": [{"run_command": {"command": ["function item/everlasting_winter_sword"], "target": "holder"}}]}]}}
+===== ghost_sword
+durability: 4095
+damage: 12
+enchant: {'value': 15, 'slot': 'sword'}
+cooldown: None
+repair: {"repair_items": [{"items": ["dec:ghost_ingot"], "repair_amount": "context.other->query.remaining_durability + query.max_durability * 0.4"}, {"items": ["dec:ghost_essence"], "repair_amount": "context.other->query.remaining_durability + query.max_durability * 0.3"}]}
+weapon: {"on_hurt_entity": {"event": "ghost_sword_attack", "target": "self"}, "on_hit_block": {"event": "attack", "target": "self"}}
+on_use: null
+other components: 
+EVENTS: {"attack": {"damage": {"type": "magic", "amount": 1}}, "ghost_sword_attack": {"randomize": [{"weight": 1, "sequence": [{"run_command": {"command": ["particle dec:ghost_sickle_particle ~~~"], "target": "other"}}, {"add_mob_effect": {"effect": "invisibility", "duration": 3, "amplifier": 0, "target": "other"}}, {"damage": {"type": "magic", "amount": 1}}]}, {"weight": 5, "damage": {"type": "magic", "amount": 1}}]}}
+===== growth
+durability: 502
+damage: 7
+enchant: {'value': 15, 'slot': 'sword'}
+cooldown: {'category': 'sword', 'duration': 1}
+repair: {"repair_items": [{"items": ["dec:dandelion"], "repair_amount": "context.other->query.remaining_durability + query.max_durability * 0.1"}, {"items": ["dec:flower_essence"], "repair_amount": "context.other->query.remaining_durability + query.max_durability * 0.5"}, {"items": ["dec:pure_ingot"], "repair_amount": "context.other->query.remaining_durability + query.max_durability * 0.7"}]}
+weapon: {"on_hurt_entity": {"event": "growth_attack", "target": "self"}, "on_hit_block": {"event": "attack", "target": "self"}}
+on_use: {"on_use": {"event": "growth_use", "target": "self"}}
+other components: 
+EVENTS: {"growth_attack": {"sequence": [{"condition": "query.scoreboard('magicpoint') > 4", "sequence": [{"run_command": {"command": ["playsound break.amethyst_block @a ~~~", "scoreboard players remove @s magicpoint 4", "playanimation @s animation.humanoid.staff_use"], "target": "holder"}}, {"shoot": {"projectile": "dec:growing_energy_ray", "launch_power": 0.2}}, {"damage": {"type": "magic", "amount": 1}}]}]}, "growth_use": {"sequence": [{"condition": "query.scoreboard('magicpoint') > 5", "sequence": [{"run_command": {"command": ["playsound break.amethyst_block @a ~~~", "scoreboard players remove @s magicpoint 5"], "target": "holder"}}, {"shoot": {"projectile": "dec:growing_energy_ray", "launch_power": 0.7}}, {"damage": {"type": "magic", "amount": 1}}]}]}, "attack": {"damage": {"type": "magic", "amount": 1}}}
+===== radiate_sword
+durability: 1024
+damage: 10
+enchant: {'value': 15, 'slot': 'sword'}
+cooldown: {'category': 'sword', 'duration': 0.2}
+repair: {"repair_items": [{"items": ["dec:uranium"], "repair_amount": "context.other->query.remaining_durability + query.max_durability * 0.1"}, {"items": ["dec:high_concentration_uranium"], "repair_amount": "context.other->query.remaining_durability + query.max_durability * 0.3"}, {"items": ["dec:enriched_uranium"], "repair_amount": "context.other->query.remaining_durability + query.max_durability * 0.3"}]}
+weapon: {"on_hurt_entity": {"event": "attack", "target": "self"}, "on_hit_block": {"event": "attack", "target": "self"}}
+on_use: {"on_use": {"event": "shoot", "target": "self"}}
+other components: 
+EVENTS: {"attack": {"damage": {"type": "magic", "amount": 1}}, "shoot": {"sequence": [{"condition": "query.scoreboard('magicpoint') > 2", "sequence": [{"run_command": {"command": ["playsound liquid.water @a ~~~", "scoreboard players remove @s magicpoint 2"], "target": "holder"}}, {"shoot": {"projectile": "dec:radiate_fog", "launch_power": 1}}, {"damage": {"type": "magic", "amount": 1}}]}]}}
+===== scale_sword
+durability: 1024
+damage: 8
+enchant: {'value': 15, 'slot': 'sword'}
+cooldown: {'category': 'sword', 'duration': 0.5}
+repair: {"repair_items": [{"items": ["dec:coral_ingot"], "repair_amount": "context.other->query.remaining_durability + query.max_durability * 0.2"}, {"items": ["dec:sharp_coral"], "repair_amount": "context.other->query.remaining_durability + query.max_durability * 0.3"}, {"items": ["dec:scale_block"], "repair_amount": "context.other->query.remaining_durability + query.max_durability * 0.7"}]}
+weapon: {"on_hurt_entity": {"event": "scale_sword_attack", "target": "self"}, "on_hit_block": {"event": "attack", "target": "self"}}
+on_use: {"on_use": {"event": "scale_sword_skill", "target": "self"}}
+other components: 
+EVENTS: {"attack": {"damage": {"type": "magic", "amount": 1}}, "scale_sword_attack": {"sequence": [{"condition": "query.is_in_water_or_rain", "randomize": [{"weight": 1, "sequence": [{"run_command": {"command": ["tag @e[c=1,hasitem={item=dec:scale_sword,location=slot.weapon.mainhand},type=!item,r=4] add scale_sword_skill", "damage @e[r=3,tag=!scale_sword_skill,type=!item] 10 drowning entity @e[c=1,tag=scale_sword_skill]", "tag @e[r=6] remove scale_sword", "particle dec:bubble_spurt_middle_particle ~~~"], "target": "other"}}, {"run_command": {"command": ["effect @s conduit_power 10"], "target": "self"}}]}, {"weight": 1}]}, {"damage": {"type": "magic", "amount": 1}}]}, "scale_sword_skill": {"sequence": [{"condition": "query.scoreboard('magicpoint') > 6 && query.is_in_water_or_rain", "sequence": [{"run_command": {"command": ["function item/scale_sword_skill_water"], "target": "holder"}}, {"damage": {"type": "magic", "amount": 1}}]}, {"condition": "query.scoreboard('magicpoint') > 10 && !query.is_in_water_or_rain", "sequence": [{"run_command": {"command": ["function item/scale_sword_skill_land"], "target": "holder"}}, {"damage": {"type": "magic", "amount": 2}}]}]}}
+===== star_sword
+durability: 4096
+damage: 12
+enchant: {'value': 10, 'slot': 'sword'}
+cooldown: None
+repair: {"repair_items": [{"items": ["dec:star_debris"], "repair_amount": "context.other->query.remaining_durability + query.max_durability * 0.6"}]}
+weapon: {"on_hurt_entity": {"event": "attack", "target": "self"}, "on_hit_block": {"event": "attack", "target": "self"}}
+on_use: {"on_use": {"event": "shoot", "target": "self"}}
+other components: 
+EVENTS: {"attack": {"damage": {"type": "magic", "amount": 1}}, "shoot": {"sequence": [{"condition": "query.scoreboard('magicpoint') < 15", "sequence": [{"run_command": {"command": ["scoreboard players set @s skill_count 0"], "target": "holder"}}]}, {"condition": "query.scoreboard('magicpoint') >= 15", "sequence": [{"condition": "query.scoreboard('skill_count') < 12", "sequence": [{"run_command": {"command": ["scoreboard players add @s skill_count 1"], "target": "holder"}}]}, {"condition": "query.scoreboard('skill_count') == 4 || query.scoreboard('skill_count') == 8", "sequence": [{"run_command": {"command": ["function item/star_sword_charge"], "target": "holder"}}]}, {"condition": "query.scoreboard('skill_count') == 12", "sequence": [{"run_command": {"command": ["function item/star_sword_shoot"], "target": "holder"}}, {"shoot": {"projectile": "dec:spots_by_sword", "launch_power": 0.2}}, {"shoot": {"projectile": "dec:spots_by_sword", "launch_power": 0.4}}, {"shoot": {"projectile": "dec:spots_by_sword", "launch_power": 0.5}}, {"shoot": {"projectile": "dec:spots_by_sword", "launch_power": 0.9}}, {"shoot": {"projectile": "dec:spots_by_sword", "launch_power": 1.4}}, {"shoot": {"projectile": "dec:spots_by_sword", "launch_power": 2}}, {"damage": {"type": "magic", "amount": 1}}]}, {"condition": "query.scoreboard('skill_count') >= 12", "sequence": [{"run_command": {"command": ["scoreboard players set @s skill_count 0"], "target": "holder"}}]}]}]}}
+===== storm_giant_sword
+durability: 533
+damage: 6
+enchant: {'value': 15, 'slot': 'sword'}
+cooldown: {'category': 'sword', 'duration': 2}
+repair: {"repair_items": [{"items": ["dec:stream_stone"], "repair_amount": "context.other->query.remaining_durability + query.max_durability * 0.3"}]}
+weapon: {"on_hurt_entity": {"event": "attack", "target": "self"}, "on_hit_block": {"event": "attack", "target": "self"}}
+on_use: {"on_use": {"event": "storm_giant_sword_use_attack", "target": "self"}}
+other components: minecraft:use_modifiers
+EVENTS: {"attack": {"damage": {"type": "magic", "amount": 1}}, "storm_giant_sword_use_attack": {"sequence": [{"condition": "query.scoreboard('magicpoint') > 3", "sequence": [{"run_command": {"command": ["playsound break.amethyst_block @a ~~~", "scoreboard players remove @s magicpoint 3", "playanimation @s animation.humanoid.staff_use"], "target": "holder"}}, {"shoot": {"projectile": "dec:storm_energy<minecraft:a>", "launch_power": 1}}, {"shoot": {"projectile": "dec:storm_energy<minecraft:b>", "launch_power": 1}}, {"shoot": {"projectile": "dec:storm_energy<minecraft:c>", "launch_power": 1}}, {"shoot": {"projectile": "dec:storm_energy<minecraft:d>", "launch_power": 1}}, {"damage": {"type": "magic", "amount": 1}}]}]}}
+===== sword_of_deep
+durability: 1023
+damage: 13
+enchant: {'value': 15, 'slot': 'sword'}
+cooldown: {'category': 'sword', 'duration': 2}
+repair: {"repair_items": [{"items": ["minecraft:wither_rose"], "repair_amount": "context.other->query.remaining_durability + query.max_durability * 0.25"}, {"items": ["dec:wither_substance"], "repair_amount": "context.other->query.remaining_durability + query.max_durability * 0.4"}]}
+weapon: {"on_hurt_entity": {"event": "attack", "target": "self"}, "on_hit_block": {"event": "attack", "target": "self"}}
+on_use: {"on_use": {"event": "shoot", "target": "self"}}
+other components: 
+EVENTS: {"attack": {"damage": {"type": "magic", "amount": 1}}, "shoot": {"sequence": [{"condition": "query.scoreboard('magicpoint') > 4", "sequence": [{"run_command": {"command": ["particle dec:deep_range_particle ~~~", "tag @s add sword_of_deep_skill", "effect @e[r=4,tag=!sword_of_deep_skill] wither 10 1", "tag @s remove sword_of_deep_skill", "scoreboard players remove @s magicpoint 4"], "target": "holder"}}, {"damage": {"type": "magic", "amount": 1}}]}]}}
+===== sword_of_guard
+durability: 231
+damage: 6
+enchant: {'value': 15, 'slot': 'sword'}
+cooldown: {'category': 'sword', 'duration': 1}
+repair: {"repair_items": [{"items": ["minecraft:iron_ingot"], "repair_amount": "context.other->query.remaining_durability + query.max_durability * 0.3"}, {"items": ["minecraft:iron_nugget"], "repair_amount": "context.other->query.remaining_durability + query.max_durability * 0.03"}]}
+weapon: {"on_hurt_entity": {"event": "attack", "target": "self"}, "on_hit_block": {"event": "attack", "target": "self"}}
+on_use: {"on_use": {"event": "shoot", "target": "self"}}
+other components: 
+EVENTS: {"attack": {"damage": {"type": "magic", "amount": 1}}, "shoot": {"sequence": [{"condition": "query.scoreboard('magicpoint') > 1", "sequence": [{"run_command": {"command": ["scoreboard players remove @s magicpoint 1", "effect @s resistance 5 0"], "target": "holder"}}, {"damage": {"type": "magic", "amount": 1}}]}]}}
+===== sword_of_halloween
+durability: 513
+damage: 5
+enchant: {'value': 15, 'slot': 'sword'}
+cooldown: None
+repair: {"repair_items": [{"items": ["minecraft:iron_ingot"], "repair_amount": "context.other->query.remaining_durability + query.max_durability * 0.3"}, {"items": ["minecraft:iron_nugget"], "repair_amount": "context.other->query.remaining_durability + query.max_durability * 0.03"}]}
+weapon: {"on_hurt_entity": {"event": "sword_of_halloween_attack", "target": "self"}, "on_hit_block": {"event": "attack", "target": "self"}}
+on_use: null
+other components: 
+EVENTS: {"attack": {"damage": {"type": "magic", "amount": 1}}, "sword_of_halloween_attack": {"sequence": [{"randomize": [{"weight": 1, "run_command": {"command": ["summon dec:pumpkin_bomb ~~~", "particle dec:bat_spurt_particle ~~0.5~"], "target": "other"}}, {"weight": 4}]}]}}
+===== the_imperial_sword
+durability: 564
+damage: 8
+enchant: {'value': 20, 'slot': 'sword'}
+cooldown: None
+repair: {"repair_items": [{"items": ["dec:ice_brick"], "repair_amount": "context.other->query.remaining_durability + query.max_durability * 0.05"}, {"items": ["dec:ice_nugget"], "repair_amount": "context.other->query.remaining_durability + query.max_durability * 0.1"}, {"items": ["dec:ice_ingot"], "repair_amount": "context.other->query.remaining_durability + query.max_durability * 0.6"}]}
+weapon: {"on_hurt_entity": {"event": "attack", "target": "self"}, "on_hit_block": {"event": "attack", "target": "self"}}
+on_use: {"on_use": {"event": "shoot", "target": "self"}}
+other components: 
+EVENTS: {"attack": {"damage": {"type": "magic", "amount": 1}}, "shoot": {"sequence": [{"condition": "query.scoreboard('magicpoint') < 15", "sequence": [{"run_command": {"command": ["scoreboard players set @s skill_count 0"], "target": "holder"}}]}, {"condition": "query.scoreboard('magicpoint') >= 15", "sequence": [{"condition": "query.scoreboard('skill_count') < 16", "sequence": [{"run_command": {"command": ["scoreboard players add @s skill_count 1"], "target": "holder"}}]}, {"condition": "query.scoreboard('skill_count') == 8", "sequence": [{"run_command": {"command": ["effect @s strength 5 1", "effect @s resistance 2 2", "effect @e[r=5,rm=2] slowness 1 255", "particle dec:frozen_shield_particle ~~~", "scoreboard players remove @s magicpoint 15", "playanimation @s animation.humanoid.sword_use"], "target": "holder"}}, {"damage": {"type": "magic", "amount": 1}}]}, {"condition": "query.scoreboard('skill_count') == 16", "sequence": [{"run_command": {"command": ["effect @s strength 5 2", "effect @s resistance 2 3", "effect @e[r=5,rm=2] slowness 2 255", "particle dec:frozen_shield_particle ~~~", "particle dec:frozen_shield_particle ~~~", "scoreboard players remove @s magicpoint 15", "playanimation @s animation.humanoid.sword_use"], "target": "holder"}}, {"damage": {"type": "magic", "amount": 1}}]}, {"condition": "query.scoreboard('skill_count') >= 16", "sequence": [{"run_command": {"command": ["scoreboard players set @s skill_count 0"], "target": "holder"}}]}]}]}}
+===== village_guardian
+durability: 513
+damage: 6
+enchant: {'value': 15, 'slot': 'sword'}
+cooldown: {'category': 'village_portal', 'duration': 60}
+repair: {"repair_items": [{"items": ["minecraft:emerald"], "repair_amount": "context.other->query.remaining_durability + query.max_durability * 0.09"}, {"items": ["minecraft:iron_ingot"], "repair_amount": "context.other->query.remaining_durability + query.max_durability * 0.01"}, {"items": ["minecraft:iron_nugget"], "repair_amount": "context.other->query.remaining_durability + query.max_durability * 0.001"}]}
+weapon: {"on_hurt_entity": {"event": "attack", "target": "self"}, "on_hit_block": {"event": "attack", "target": "self"}}
+on_use: {"on_use": {"event": "village_guardian_use", "target": "self"}}
+other components: 
+EVENTS: {"attack": {"sequence": [{"damage": {"type": "magic", "amount": 1}}, {"run_command": {"command": ["effect @e[family=villager,r=4] regeneration 10 0", "particle dec:village_portal_seep_particle ~~~"], "target": "other"}}]}, "village_guardian_use": {"sequence": [{"condition": "query.remaining_durability > 100 && query.scoreboard('magicpoint') > 19", "sequence": [{"damage": {"type": "magic", "amount": 70}}, {"run_command": {"command": ["function item/village_guardian"], "target": "holder"}}]}]}}
+===== vortex
+durability: 832
+damage: 8
+enchant: {'value': 15, 'slot': 'sword'}
+cooldown: {'category': 'sword', 'duration': 0.5}
+repair: {"repair_items": [{"items": ["dec:coral_ingot"], "repair_amount": "context.other->query.remaining_durability + query.max_durability * 0.3"}, {"items": ["dec:sharp_coral"], "repair_amount": "context.other->query.remaining_durability + query.max_durability * 0.4"}]}
+weapon: {"on_hurt_entity": {"event": "attack", "target": "self"}, "on_hit_block": {"event": "attack", "target": "self"}}
+on_use: {"on_use": {"event": "vortex_attack", "target": "self"}}
+other components: 
+EVENTS: {"attack": {"damage": {"type": "magic", "amount": 1}}, "vortex_attack": {"sequence": [{"condition": "query.scoreboard('magicpoint') > 7 && query.is_in_water_or_rain", "sequence": [{"run_command": {"command": ["function item/vortex_water"], "target": "holder"}}, {"damage": {"type": "magic", "amount": 1}}]}, {"condition": "query.scoreboard('magicpoint') > 11 && !query.is_in_water_or_rain", "sequence": [{"run_command": {"command": ["function item/vortex_land"], "target": "holder"}}, {"damage": {"type": "magic", "amount": 2}}]}]}}
+===== warden_sword
+durability: 563
+damage: 6
+enchant: {'value': 7, 'slot': 'sword'}
+cooldown: {'category': 'sword', 'duration': 15}
+repair: {"repair_items": [{"items": ["minecraft:sculk"], "repair_amount": "context.other->query.remaining_durability + query.max_durability * 0.02"}, {"items": ["minecraft:sculk_vein"], "repair_amount": "context.other->query.remaining_durability + query.max_durability * 0.01"}]}
+weapon: {"on_hurt_entity": {"event": "attack", "target": "self"}, "on_hit_block": {"event": "attack", "target": "self"}}
+on_use: null
+other components: minecraft:chargeable, minecraft:use_modifiers
+EVENTS: {"attack": {"damage": {"type": "magic", "amount": 1}}, "angry": {"sequence": [{"condition": "query.scoreboard('magicpoint') > 19", "sequence": [{"run_command": {"command": ["playsound mob.warden.roar @a ~~~", "function item/warden_sword", "scoreboard players remove @s magicpoint 20"], "target": "holder"}}, {"damage": {"type": "magic", "amount": 1}}]}]}}
+===== wind_of_shadow
+durability: 524
+damage: 8
+enchant: {'value': 15, 'slot': 'sword'}
+cooldown: {'category': 'sword', 'duration': 4}
+repair: {"repair_items": [{"items": ["dec:ender_core"], "repair_amount": "context.other->query.remaining_durability + query.max_durability * 0.4"}, {"items": ["dec:ender_breath"], "repair_amount": "context.other->query.remaining_durability + query.max_durability * 0.3"}, {"items": ["dec:ender_powder"], "repair_amount": "context.other->query.remaining_durability + query.max_durability * 0.1"}, {"items": ["dec:ender_stone"], "repair_amount": "context.other->query.remaining_durability + query.max_durability * 0.2"}]}
+weapon: {"on_hurt_entity": {"event": "attack", "target": "self"}, "on_hit_block": {"event": "attack", "target": "self"}}
+on_use: {"on_use": {"event": "skill_start", "target": "self"}}
+other components: minecraft:chargeable, minecraft:use_modifiers
+EVENTS: {"attack": {"damage": {"type": "magic", "amount": 1}}, "skill_start": {"sequence": [{"condition": "query.scoreboard('magicpoint') > 10", "sequence": [{"run_command": {"command": ["effect @s invisibility 3 0 true", "effect @s speed 3 2 true", "particle dec:ender_spurt_particle ~~~", "scoreboard players remove @s magicpoint 10"], "target": "holder"}}, {"damage": {"type": "magic", "amount": 1}}]}]}, "skill_end": {"damage": {"type": "magic", "amount": 1}, "run_command": {"command": ["function item/wind_of_shadow"], "target": "holder"}}}

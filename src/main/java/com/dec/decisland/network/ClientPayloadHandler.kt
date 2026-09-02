@@ -3,6 +3,7 @@ package com.dec.decisland.network
 import com.dec.decisland.client.RecoilClient
 import com.dec.decisland.client.bedrock.BedrockEmitterManager
 import com.dec.decisland.client.gui.ClientManaOverlay
+import com.dec.decisland.item.custom.RapierItem
 import net.minecraft.client.Minecraft
 import net.minecraft.network.chat.Component
 import net.minecraft.world.phys.Vec3
@@ -35,6 +36,18 @@ object ClientPayloadHandler {
             val client = Minecraft.getInstance()
             if (client.level != null) {
                 BedrockEmitterManager.spawnAt(payload.id, Vec3(payload.x, payload.y, payload.z), payload.durationTicks)
+            }
+        }.exceptionally { error ->
+            context.disconnect(Component.translatable("decisland.networking.failed", error.message ?: "unknown"))
+            null
+        }
+    }
+
+    fun handleDash(payload: DashPayload, context: IPayloadContext) {
+        context.enqueueWork {
+            val player = Minecraft.getInstance().player
+            if (player != null) {
+                RapierItem.applyDashImpulse(player, payload.power)
             }
         }.exceptionally { error ->
             context.disconnect(Component.translatable("decisland.networking.failed", error.message ?: "unknown"))

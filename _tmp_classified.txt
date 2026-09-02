@@ -1,0 +1,69 @@
+angel_purification | Angel Purification | 净化使者 | dec:spears
+bamboo_yataghan | Bamboo Yataghan | 竹长剑 | sword
+bat_staff | Bat Staff | 蝙蝠杖 | dec:staffs
+blaze_staff | Blaze Staff | 烈焰法杖 | dec:staffs
+blood_meat | Blood Meat | 血腥肉块 | dec:night_event_items
+blue_of_the_sea | Blue Of The Sea | 海之忧伤 | sword
+bomber | Bomber | 轰炸者 | dec:flintlocks
+bomber_bullet | Bomber Bullet | 轰炸弹 | dec:bullets
+catapult | Catapult | 弹弓 | dec:flintlocks
+chaos_staff | Chaos Staff | 混沌召唤杖 | dec:staffs
+chicken_staff | Chicken Staff | 小鸡法杖 | dec:staffs
+christmas_gift | Christmas Gift | 圣诞礼物 | decorations
+christmas_sock | Christmas Sock | 圣诞袜 | decorations
+decrepit_atlantis | Decrepit Atlantis | 破旧的亚特兰蒂斯 | sword
+destroy_staff | Destroy Staff | 破坏神杖 | dec:destroy_staffs
+dragon_fireball_by_player | Dragon Fireball | 龙息弹 | dec:thrown_sundries
+drift_bottle | Drift Bottle | 漂流瓶 | decorations
+dust_destroyer | Dust Destroy | 尘灭者 | sword
+dust_staff | Dust Staff | 尘埃召唤杖 | dec:staffs
+echo_of_deep | Echo of Deep | 深渊回影 | dec:flintlocks
+energy_totem | Energy Totem | 能量图腾 | dec:totems
+everlasting_winter_heart | Everlasting Winter Heart | 永冬之心 | dec:night_event_items
+everlasting_winter_sword | Everlasting Winter Sword | 永冬长剑 | sword
+exploding_pellets | Exploding Pellets | 爆炸弹丸 | dec:bullets
+fire_heart | Fire Heart | 烈火之心 | navigation
+fire_totem | Fire Totem | 火焰图腾 | dec:totems
+ghost_dirt_wall | Ghost Dirt Wall | 鬼魂土墙 | navigation
+ghost_summoner | Ghost Summoner | 唤魂者 | dec:staffs
+ghost_sword | The Absorber Of Soul | 灵魂吸收者 | sword
+gingerbread_totem | Gingerbread Totem | 姜饼图腾 | dec:totems
+god_of_destroy | God Of Destroy | 破坏之神 | dec:destroy_staffs
+god_of_sun | God Of Sun | 太阳神 | dec:staffs
+golden_fence | Golden Fence | 流金栅栏 | decorations
+grapeshot_frozen_ball | Grapeshot Frozen Ball | 霰弹冰霜魔法球 | dec:thrown_sundries
+growth | Growth | 生长者 | sword
+hook_rope | Hook Rope | 钩锁 | navigation
+ice_hook_rope | Ice Hook Rope | 极寒钩锁 | navigation
+leaves_knife | Leaves Knife | 绿叶飞刀 | dec:thrown_sundries
+levitation_cloud | Levitation Cloud | 悬浮云 | dec:thrown_sundries
+levitation_dirt_wall | Levitation Dirt Wall | 飘浮土墙 | navigation
+magic_mask_bag | Magic Mask Bag | 魔法面具袋 | decorations
+magic_scroll_blue | Blue Magic Scroll | 蓝魔法卷轴 | navigation
+natural_spear | Natural Spear | 自然之矛 | dec:staffs
+ocean_totem | Ocean Totem | 海洋图腾 | dec:totems
+paraffin_bucket | Paraffin Bucket | 煤油桶 | navigation
+patterned_vase_red | Patterned Vase Red | 红色纹饰花瓶 | decorations
+poison_bag | Poison Bag | 毒囊 | dec:thrown_sundries
+radiate_spreader | Radiate Spreader | 堕落之神 | dec:staffs
+radiate_sword | Radiate Sword | 堕落圣刃 | sword
+red_bag | Red Bag | 红包 | decorations
+scale_sword | Scale Sword | 鳞之刃 | sword
+scarecrow | Scarecrow | 稻草人 | navigation
+simple_car | Simple Car | 简单小车 | navigation
+simple_glider | Simple Glider | 简单滑翔机 | navigation
+soul_fireball | Soul Fireball | 灵魂烈焰弹 | dec:thrown_sundries
+spider_staff | Spider Staff | 蜘蛛法杖 | dec:staffs
+star_sword | The Bursting Star | 迸发之星 | sword
+storm_giant_sword | Storm Giant Sword | 风暴巨剑 | sword
+sword_of_deep | Black Domain | 黑域 | sword
+sword_of_guard | The Spirit Of Guard | 侍卫之灵 | sword
+sword_of_halloween | Sword Of Halloween | 万圣之刃 | sword
+tear_from_dream | Tear from Dream | 梦境之泪 | dec:magic_accessories
+the_imperial_sword | the Imperial Sword | 尚方宝剑 | sword
+unknow_book | Unknow Book | 未知的书 | decorations
+village_guardian | Village Guardian | 村庄守卫 | sword
+vortex | Vortex | 旋涡 | sword
+warden_sword | Warden Sword | 匿潜刃 | sword
+wind_of_shadow | Wind Of Shadow | 暗影之风 | sword
+wooden_enchant_book | Wooden Enchant Book | 木制附魔书 | dec:magic_books

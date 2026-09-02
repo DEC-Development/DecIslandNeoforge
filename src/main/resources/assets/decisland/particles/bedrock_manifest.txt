@@ -75,3 +75,5 @@ copper_battleaxe_ring.particle.json
 steel_battleaxe_ring.particle.json
 bubble_ring.particle.json
 dead_wood_wake.particle.json
+bat_spurt.particle.json
+wither_cloud_wake.particle.json

@@ -197,7 +197,7 @@ object BedrockEmitterManager {
             return when (val shape = definition.emitterShape) {
                 is BedrockEmitterShape.Sphere -> {
                     val radius = Molang.evalDouble(shape.radius, createContext(), emitterVariables) ?: 0.0
-                    val offset = toVec(shape.offset)
+                    val offset = evalVec(shape.offset)
                     val dir = randomUnit()
                     val distance = if (shape.surfaceOnly == true) radius else cbrt(Math.random()) * radius
                     val delta = dir.scale(distance)
@@ -205,7 +205,7 @@ object BedrockEmitterManager {
                 }
                 is BedrockEmitterShape.Box -> {
                     val half = shape.halfDimensions ?: doubleArrayOf(0.0, 0.0, 0.0)
-                    val offset = toVec(shape.offset)
+                    val offset = evalVec(shape.offset)
                     val delta = Vec3(
                         (Math.random() * 2.0 - 1.0) * half.getOrElse(0) { 0.0 },
                         (Math.random() * 2.0 - 1.0) * half.getOrElse(1) { 0.0 },
@@ -215,7 +215,7 @@ object BedrockEmitterManager {
                 }
                 is BedrockEmitterShape.Disc -> {
                     val radius = Molang.evalDouble(shape.radius, createContext(), emitterVariables) ?: 0.0
-                    val offset = toVec(shape.offset)
+                    val offset = evalVec(shape.offset)
                     val normalRaw = shape.normal ?: doubleArrayOf(0.0, 1.0, 0.0)
                     val normal = normalizeSafe(
                         Vec3(
@@ -233,7 +233,7 @@ object BedrockEmitterManager {
                 }
                 is BedrockEmitterShape.Point -> {
                     val fallback = randomUnit()
-                    Spawn(origin.add(toVec(shape.offset)), resolveDirection(shape.direction, fallback, fallback))
+                    Spawn(origin.add(evalVec(shape.offset)), resolveDirection(shape.direction, fallback, fallback))
                 }
                 null -> Spawn(origin, Vec3(0.0, 1.0, 0.0))
             }
@@ -308,6 +308,19 @@ object BedrockEmitterManager {
 
         private fun toVec(values: DoubleArray?): Vec3 =
             if (values == null) Vec3.ZERO else Vec3(values.getOrElse(0) { 0.0 }, values.getOrElse(1) { 0.0 }, values.getOrElse(2) { 0.0 })
+
+        // Shape offsets can be Molang expressions (e.g. ring particles sweeping around
+        // the emitter with emitter_age), so they are evaluated per spawn.
+        private fun evalVec(values: List<String>?): Vec3 =
+            if (values == null) {
+                Vec3.ZERO
+            } else {
+                Vec3(
+                    Molang.evalDouble(values.getOrElse(0) { "0" }, createContext(), emitterVariables) ?: 0.0,
+                    Molang.evalDouble(values.getOrElse(1) { "0" }, createContext(), emitterVariables) ?: 0.0,
+                    Molang.evalDouble(values.getOrElse(2) { "0" }, createContext(), emitterVariables) ?: 0.0,
+                )
+            }
 
         private fun refreshCurveVariables() {
             emitterCurveVariables.clear()

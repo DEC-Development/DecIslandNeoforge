@@ -131,6 +131,7 @@ dark_werewolf_mask
 dark_zombie_mask
 dead_wood_dagger
 dead_wood_rapier
+decrepit_atlantis
 deep_dandelion
 deep_staff
 depart_grass
@@ -151,6 +152,7 @@ dirt_helmet
 dirt_leggings
 dolphin_mask
 drowned_mask
+dust_destroyer
 dust_ring
 elf_of_ash_mask
 elf_of_chaos_mask
@@ -259,6 +261,7 @@ ghost_essence
 ghost_flintlock
 ghost_ingot
 ghost_sickle
+ghost_sword
 giant_bat_wings
 giant_ivy
 gingerbread_man
@@ -282,6 +285,7 @@ golden_dagger
 golden_lamp
 golden_staff
 gray_shoes
+growth
 guardian_elder_mask
 guardian_mask
 guide_book
@@ -574,6 +578,8 @@ sun_stone
 swamp_drowned_mask
 swamp_golem_mask
 sword_fish
+sword_of_guard
+sword_of_halloween
 the_blade
 throwable_bomb
 thunder_rapier

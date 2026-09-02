@@ -5,6 +5,7 @@ import net.minecraft.core.component.DataComponents
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.stats.Stats
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
@@ -34,7 +35,10 @@ class RapierItem(
             return InteractionResult.FAIL
         }
 
-        if (!level.isClientSide) {
+        if (level.isClientSide) {
+            // Player movement is client-driven, so the dash impulse must be applied locally.
+            applyDashImpulse(player, config.dashPower * DASH_SCALE)
+        } else {
             performLunge(level as ServerLevel, player, stack, combo = false)
             player.awardStat(Stats.ITEM_USED.get(this))
         }
@@ -45,11 +49,11 @@ class RapierItem(
 
     override fun hurtEnemy(stack: ItemStack, target: LivingEntity, attacker: LivingEntity) {
         val player = attacker as? Player
-        if (player != null && player.level() is ServerLevel) {
+        if (player != null && !player.level().isClientSide && player.level() is ServerLevel) {
             val tag = readTag(stack)
             val count = tag.getIntOr(TAG_SKILL_COUNT, 0)
             if (count > config.comboThreshold) {
-                performLunge(player.level() as ServerLevel, player, stack, combo = true)
+                performLunge(player.level() as ServerLevel, player, stack, combo = true, notifyClient = true)
             } else {
                 tag.putInt(TAG_SKILL_COUNT, count + 1)
                 writeTag(stack, tag)
@@ -89,7 +93,7 @@ class RapierItem(
         }
     }
 
-    private fun performLunge(serverLevel: ServerLevel, player: Player, stack: ItemStack, combo: Boolean) {
+    private fun performLunge(serverLevel: ServerLevel, player: Player, stack: ItemStack, combo: Boolean, notifyClient: Boolean = false) {
         val tag = readTag(stack)
         tag.putInt(TAG_SKILL_COUNT, 0)
         tag.putLong(TAG_LUNGE_START, serverLevel.gameTime)
@@ -97,10 +101,11 @@ class RapierItem(
         writeTag(stack, tag)
 
         // Bedrock dec:sprint: horizontal impulse along the view direction.
-        val view = player.getViewVector(0.0f)
-        val horizontalLength = sqrt(view.x * view.x + view.z * view.z) + 1.0E-6
         val power = (if (combo) config.comboDashPower else config.dashPower) * DASH_SCALE
-        player.push(view.x / horizontalLength * power, 0.0, view.z / horizontalLength * power)
+        applyDashImpulse(player, power)
+        if (notifyClient && player is ServerPlayer) {
+            Networking.sendDash(player, power)
+        }
 
         val auraEffects = if (combo) config.comboAuraEffects else config.auraEffects
         applyAura(serverLevel, player, auraEffects)
@@ -232,6 +237,16 @@ class RapierItem(
     }
 
     companion object {
+        // Applies the Bedrock dec:sprint impulse: horizontal push along the view direction.
+        // Safe to call on both sides; player movement is client-driven, so the client call
+        // is what actually moves the player while the server call keeps physics consistent.
+        @JvmStatic
+        fun applyDashImpulse(player: Player, power: Float) {
+            val view = player.getViewVector(0.0f)
+            val horizontalLength = sqrt(view.x * view.x + view.z * view.z) + 1.0E-6
+            player.push(view.x / horizontalLength * power, 0.0, view.z / horizontalLength * power)
+        }
+
         private const val TAG_SKILL_COUNT = "skill_count"
         private const val TAG_LUNGE_START = "lunge_start"
         private const val TAG_LUNGE_COMBO = "lunge_combo"
@@ -240,6 +255,6 @@ class RapierItem(
         private const val PULSE_RADIUS = 2.0
         private const val AURA_RADIUS = 3.0
         private const val AURA_INNER_RADIUS = 1.0
-        private const val DASH_SCALE = 0.35f
+        private const val DASH_SCALE = 0.6f
     }
 }

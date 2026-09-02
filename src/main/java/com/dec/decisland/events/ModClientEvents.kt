@@ -10,6 +10,7 @@ import com.dec.decisland.client.renderer.EnergyBallBedrockRenderer
 import com.dec.decisland.client.renderer.EmptyRenderer
 import com.dec.decisland.client.renderer.FashionArmorClientItemExtensions
 import com.dec.decisland.client.renderer.MaskClientItemExtensions
+import com.dec.decisland.client.renderer.PumpkinBombRenderer
 import com.dec.decisland.client.gui.ClientManaOverlay
 import com.dec.decisland.entity.ModEntities
 import com.dec.decisland.entity.projectile.AmethystEnergyBall
@@ -130,6 +131,8 @@ object ModClientEvents {
         EntityRenderers.register(ModEntities.AMETHYST_ENERGY_RAY.get(), ::EmptyRenderer)
         EntityRenderers.register(ModEntities.FROZEN_RAY.get(), ::EmptyRenderer)
         EntityRenderers.register(ModEntities.GROWING_ENERGY_RAY.get(), ::EmptyRenderer)
+        EntityRenderers.register(ModEntities.PUMPKIN_BOMB.get(), ::PumpkinBombRenderer)
+        EntityRenderers.register(ModEntities.WITHER_CLOUD.get(), ::EmptyRenderer)
         EntityRenderers.register(ModEntities.NIGHTMARE_SPORE.get(), ::EmptyRenderer)
         EntityRenderers.register(ModEntities.NIGHTMARE_RAY.get(), ::EmptyRenderer)
         EntityRenderers.register(ModEntities.WAVE_ENERGY.get(), ::EmptyRenderer)

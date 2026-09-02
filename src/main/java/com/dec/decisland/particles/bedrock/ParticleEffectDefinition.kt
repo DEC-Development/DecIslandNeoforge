@@ -70,20 +70,20 @@ sealed class BedrockEmitterRate {
 
 sealed class BedrockEmitterShape {
     data class Point(
-        val offset: DoubleArray? = null,
+        val offset: List<String>? = null,
         val direction: Any? = null,
     ) : BedrockEmitterShape()
 
     data class Sphere(
         val radius: String? = null,
-        val offset: DoubleArray? = null,
+        val offset: List<String>? = null,
         val surfaceOnly: Boolean? = null,
         val direction: Any? = null,
     ) : BedrockEmitterShape()
 
     data class Box(
         val halfDimensions: DoubleArray? = null,
-        val offset: DoubleArray? = null,
+        val offset: List<String>? = null,
         val surfaceOnly: Boolean? = null,
         val direction: Any? = null,
     ) : BedrockEmitterShape()
@@ -91,7 +91,7 @@ sealed class BedrockEmitterShape {
     data class Disc(
         val radius: String? = null,
         val normal: DoubleArray? = null,
-        val offset: DoubleArray? = null,
+        val offset: List<String>? = null,
         val surfaceOnly: Boolean? = null,
         val direction: Any? = null,
     ) : BedrockEmitterShape()

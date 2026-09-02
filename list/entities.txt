@@ -38,6 +38,7 @@ netherite_dart
 nightmare_ray
 nightmare_spore
 poison_dart
+pumpkin_bomb
 pure_energy_ball
 smoke_bomb
 snow_energy
@@ -56,4 +57,5 @@ thunder_ball
 void_whispering_dagger
 wave_energy
 winter_energy
+wither_cloud
 wood_dart

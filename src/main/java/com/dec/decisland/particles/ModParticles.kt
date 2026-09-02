@@ -227,14 +227,14 @@ object ModParticles {
             emitterShape = components.getAsJsonObjectOrNull("minecraft:emitter_shape_sphere")?.let { obj ->
                 BedrockEmitterShape.Sphere(
                     radius = obj.getAsJsonPrimitiveOrNull("radius")?.asString,
-                    offset = obj.getAsJsonArrayOrNull("offset")?.toDoubleArray3(),
+                    offset = obj.getAsJsonArrayOrNull("offset")?.toStringArray3(),
                     surfaceOnly = obj.getAsJsonPrimitiveOrNull("surface_only")?.asBoolean,
                     direction = obj.get("direction")?.let(::parseScalarOrVecOrString),
                 )
             } ?: components.getAsJsonObjectOrNull("minecraft:emitter_shape_box")?.let { obj ->
                 BedrockEmitterShape.Box(
                     halfDimensions = obj.getAsJsonArrayOrNull("half_dimensions")?.toDoubleArray3(),
-                    offset = obj.getAsJsonArrayOrNull("offset")?.toDoubleArray3(),
+                    offset = obj.getAsJsonArrayOrNull("offset")?.toStringArray3(),
                     surfaceOnly = obj.getAsJsonPrimitiveOrNull("surface_only")?.asBoolean,
                     direction = obj.get("direction")?.let(::parseScalarOrVecOrString),
                 )
@@ -242,13 +242,13 @@ object ModParticles {
                 BedrockEmitterShape.Disc(
                     radius = obj.getAsJsonPrimitiveOrNull("radius")?.asString,
                     normal = obj.getAsJsonArrayOrNull("normal")?.toDoubleArray3(),
-                    offset = obj.getAsJsonArrayOrNull("offset")?.toDoubleArray3(),
+                    offset = obj.getAsJsonArrayOrNull("offset")?.toStringArray3(),
                     surfaceOnly = obj.getAsJsonPrimitiveOrNull("surface_only")?.asBoolean,
                     direction = obj.get("direction")?.let(::parseScalarOrVecOrString),
                 )
             } ?: components.getAsJsonObjectOrNull("minecraft:emitter_shape_point")?.let { obj ->
                 BedrockEmitterShape.Point(
-                    offset = obj.getAsJsonArrayOrNull("offset")?.toDoubleArray3(),
+                    offset = obj.getAsJsonArrayOrNull("offset")?.toStringArray3(),
                     direction = obj.get("direction")?.let(::parseScalarOrVecOrString),
                 )
             },
@@ -537,6 +537,17 @@ object ModParticles {
         getOrNullNumber(1),
         getOrNullNumber(2),
     )
+
+    // Offsets may contain Molang expressions (e.g. rings sweeping with emitter age),
+    // so they are kept as raw strings and evaluated at spawn time.
+    private fun JsonArray.toStringArray3(): List<String> = listOf(
+        getOrNullExpression(0),
+        getOrNullExpression(1),
+        getOrNullExpression(2),
+    )
+
+    private fun JsonArray.getOrNullExpression(index: Int): String =
+        if (index in 0 until size() && this[index].isJsonPrimitive) this[index].asString else "0"
 
     private fun JsonArray.toIntArray2(): IntArray = intArrayOf(
         getOrNullInt(0),

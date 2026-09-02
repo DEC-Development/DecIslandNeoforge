@@ -141,6 +141,24 @@ object ModToolMaterial {
     val THUNDER_RAPIER: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, 316, 8.0f, 0.0f, 10, EMPTY_ITEM_TAG)
 
     @JvmField
+    val DECREPIT_ATLANTIS: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, 100, 8.0f, 5.0f, 15, EMPTY_ITEM_TAG)
+
+    @JvmField
+    val SWORD_OF_GUARD: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, 231, 8.0f, 2.0f, 15, EMPTY_ITEM_TAG)
+
+    @JvmField
+    val SWORD_OF_HALLOWEEN: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, 513, 8.0f, 1.0f, 15, EMPTY_ITEM_TAG)
+
+    @JvmField
+    val GHOST_SWORD: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, 4095, 8.0f, 5.0f, 15, EMPTY_ITEM_TAG)
+
+    @JvmField
+    val DUST_DESTROYER: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, 2045, 8.0f, 4.0f, 15, EMPTY_ITEM_TAG)
+
+    @JvmField
+    val GROWTH_SWORD: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, 502, 8.0f, 2.0f, 15, EMPTY_ITEM_TAG)
+
+    @JvmField
     val AMETHYST_TOOL: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, AMETHYST_SWORD.durability(), 7.0f, 0.0f, 20, EMPTY_ITEM_TAG)
 
     @JvmField

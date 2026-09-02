@@ -74,7 +74,7 @@ class BattleaxeItem(
 
         val bursts = if (combo) config.comboParticleBursts else config.skillParticleBursts
         repeat(bursts) {
-            Networking.sendBedrockEmitterToNearby(serverLevel, config.ringParticleId, player.position(), 64.0, 2)
+            Networking.sendBedrockEmitterToNearby(serverLevel, config.ringParticleId, player.position(), 64.0, RING_PARTICLE_DURATION_TICKS)
         }
 
         val damage = if (combo) config.comboSkillDamage else config.skillDamage
@@ -172,6 +172,7 @@ class BattleaxeItem(
     companion object {
         private const val TAG_SKILL_COUNT = "skill_count"
         private const val EXTRA_MINING_DURABILITY_COST = 2
+        private const val RING_PARTICLE_DURATION_TICKS = 20
 
         @JvmField
         val CROSS_OFFSETS: List<Vec3> = listOf(

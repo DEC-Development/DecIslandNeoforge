@@ -37,9 +37,11 @@ furnace_golden_dagger
 furnace_steel_battleaxe
 furnace_steel_dagger
 ghost_dagger
+ghost_sword
 glass_axe
 glass_pickaxe
 gold_dagger
+growth
 iron_dagger
 lapis_dagger
 leaves_dagger
