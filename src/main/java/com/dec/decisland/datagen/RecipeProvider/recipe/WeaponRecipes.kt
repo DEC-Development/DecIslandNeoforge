@@ -6,6 +6,8 @@ import com.dec.decisland.datagen.RecipeProvider.RecipeDsl
 import com.dec.decisland.datagen.RecipeProvider.RecipeIngredient
 import com.dec.decisland.datagen.RecipeProvider.ShapedRecipeConfig
 import com.dec.decisland.item.category.Material
+import com.dec.decisland.item.category.Fish
+import com.dec.decisland.item.category.Food
 import com.dec.decisland.item.category.Weapon
 import net.minecraft.data.recipes.RecipeCategory
 import net.minecraft.tags.ItemTags
@@ -213,6 +215,10 @@ object WeaponRecipes {
                 .unlockedBy(Material.PURE_INGOT.get())
                 .build(),
         )
+        RecipeDsl.save(context, ShapedRecipeConfig.Builder("everlasting_winter_sword").category(RecipeCategory.COMBAT).result(Weapon.EVERLASTING_WINTER_SWORD.get()).pattern(" X ", "XAX", " B ").define('X', Material.EVERLASTING_WINTER_INGOT.get()).define('A', Items.DIAMOND_SWORD).define('B', Material.EVERLASTING_WINTER_STICK.get()).unlockedBy(Material.EVERLASTING_WINTER_INGOT.get()).build())
+        RecipeDsl.save(context, ShapedRecipeConfig.Builder("vortex").category(RecipeCategory.COMBAT).result(Weapon.VORTEX.get()).pattern("A#A", "AXA", "AAA").define('#', Items.HEART_OF_THE_SEA).define('A', Food.POLLUTION_ALGAE.get()).define('X', Weapon.CORAL_SWORD.get()).unlockedBy(Items.HEART_OF_THE_SEA).build())
+        RecipeDsl.save(context, ShapedRecipeConfig.Builder("the_imperial_sword").category(RecipeCategory.COMBAT).result(Weapon.THE_IMPERIAL_SWORD.get()).pattern(" X ", "XAX", " B ").define('X', Material.EVERLASTING_WINTER_INGOT.get()).define('A', Fish.SWORD_FISH.get()).define('B', Material.EVERLASTING_WINTER_STICK.get()).unlockedBy(Material.EVERLASTING_WINTER_INGOT.get()).build())
+        RecipeDsl.save(context, ShapedRecipeConfig.Builder("wind_of_shadow").category(RecipeCategory.COMBAT).result(Weapon.WIND_OF_SHADOW.get()).pattern("BAB", "BAB", "BXB").define('A', Material.STREAM_STONE.get()).define('B', Material.ENDER_CORE.get()).define('X', Items.STICK).unlockedBy(Material.ENDER_CORE.get()).build())
         battleaxeRecycleRecipes("copper_battleaxe", Weapon.COPPER_BATTLEAXE.get(), Items.COPPER_INGOT).forEach { RecipeDsl.save(context, it) }
         battleaxeRecycleRecipes("steel_battleaxe", Weapon.STEEL_BATTLEAXE.get(), Material.STEEL_INGOT.get()).forEach { RecipeDsl.save(context, it) }
     }

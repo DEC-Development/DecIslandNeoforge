@@ -30,21 +30,21 @@ So far, we support Minecraft 1.21.11 and Neoforge 21.11.38-beta
 - [ ] blue_of_the_sea 海之忧伤
 - [x] decrepit_atlantis 破旧的亚特兰蒂斯
 - [x] dust_destroyer 尘灭者
-- [ ] everlasting_winter_sword 永冬长剑
+- [x] everlasting_winter_sword 永冬长剑
 - [x] ghost_sword 灵魂吸收者
 - [x] growth 生长者
 - [ ] radiate_sword 堕落圣刃
-- [ ] scale_sword 鳞之刃
+- [x] scale_sword 鳞之刃
 - [ ] star_sword 迸发之星
 - [ ] storm_giant_sword 风暴巨剑
-- [ ] sword_of_deep 黑域
+- [x] sword_of_deep 黑域
 - [x] sword_of_guard 侍卫之灵
 - [x] sword_of_halloween 万圣之刃
-- [ ] the_imperial_sword 尚方宝剑
+- [x] the_imperial_sword 尚方宝剑
 - [ ] village_guardian 村庄守卫
-- [ ] vortex 旋涡
-- [ ] warden_sword 匿潜刃
-- [ ] wind_of_shadow 暗影之风
+- [x] vortex 旋涡
+- [x] warden_sword 匿潜刃
+- [x] wind_of_shadow 暗影之风
 
 ### 法杖 ×10
 - [ ] bat_staff 蝙蝠杖
@@ -134,13 +134,13 @@ So far, we support Minecraft 1.21.11 and Neoforge 21.11.38-beta
 ### B 批：AOE/增益/蓄力
 | 剑 | 机制 | 要点 |
 |---|---|---|
-| [ ] everlasting_winter_sword 永冬长剑 | 右键耗魔 1 → 半径 2-4 环减速 3s I | 耐久 1712 / 伤害 8 / 附魔 5 |
-| [ ] sword_of_deep 黑域 | 右键耗魔 4 → 半径 4 全体凋零 10s II | 耐久 1023 / 伤害 13；粒子 deep_range 需移植 |
-| [ ] vortex 旋涡 | 右键：水中耗魔 7（潮涌 5s + r3 中毒 5s + 溺水伤害 10）/ 陆地耗魔 11（中毒 2s + 伤害 7） | 耐久 832 / 伤害 8；粒子 bubble_vortex 需移植 |
-| [ ] scale_sword 鳞之刃 | 命中：水中 1/2 概率目标 r3 溺水伤害 10 + 自身潮涌 10s；右键水中耗魔 6 / 陆地耗魔 10 强化版（伤害 12/8） | 耐久 1024 / 伤害 8 |
-| [ ] warden_sword 匿潜刃 | 长按 1.5s 蓄力：耗魔 20 → 自身失明 10s + 黑暗 30s + 力量 8s + 速度 8s II + 抗性 8s II | 耐久 563 / 伤害 6 / 附魔 7，冷却 15s |
-| [ ] wind_of_shadow 暗影之风 | 两段：右键耗魔 10 → 隐身 + 加速 3s；续按 3s → 半径 4 魔法伤害 11 | 耐久 524 / 伤害 8，冷却 4s；粒子 ender_spurt/ender_bomb 需移植 |
-| [ ] the_imperial_sword 尚方宝剑 | 右键计数蓄能：第 8 次耗魔 15 → 力量 5s II + 抗性 2s III + r2-5 定身 1s；第 16 次强化版 | 耐久 564 / 伤害 8 / 附魔 20；粒子 frozen_shield 需移植 |
+| [x] everlasting_winter_sword 永冬长剑 | 右键耗魔 1 → 半径 2-4 环减速 3s I | 耐久 1712 / 伤害 8 / 附魔 5 |
+| [x] sword_of_deep 黑域 | 右键耗魔 4 → 半径 4 全体凋零 10s II | 耐久 1023 / 伤害 13；已移植 deep_range 粒子 |
+| [x] vortex 旋涡 | 右键：水中耗魔 7（潮涌 5s + r3 中毒 5s + 溺水伤害 10）/ 陆地耗魔 11（中毒 2s + 伤害 7） | 耐久 832 / 伤害 8；已移植 bubble_vortex 粒子 |
+| [x] scale_sword 鳞之刃 | 命中：水中 1/2 概率目标 r3 溺水伤害 10 + 自身潮涌 10s；右键水中耗魔 6 / 陆地耗魔 10 强化版（伤害 12/8） | 耐久 1024 / 伤害 8 |
+| [x] warden_sword 匿潜刃 | 长按 1.5s 蓄力：耗魔 20 → 自身失明 10s + 黑暗 30s + 力量 8s + 速度 8s II + 抗性 8s II | 耐久 563 / 伤害 6 / 附魔 7，冷却 15s |
+| [x] wind_of_shadow 暗影之风 | 两段：右键耗魔 10 → 隐身 + 加速 3s；续按 3s → 半径 4 魔法伤害 11 | 耐久 524 / 伤害 8，冷却 4s；已移植 ender_spurt/ender_bomb 粒子 |
+| [x] the_imperial_sword 尚方宝剑 | 右键计数蓄能：第 8 次耗魔 15 → 力量 5s II + 抗性 2s III + r2-5 定身 1s；第 16 次强化版 | 耐久 564 / 伤害 8 / 附魔 20；已移植 frozen_shield 粒子 |
 
 ### C 批：发射投射物（需新实体）
 | 剑 | 投射物 | 要点 |

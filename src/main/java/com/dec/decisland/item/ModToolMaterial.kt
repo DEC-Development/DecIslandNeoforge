@@ -159,6 +159,27 @@ object ModToolMaterial {
     val GROWTH_SWORD: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, 502, 8.0f, 2.0f, 15, EMPTY_ITEM_TAG)
 
     @JvmField
+    val EVERLASTING_WINTER_SWORD: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, 1712, 8.0f, 7.0f, 5, EMPTY_ITEM_TAG)
+
+    @JvmField
+    val SWORD_OF_DEEP: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, 1023, 8.0f, 12.0f, 15, EMPTY_ITEM_TAG)
+
+    @JvmField
+    val VORTEX: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, 832, 8.0f, 7.0f, 15, EMPTY_ITEM_TAG)
+
+    @JvmField
+    val SCALE_SWORD: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, 1024, 8.0f, 7.0f, 15, EMPTY_ITEM_TAG)
+
+    @JvmField
+    val WARDEN_SWORD: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, 563, 8.0f, 5.0f, 7, EMPTY_ITEM_TAG)
+
+    @JvmField
+    val WIND_OF_SHADOW: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, 524, 8.0f, 7.0f, 15, EMPTY_ITEM_TAG)
+
+    @JvmField
+    val THE_IMPERIAL_SWORD: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, 564, 8.0f, 7.0f, 20, EMPTY_ITEM_TAG)
+
+    @JvmField
     val AMETHYST_TOOL: ToolMaterial = ToolMaterial(EMPTY_BLOCK_TAG, AMETHYST_SWORD.durability(), 7.0f, 0.0f, 20, EMPTY_ITEM_TAG)
 
     @JvmField

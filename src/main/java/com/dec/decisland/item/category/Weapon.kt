@@ -38,6 +38,7 @@ import net.minecraft.world.item.Items.STICK
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.ToolMaterial
 import net.minecraft.world.item.component.Consumables
+import net.minecraft.world.item.component.UseEffects
 import net.neoforged.neoforge.registries.DeferredItem
 import java.util.function.Function
 import java.util.function.Supplier
@@ -670,6 +671,27 @@ object Weapon {
             .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
             .build(),
     )
+
+    private fun registerBSword(name: String, material: ToolMaterial, damage: Float, cooldown: Float?, kind: BatchBSwordItem.Kind) = ModItems.registerItem(
+        ItemConfig.Builder(name).func { p -> BatchBSwordItem(p, kind) }
+            .props {
+                Item.Properties().sword(material, damage, -2.4f).stacksTo(1).also {
+                    if (cooldown != null) it.useCooldown(cooldown)
+                    if (kind == BatchBSwordItem.Kind.SHADOW) {
+                        it.component(DataComponents.USE_EFFECTS, UseEffects(true, true, 1.0f))
+                    }
+                }
+            }
+            .tags(swordWeaponTags).modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
+            .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB).build())
+
+    @JvmField val EVERLASTING_WINTER_SWORD = registerBSword("everlasting_winter_sword", ModToolMaterial.EVERLASTING_WINTER_SWORD, 7f, 1f, BatchBSwordItem.Kind.WINTER)
+    @JvmField val SWORD_OF_DEEP = registerBSword("sword_of_deep", ModToolMaterial.SWORD_OF_DEEP, 12f, null, BatchBSwordItem.Kind.DEEP)
+    @JvmField val VORTEX = registerBSword("vortex", ModToolMaterial.VORTEX, 7f, 0.5f, BatchBSwordItem.Kind.VORTEX)
+    @JvmField val SCALE_SWORD = registerBSword("scale_sword", ModToolMaterial.SCALE_SWORD, 7f, 0.5f, BatchBSwordItem.Kind.SCALE)
+    @JvmField val WARDEN_SWORD = registerBSword("warden_sword", ModToolMaterial.WARDEN_SWORD, 5f, 15f, BatchBSwordItem.Kind.WARDEN)
+    @JvmField val WIND_OF_SHADOW = registerBSword("wind_of_shadow", ModToolMaterial.WIND_OF_SHADOW, 7f, 4f, BatchBSwordItem.Kind.SHADOW)
+    @JvmField val THE_IMPERIAL_SWORD = registerBSword("the_imperial_sword", ModToolMaterial.THE_IMPERIAL_SWORD, 7f, null, BatchBSwordItem.Kind.IMPERIAL)
 
     @JvmField
     val NIGHTMARE: DeferredItem<Item> = ModItems.registerItem(

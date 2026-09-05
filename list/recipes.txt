@@ -25,6 +25,7 @@ emerald_dagger
 emerald_pickaxe
 everlasting_winter_dagger
 everlasting_winter_stick
+everlasting_winter_sword
 flintlock_bullet
 frozen_power
 furnace_copper_battleaxe
@@ -59,8 +60,11 @@ slime_pickaxe
 steel_battleaxe
 steel_dagger
 stone_dagger
+the_imperial_sword
 thunder_rapier
+vortex
 wind_dagger
+wind_of_shadow
 wooden_dagger
 wooden_dagger_from_crimson_planks
 wooden_dagger_from_warped_planks

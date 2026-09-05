@@ -2,3 +2,4 @@ absolute_zero_smoke_big_particle
 absolute_zero_smoke_single_particle
 absolute_zero_smoke_small_particle
 blizzard_wake_particle
+imperial_totem_particle

@@ -30,6 +30,7 @@ import com.dec.decisland.particles.bedrock.ColorStop
 import com.dec.decisland.particles.custom.AbsoluteZeroSmokeSeedParticle
 import com.dec.decisland.particles.custom.AbsoluteZeroSmokeSingleParticle
 import com.dec.decisland.particles.custom.BlizzardWakeParticle
+import com.dec.decisland.particles.custom.ImperialTotemParticle
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
@@ -86,6 +87,13 @@ object ModParticles {
             .factoryProvider { event, particleType ->
                 event.registerSpecial(particleType, AbsoluteZeroSmokeSeedParticle.Provider(30, 5.0, 0.1))
             }
+            .build(),
+    )
+
+    @JvmField
+    val IMPERIAL_TOTEM_PARTICLE: Supplier<SimpleParticleType> = registerParticle(
+        ParticleConfig.Builder("imperial_totem_particle")
+            .factoryProvider { event, particleType -> event.registerSpriteSet(particleType, ImperialTotemParticle::Provider) }
             .build(),
     )
 

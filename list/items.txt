@@ -214,6 +214,7 @@ everlasting_winter_leggings
 everlasting_winter_sickle
 everlasting_winter_staff
 everlasting_winter_stick
+everlasting_winter_sword
 evil_snow_man_mask
 experience_book
 experience_book_empty
@@ -489,6 +490,7 @@ rupert_helmet
 rupert_leggings
 russet_grass
 sardine
+scale_sword
 scimitar
 sea_turtle_mask
 sea_urchin
@@ -578,9 +580,11 @@ sun_stone
 swamp_drowned_mask
 swamp_golem_mask
 sword_fish
+sword_of_deep
 sword_of_guard
 sword_of_halloween
 the_blade
+the_imperial_sword
 throwable_bomb
 thunder_rapier
 thunder_staff
@@ -604,7 +608,9 @@ vengeful_ghost_mask
 vex_mask
 villager_mask
 void_whispering_dagger
+vortex
 wandering_trader_mask
+warden_sword
 warped_skeleton_mask
 waste
 wave_magic_book
@@ -613,6 +619,7 @@ white_flower_block
 white_shoes
 white_t_shirt
 wind_dagger
+wind_of_shadow
 wine_glass
 wings_from_deep
 witch_hat

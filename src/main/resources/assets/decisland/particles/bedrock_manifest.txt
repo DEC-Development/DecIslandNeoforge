@@ -76,4 +76,10 @@ steel_battleaxe_ring.particle.json
 bubble_ring.particle.json
 dead_wood_wake.particle.json
 bat_spurt.particle.json
+deep_range.particle.json
+bubble_vortex.particle.json
+frozen_shield.particle.json
+ender_spurt.particle.json
+ender_bomb.particle.json
+bubble_spurt_middle.particle.json
 wither_cloud_wake.particle.json
