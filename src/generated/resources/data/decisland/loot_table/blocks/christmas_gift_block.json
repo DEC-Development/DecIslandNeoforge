@@ -1,0 +1,32 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "decisland:christmas_cap",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "decisland:gingerbread_man",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "decisland:gingerbread_sword",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "decisland:candy_cane",
+          "weight": 3
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "decisland:blocks/christmas_gift_block"
+}

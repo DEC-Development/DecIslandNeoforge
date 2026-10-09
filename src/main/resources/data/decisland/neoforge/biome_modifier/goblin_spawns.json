@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#decisland:spawns_goblin",
+  "spawners": {
+    "type": "decisland:goblin",
+    "weight": 2,
+    "minCount": 4,
+    "maxCount": 4
+  }
+}

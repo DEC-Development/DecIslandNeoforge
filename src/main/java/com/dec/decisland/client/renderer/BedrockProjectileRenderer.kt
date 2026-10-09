@@ -20,7 +20,7 @@ open class BedrockProjectileRenderer<T : Entity>(
     private val textureLocation: ResourceLocation,
     private val scale: Float,
 ) : EntityRenderer<T>(context) {
-    private val model = BedrockAnimatedEntityModel(
+    private val model = BedrockAnimatedEntityModel<T>(
         BedrockEntityAssets.geometry(geometryLocation),
         BedrockEntityAssets.animation(animationLocation, animationName),
     )
@@ -41,6 +41,8 @@ open class BedrockProjectileRenderer<T : Entity>(
         packedLight: Int,
     ) {
         poseStack.pushPose()
+        // 模型烘焙锚点为脚底（y=24），直接渲染的实体按缩放比例补偿对齐
+        poseStack.translate(0.0, -1.5 * scale, 0.0)
         poseStack.scale(scale, scale, scale)
         model.applyAnimation((entity.tickCount + partialTick) / 20.0f)
         val swirlOffset = ((entity.tickCount + partialTick) * 0.01f) % 1.0f

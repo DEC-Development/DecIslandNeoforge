@@ -1,0 +1,9 @@
+{
+  "values": [
+    "minecraft:river",
+    "minecraft:frozen_river",
+    "minecraft:jungle",
+    "minecraft:bamboo_jungle",
+    "minecraft:sparse_jungle"
+  ]
+}

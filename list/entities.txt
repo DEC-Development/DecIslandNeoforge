@@ -15,6 +15,7 @@ copper_dart
 coral_dart
 deep_energy
 diamond_dart
+elf_of_leaves
 emerald_dart
 energy_ball
 energy_ray
@@ -32,6 +33,7 @@ iron_dart
 jellyfish_by_jellyfish_staff
 lapis_bullet
 lava_dart
+leaves_golem
 mind_controller
 muddy_ball
 netherite_dart
@@ -59,3 +61,4 @@ wave_energy
 winter_energy
 wither_cloud
 wood_dart
+zombie_warrior

@@ -368,6 +368,7 @@ object ModParticles {
             path == "textures/particle/sga_*" && namespace == "minecraft" ->
                 ('a'..'z').map { char -> ResourceLocation.fromNamespaceAndPath(namespace, "sga_$char") }
             path.startsWith("textures/particle/") ->
+                // 项目图集配置 atlases/particles.json 以无前缀收录 textures/particle 目录
                 listOf(ResourceLocation.fromNamespaceAndPath(namespace, path.removePrefix("textures/particle/")))
             path.startsWith("textures/wb_par/") ->
                 listOf(ResourceLocation.fromNamespaceAndPath(DecIsland.MOD_ID, "wb_par/${path.removePrefix("textures/wb_par/")}"))

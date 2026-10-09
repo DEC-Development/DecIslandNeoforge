@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#decisland:spawns_mushroom_zombie",
+  "spawners": {
+    "type": "decisland:mushroom_zombie",
+    "weight": 3,
+    "minCount": 4,
+    "maxCount": 4
+  }
+}

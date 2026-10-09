@@ -1,0 +1,308 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "rolls": {
+        "min": 2,
+        "max": 3
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:prismarine_shard",
+          "weight": 4,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 2,
+                "max": 5
+              }
+            },
+            {
+              "function": "minecraft:enchanted_count_increase",
+              "enchantment": "minecraft:looting",
+              "count": {
+                "min": 0,
+                "max": 1
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:sponge",
+          "weight": 3,
+          "functions": []
+        },
+        {
+          "type": "minecraft:item",
+          "name": "decisland:scale_block",
+          "weight": 1,
+          "functions": []
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:prismarine_crystals",
+          "weight": 6,
+          "functions": [
+            {
+              "function": "minecraft:enchanted_count_increase",
+              "enchantment": "minecraft:looting",
+              "count": {
+                "min": 1,
+                "max": 3
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "decisland:wave_magic_book",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "decisland:sword_of_guard",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "decisland:storm_battleaxe",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "decisland:storm_staff",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "decisland:storm_flintlock",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "decisland:decrepit_atlantis",
+          "weight": 2,
+          "functions": []
+        }
+      ]
+    },
+    {
+      "rolls": 2,
+      "entries": [
+        {
+          "type": "minecraft:group",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:cod",
+              "weight": 400
+            },
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:salmon",
+              "weight": 250
+            },
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:tropical_fish",
+              "weight": 20
+            },
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:pufferfish",
+              "weight": 130
+            },
+            {
+              "type": "minecraft:item",
+              "name": "decisland:ender_fish",
+              "weight": 10
+            },
+            {
+              "type": "minecraft:item",
+              "name": "decisland:coal_fish",
+              "weight": 10
+            },
+            {
+              "type": "minecraft:item",
+              "name": "decisland:iron_fish",
+              "weight": 5
+            },
+            {
+              "type": "minecraft:item",
+              "name": "decisland:gold_fish",
+              "weight": 3
+            },
+            {
+              "type": "minecraft:item",
+              "name": "decisland:emerald_fish",
+              "weight": 2
+            },
+            {
+              "type": "minecraft:item",
+              "name": "decisland:diamond_fish",
+              "weight": 1
+            },
+            {
+              "type": "minecraft:item",
+              "name": "decisland:sword_fish",
+              "weight": 4
+            },
+            {
+              "type": "minecraft:item",
+              "name": "decisland:spiral_shell",
+              "weight": 40
+            },
+            {
+              "type": "minecraft:item",
+              "name": "decisland:snailfish",
+              "weight": 30
+            },
+            {
+              "type": "minecraft:item",
+              "name": "decisland:tropical_fish",
+              "weight": 400
+            },
+            {
+              "type": "minecraft:item",
+              "name": "decisland:yellow_jellyfish",
+              "weight": 1
+            },
+            {
+              "type": "minecraft:item",
+              "name": "decisland:pink_jellyfish",
+              "weight": 1
+            },
+            {
+              "type": "minecraft:item",
+              "name": "decisland:blue_jellyfish",
+              "weight": 1
+            },
+            {
+              "type": "minecraft:item",
+              "name": "decisland:moon_jellyfish",
+              "weight": 1
+            },
+            {
+              "type": "minecraft:item",
+              "name": "decisland:lamprey",
+              "weight": 1
+            },
+            {
+              "type": "minecraft:item",
+              "name": "decisland:nautilus_alive",
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "type": "minecraft:group",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:nautilus_shell",
+              "weight": 5
+            },
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:lily_pad",
+              "weight": 5
+            },
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:diamond",
+              "weight": 1
+            },
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:emerald",
+              "weight": 1
+            },
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:gold_ingot",
+              "weight": 5
+            },
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:iron_ingot",
+              "weight": 5
+            },
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:name_tag",
+              "weight": 5
+            },
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:saddle",
+              "weight": 5
+            },
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:prismarine",
+              "weight": 1
+            },
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:prismarine_crystals",
+              "weight": 1
+            },
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:prismarine_shard",
+              "weight": 1
+            },
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:sponge",
+              "weight": 1,
+              "functions": []
+            },
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:bow",
+              "weight": 5,
+              "functions": [
+                {
+                  "function": "minecraft:set_damage",
+                  "damage": {
+                    "min": 0,
+                    "max": 0.25
+                  }
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:fishing_rod",
+              "weight": 5,
+              "functions": [
+                {
+                  "function": "minecraft:set_damage",
+                  "damage": {
+                    "min": 0,
+                    "max": 0.25
+                  }
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:book",
+              "weight": 6,
+              "functions": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

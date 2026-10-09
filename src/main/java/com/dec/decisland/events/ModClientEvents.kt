@@ -6,11 +6,15 @@ import com.dec.decisland.client.RecoilClient
 import com.dec.decisland.client.bedrock.BedrockEmitterManager
 import com.dec.decisland.client.renderer.BedrockProjectileRenderer
 import com.dec.decisland.client.renderer.DartRenderer
-import com.dec.decisland.client.renderer.EnergyBallBedrockRenderer
+import com.dec.decisland.client.renderer.ElfOfLeavesRenderer
 import com.dec.decisland.client.renderer.EmptyRenderer
+import com.dec.decisland.client.renderer.EnergyBallBedrockRenderer
+import com.dec.decisland.client.renderer.GeneratedMobClient
 import com.dec.decisland.client.renderer.FashionArmorClientItemExtensions
+import com.dec.decisland.client.renderer.LeavesGolemRenderer
 import com.dec.decisland.client.renderer.MaskClientItemExtensions
 import com.dec.decisland.client.renderer.PumpkinBombRenderer
+import com.dec.decisland.client.renderer.ZombieWarriorRenderer
 import com.dec.decisland.client.gui.ClientManaOverlay
 import com.dec.decisland.entity.ModEntities
 import com.dec.decisland.entity.projectile.AmethystEnergyBall
@@ -133,6 +137,9 @@ object ModClientEvents {
         EntityRenderers.register(ModEntities.GROWING_ENERGY_RAY.get(), ::EmptyRenderer)
         EntityRenderers.register(ModEntities.PUMPKIN_BOMB.get(), ::PumpkinBombRenderer)
         EntityRenderers.register(ModEntities.WITHER_CLOUD.get(), ::EmptyRenderer)
+        EntityRenderers.register(ModEntities.ZOMBIE_WARRIOR.get(), ::ZombieWarriorRenderer)
+        EntityRenderers.register(ModEntities.LEAVES_GOLEM.get(), ::LeavesGolemRenderer)
+        EntityRenderers.register(ModEntities.ELF_OF_LEAVES.get(), ::ElfOfLeavesRenderer)
         EntityRenderers.register(ModEntities.NIGHTMARE_SPORE.get(), ::EmptyRenderer)
         EntityRenderers.register(ModEntities.NIGHTMARE_RAY.get(), ::EmptyRenderer)
         EntityRenderers.register(ModEntities.WAVE_ENERGY.get(), ::EmptyRenderer)
@@ -146,6 +153,7 @@ object ModClientEvents {
         EntityRenderers.register(ModEntities.BULLET_BY_LAVA_FLINTLOCK.get(), ::ThrownItemRenderer)
         EntityRenderers.register(ModEntities.BULLET_BY_STAR_FLINTLOCK.get(), ::ThrownItemRenderer)
         EntityRenderers.register(ModEntities.BULLET_BY_STORM_FLINTLOCK.get(), ::ThrownItemRenderer)
+        GeneratedMobClient.registerAll()
     }
 
     @SubscribeEvent

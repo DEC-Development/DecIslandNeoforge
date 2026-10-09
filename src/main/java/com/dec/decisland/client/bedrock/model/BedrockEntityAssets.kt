@@ -4,6 +4,7 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
+import com.google.gson.JsonPrimitive
 import net.minecraft.client.Minecraft
 import net.minecraft.resources.ResourceLocation
 import java.io.InputStream
@@ -194,11 +195,21 @@ object BedrockEntityAssets {
             return null
         }
 
+        // 基岩动画可能含 Molang 表达式（如 "query.target_x_rotation"），无法静态求值 → 跳过该关键帧
         return BedrockVec3(
-            array[0].asFloat,
-            array[1].asFloat,
-            array[2].asFloat,
+            array[0].asFloatOrNull() ?: return null,
+            array[1].asFloatOrNull() ?: return null,
+            array[2].asFloatOrNull() ?: return null,
         )
+    }
+
+    private fun JsonElement.asFloatOrNull(): Float? {
+        val primitive = this as? JsonPrimitive ?: return null
+        return when {
+            primitive.isNumber -> primitive.asFloat
+            primitive.isString -> primitive.asString.toFloatOrNull()
+            else -> null
+        }
     }
 
     private fun parseJson(resourceId: ResourceLocation): JsonObject {

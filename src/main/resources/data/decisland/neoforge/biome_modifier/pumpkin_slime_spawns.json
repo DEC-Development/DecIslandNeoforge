@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#decisland:spawns_pumpkin_slime",
+  "spawners": {
+    "type": "decisland:pumpkin_slime",
+    "weight": 2,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

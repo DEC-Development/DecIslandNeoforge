@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#decisland:spawns_star",
+  "spawners": {
+    "type": "decisland:star",
+    "weight": 2,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

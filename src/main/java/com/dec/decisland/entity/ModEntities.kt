@@ -1,8 +1,11 @@
 package com.dec.decisland.entity
 
 import com.dec.decisland.DecIsland
+import com.dec.decisland.entity.custom.ElfOfLeaves
+import com.dec.decisland.entity.custom.LeavesGolem
 import com.dec.decisland.entity.custom.PumpkinBombEntity
 import com.dec.decisland.entity.custom.WitherCloudEntity
+import com.dec.decisland.entity.custom.ZombieWarrior
 import com.dec.decisland.entity.projectile.AmethystEnergyBall
 import com.dec.decisland.entity.projectile.AmethystEnergyRay
 import com.dec.decisland.entity.projectile.BlizzardEnergy
@@ -427,6 +430,24 @@ object ModEntities {
     val WITHER_CLOUD: Supplier<EntityType<WitherCloudEntity>> =
         registerEntity("wither_cloud", { type, level -> WitherCloudEntity(type, level) }, MobCategory.MISC) {
             sized(0.5f, 0.5f).clientTrackingRange(8).updateInterval(10)
+        }
+
+    @JvmField
+    val ZOMBIE_WARRIOR: Supplier<EntityType<ZombieWarrior>> =
+        registerEntity("zombie_warrior", { type, level -> ZombieWarrior(type, level) }, MobCategory.MONSTER) {
+            sized(0.6f, 1.95f).clientTrackingRange(10).updateInterval(2)
+        }
+
+    @JvmField
+    val LEAVES_GOLEM: Supplier<EntityType<LeavesGolem>> =
+        registerEntity("leaves_golem", { type, level -> LeavesGolem(type, level) }, MobCategory.MONSTER) {
+            sized(1.4f, 2.9f).fireImmune().clientTrackingRange(10).updateInterval(2)
+        }
+
+    @JvmField
+    val ELF_OF_LEAVES: Supplier<EntityType<ElfOfLeaves>> =
+        registerEntity("elf_of_leaves", { type, level -> ElfOfLeaves(type, level) }, MobCategory.MONSTER) {
+            sized(0.4f, 0.8f).clientTrackingRange(10).updateInterval(2)
         }
 
     @JvmStatic

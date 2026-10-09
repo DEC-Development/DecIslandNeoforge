@@ -1,0 +1,91 @@
+{
+ "Slime": [],
+ "Phantom": [],
+ "Cod": [],
+ "Salmon": [],
+ "AbstractFish": [
+  "createAttributes("
+ ],
+ "AbstractSkeleton": [
+  "createAttributes("
+ ],
+ "Spider": [
+  "createAttributes("
+ ],
+ "SnowGolem": [
+  "createAttributes("
+ ],
+ "Bat": [
+  "createAttributes("
+ ],
+ "net/minecraft/world/item/Items.java": {
+  "size": 168717,
+  "items": 238,
+  "sample": [
+   "redstone",
+   "saddle",
+   "minecart",
+   "chest_minecart",
+   "tnt_minecart"
+  ]
+ },
+ "net/minecraft/references/Items.java": {
+  "size": 569,
+  "items": 0,
+  "sample": []
+ },
+ "blocksCount": 242,
+ "blocksSample": [
+  [
+   "netherrack",
+   false
+  ],
+  [
+   "snow",
+   false
+  ],
+  [
+   "ice",
+   false
+  ],
+  [
+   "tnt",
+   false
+  ],
+  [
+   "sponge",
+   false
+  ],
+  [
+   "lily_pad",
+   false
+  ],
+  [
+   "nether_quartz_ore",
+   false
+  ],
+  [
+   "poppy",
+   false
+  ],
+  [
+   "end_stone",
+   false
+  ],
+  [
+   "coal_ore",
+   false
+  ],
+  [
+   "water",
+   false
+  ],
+  [
+   "lava",
+   false
+  ]
+ ],
+ "jars": [
+  "1.21.1-NeoForge_21.1.247.jar 27MB"
+ ]
+}

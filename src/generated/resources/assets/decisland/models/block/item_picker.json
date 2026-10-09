@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "decisland:block/item_picker_down",
+    "side": "decisland:block/item_picker_side",
+    "top": "decisland:block/item_picker_up"
+  }
+}

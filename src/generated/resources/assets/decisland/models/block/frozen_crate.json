@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "decisland:block/crate_locked",
+    "side": "decisland:block/frozen_crate_locked",
+    "top": "decisland:block/frozen_crate_up"
+  }
+}

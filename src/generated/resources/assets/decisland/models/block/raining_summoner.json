@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "decisland:block/weather_console_down",
+    "side": "decisland:block/raining_summoner",
+    "top": "decisland:block/weather_console_up"
+  }
+}

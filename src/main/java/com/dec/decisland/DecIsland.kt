@@ -3,6 +3,7 @@ package com.dec.decisland
 import com.dec.decisland.attachment.ModAttachments
 import com.dec.decisland.block.ModBlocks
 import com.dec.decisland.effect.ModEffects
+import com.dec.decisland.entity.GeneratedMobs
 import com.dec.decisland.entity.ModEntities
 import com.dec.decisland.item.ModCreativeModeTabs
 import com.dec.decisland.item.ModItems
@@ -53,6 +54,7 @@ class DecIsland(modEventBus: IEventBus, modContainer: ModContainer) {
 
             ModBlocks.register(modEventBus)
             ModEntities.registry(modEventBus)
+            GeneratedMobs.register(modEventBus)
             ModCreativeModeTabs.register(modEventBus)
             ModParticles.register(modEventBus)
             ModEffects.register(modEventBus)

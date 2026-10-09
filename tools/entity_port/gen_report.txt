@@ -1,0 +1,51 @@
+WARN (4):
+  gingerbread_man_by_totem: 无几何体/runtime → 回退原版 Zombie 人形
+  动画未找到: animation.villager.move (host_of_deep)
+  动画未找到: animation.villager.move (shadow_of_deep)
+  soldier: 无几何体/runtime → 回退原版 Zombie 人形
+
+INFO:
+  贴图ID池: dec 1364 / vanilla 1754
+  loot[abyssal_controller] 丢弃: set_data, item:dec:storm_giant_sword, item:dec:blue_of_the_sea, enchant_with_levels
+  内置动画未内联(忽略): animation.humanoid.riding.arms.v1.0 (ash_knight)
+  loot[ash_knight] 丢弃: item:dec:dust_staff, item:dec:chaos_staff, item:minecraft:netherstar
+  loot[ash_knight_head] 丢弃: item:dec:dust_staff, item:dec:chaos_staff, item:minecraft:netherstar
+  loot[chest_monster] 丢弃: item:dec:christmas_gift, item:dec:red_bag
+  内置动画未内联(忽略): controller.animation.crab.default (crab)
+  内置动画未内联(忽略): animation.humanoid.look_at_target.swimming.v1.0 (dark_werewolf)
+  loot[enchant_illager] 丢弃: item:dec:wooden_enchant_book, enchant_with_levels
+  内置动画未内联(忽略): controller.animation.snail.root (ender_snail)
+  内置动画未内联(忽略): animation.humanoid.look_at_target.default (everlasting_winter_ghast)
+  内置动画未内联(忽略): animation.humanoid.look_at_target.swimming (everlasting_winter_ghast)
+  loot[everlasting_winter_ghast] 丢弃: item:dec:ice_hook_rope, item:dec:grapeshot_frozen_ball
+  内置动画未内联(忽略): animation.humanoid.look_at_target.default (everlasting_winter_shadow)
+  内置动画未内联(忽略): animation.humanoid.look_at_target.swimming (everlasting_winter_shadow)
+  内置动画未内联(忽略): animation.humanoid.look_at_target.default (frozen_shadow)
+  内置动画未内联(忽略): animation.humanoid.look_at_target.swimming (frozen_shadow)
+  内置动画未内联(忽略): animation.humanoid.move.v1.0 (goblin)
+  内置动画未内联(忽略): animation.humanoid.bow_and_arrow.v1.0 (goblin_sniper)
+  内置动画未内联(忽略): animation.humanoid.move.v1.0 (goblin_sniper)
+  内置动画未内联(忽略): animation.humanoid.bow_and_arrow.v1.0 (goblin_wizard)
+  内置动画未内联(忽略): animation.humanoid.move.v1.0 (goblin_wizard)
+  内置动画未内联(忽略): animation.humanoid.look_at_target.default.v1.0 (host_of_deep)
+  loot[host_of_deep] 丢弃: item:dec:echo_of_deep, item:dec:deep_dandelion_crop
+  内置动画未内联(忽略): controller.animation.ice_monster.root (ice_monster)
+  内置动画未内联(忽略): controller.animation.ice_spirit.root (ice_spirit)
+  内置动画未内联(忽略): controller.animation.ice_wizard.root (ice_wizard)
+  loot[king_of_pillager] 丢弃: item:dec:village_guardian
+  loot[lava_lizard] 丢弃: item:dec:fire_heart
+  loot[lurk_zombie] 丢弃: item:dec:lurk_bud_crop, item:dec:lurk_fruit_crop, item:dec:lurk_orchid_crop
+  loot[mummy_skeleton] 丢弃: set_data
+  内置动画未内联(忽略): animation.humanoid.base_pose.v1.0 (murloc_wizard)
+  内置动画未内联(忽略): animation.humanoid.look_at_target.swimming.v1.0 (murloc_wizard)
+  loot[mystical_skeleton] 丢弃: set_data
+  内置动画未内联(忽略): controller.animation.nautilus.default (nautilus)
+  loot[predators] 丢弃: item:dec:bat_staff
+  loot[radiate_creeper] 丢弃: killed_by_entity
+  内置动画未内联(忽略): animation.humanoid.look_at_target.default.v1.0 (shadow_of_deep)
+  loot[skeleton_wizard] 丢弃: item:minecraft:copper_nugget
+  loot[soul_blaze] 丢弃: item:dec:soul_fireball, killed_by_player_or_pets
+  loot[swamp_drowned] 丢弃: item:dec:poison_bag
+  loot[swamp_golem] 丢弃: item:dec:poison_bag
+  loot[warped_skeleton] 丢弃: set_data
+  内置动画未内联(忽略): animation.humanoid.look_at_target.swimming.v1.0 (werewolf)

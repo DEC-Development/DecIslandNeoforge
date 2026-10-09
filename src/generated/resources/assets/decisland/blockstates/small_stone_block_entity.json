@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "decisland:block/small_stone_block_entity"
+    }
+  }
+}

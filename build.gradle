@@ -20,6 +20,15 @@ group = mod_group_id
 
 // This is the repositories block in your build.gradle. NOT the one in publishing, or in buildscript. If it does not exist already, create it.
 repositories {
+    // 阿里云 Maven 镜像（国内加速），public 为 central 聚合镜像
+    maven {
+        name = "AliyunPublic"
+        url = "https://maven.aliyun.com/repository/public"
+    }
+    maven {
+        name = "AliyunCentral"
+        url = "https://maven.aliyun.com/repository/central"
+    }
     maven {
         name = "Modrinth"
         url = "https://api.modrinth.com/maven"
@@ -98,7 +107,7 @@ neoForge {
         }
 
         // applies to all the run configs above
-        configureEach {
+        configureEach { run ->
             // Recommended logging data for a userdev environment
             // The markers can be added/remove as needed separated by commas.
             // "SCAN": For mods scan.
@@ -111,16 +120,17 @@ neoForge {
             // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
             logLevel = org.slf4j.event.Level.INFO
 
-            // Keep dev runs conservative on memory so the client does not over-allocate
-            // heap/native space on machines with a small Windows page file.
+            // 客户端需要加载全部资源/模型，给 4G；数据生成与服务端 2G 即可，
+            // 统一 SerialGC + 小线程栈，降低小页面文件机器上的原生内存压力。
+            def heapSize = run.name == 'client' ? '4G' : '2G'
             jvmArguments.addAll(
                     '-Xms128m',
-                    '-Xmx8G',
+                    "-Xmx${heapSize}",
                     '-Xss512k',
                     '-XX:ReservedCodeCacheSize=128m',
                     '-XX:CICompilerCount=2',
                     '-XX:+UseSerialGC',
-                    '-XX:HeapBaseMinAddress=6G'
+                    '-XX:TieredStopAtLevel=1'
             )
         }
     }
@@ -169,6 +179,9 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    // 将 Kotlin 标准库打进最终 jar，否则游戏环境缺少 kotlin.jvm.internal.* 导致 NoClassDefFoundError
+    jarJar("org.jetbrains.kotlin:kotlin-stdlib:2.2.0")
+    jarJar("org.jetbrains:annotations:24.1.0")
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

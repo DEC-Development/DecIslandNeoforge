@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#decisland:spawns_bomber",
+  "spawners": {
+    "type": "decisland:bomber",
+    "weight": 1,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

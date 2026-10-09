@@ -31,3 +31,8 @@ _tmp_bedrock_source
 generated
 !src/generated/
 .*
+
+# build/debug artifacts
+*.log
+errfiles.txt
+mc_sources/

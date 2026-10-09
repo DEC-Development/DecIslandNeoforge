@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#decisland:spawns_mummy_skeleton",
+  "spawners": {
+    "type": "decisland:mummy_skeleton",
+    "weight": 80,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

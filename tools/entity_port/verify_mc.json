@@ -1,0 +1,488 @@
+{
+ "renderers": {
+  "ZombieRenderer": {
+   "file": "net/minecraft/client/renderer/entity/ZombieRenderer.java",
+   "decl": "public class ZombieRenderer extends AbstractZombieRenderer<Zombie,",
+   "generic": false
+  },
+  "DrownedRenderer": {
+   "file": "net/minecraft/client/renderer/entity/DrownedRenderer.java",
+   "decl": "public class DrownedRenderer extends AbstractZombieRenderer<Drowned,",
+   "generic": false
+  },
+  "SkeletonRenderer": {
+   "file": "net/minecraft/client/renderer/entity/SkeletonRenderer.java",
+   "decl": "public class SkeletonRenderer<T extends AbstractSkeleton> extends HumanoidMobRenderer<T,",
+   "generic": true
+  },
+  "StrayRenderer": {
+   "file": "net/minecraft/client/renderer/entity/StrayRenderer.java",
+   "decl": "public class StrayRenderer extends SkeletonRenderer<Stray>",
+   "generic": false
+  },
+  "WitherSkeletonRenderer": {
+   "file": "net/minecraft/client/renderer/entity/WitherSkeletonRenderer.java",
+   "decl": "public class WitherSkeletonRenderer extends SkeletonRenderer<WitherSkeleton>",
+   "generic": false
+  },
+  "CreeperRenderer": {
+   "file": "net/minecraft/client/renderer/entity/CreeperRenderer.java",
+   "decl": "public class CreeperRenderer extends MobRenderer<Creeper,",
+   "generic": false
+  },
+  "BatRenderer": {
+   "file": "net/minecraft/client/renderer/entity/BatRenderer.java",
+   "decl": "public class BatRenderer extends MobRenderer<Bat,",
+   "generic": false
+  },
+  "GhastRenderer": {
+   "file": "net/minecraft/client/renderer/entity/GhastRenderer.java",
+   "decl": "public class GhastRenderer extends MobRenderer<Ghast,",
+   "generic": false
+  },
+  "BlazeRenderer": {
+   "file": "net/minecraft/client/renderer/entity/BlazeRenderer.java",
+   "decl": "public class BlazeRenderer extends MobRenderer<Blaze,",
+   "generic": false
+  },
+  "SlimeRenderer": {
+   "file": "net/minecraft/client/renderer/entity/SlimeRenderer.java",
+   "decl": "public class SlimeRenderer extends MobRenderer<Slime,",
+   "generic": false
+  },
+  "MagmaCubeRenderer": {
+   "file": "net/minecraft/client/renderer/entity/MagmaCubeRenderer.java",
+   "decl": "public class MagmaCubeRenderer extends MobRenderer<MagmaCube,",
+   "generic": false
+  },
+  "VexRenderer": {
+   "file": "net/minecraft/client/renderer/entity/VexRenderer.java",
+   "decl": "public class VexRenderer extends MobRenderer<Vex,",
+   "generic": false
+  },
+  "GuardianRenderer": {
+   "file": "net/minecraft/client/renderer/entity/GuardianRenderer.java",
+   "decl": "public class GuardianRenderer extends MobRenderer<Guardian,",
+   "generic": false
+  },
+  "IronGolemRenderer": {
+   "file": "net/minecraft/client/renderer/entity/IronGolemRenderer.java",
+   "decl": "public class IronGolemRenderer extends MobRenderer<IronGolem,",
+   "generic": false
+  },
+  "SnowGolemRenderer": {
+   "file": "net/minecraft/client/renderer/entity/SnowGolemRenderer.java",
+   "decl": "public class SnowGolemRenderer extends MobRenderer<SnowGolem,",
+   "generic": false
+  },
+  "PolarBearRenderer": {
+   "file": "net/minecraft/client/renderer/entity/PolarBearRenderer.java",
+   "decl": "public class PolarBearRenderer extends MobRenderer<PolarBear,",
+   "generic": false
+  },
+  "CaveSpiderRenderer": {
+   "file": "net/minecraft/client/renderer/entity/CaveSpiderRenderer.java",
+   "decl": "public class CaveSpiderRenderer extends SpiderRenderer<CaveSpider>",
+   "generic": false
+  },
+  "SpiderRenderer": {
+   "file": "net/minecraft/client/renderer/entity/SpiderRenderer.java",
+   "decl": "public class SpiderRenderer<T extends Spider> extends MobRenderer<T,",
+   "generic": true
+  },
+  "EndermanRenderer": {
+   "file": "net/minecraft/client/renderer/entity/EndermanRenderer.java",
+   "decl": "public class EndermanRenderer extends MobRenderer<EnderMan,",
+   "generic": false
+  },
+  "EnderManRenderer": null,
+  "CodRenderer": {
+   "file": "net/minecraft/client/renderer/entity/CodRenderer.java",
+   "decl": "public class CodRenderer extends MobRenderer<Cod,",
+   "generic": false
+  },
+  "ChickenRenderer": {
+   "file": "net/minecraft/client/renderer/entity/ChickenRenderer.java",
+   "decl": "public class ChickenRenderer extends MobRenderer<Chicken,",
+   "generic": false
+  },
+  "EvokerRenderer": {
+   "file": "net/minecraft/client/renderer/entity/EvokerRenderer.java",
+   "decl": "public class EvokerRenderer<T extends SpellcasterIllager> extends IllagerRenderer<T>",
+   "generic": true
+  },
+  "SilverfishRenderer": {
+   "file": "net/minecraft/client/renderer/entity/SilverfishRenderer.java",
+   "decl": "public class SilverfishRenderer extends MobRenderer<Silverfish,",
+   "generic": false
+  },
+  "WolfRenderer": {
+   "file": "net/minecraft/client/renderer/entity/WolfRenderer.java",
+   "decl": "public class WolfRenderer extends MobRenderer<Wolf,",
+   "generic": false
+  },
+  "PillagerRenderer": {
+   "file": "net/minecraft/client/renderer/entity/PillagerRenderer.java",
+   "decl": "public class PillagerRenderer extends IllagerRenderer<Pillager>",
+   "generic": false
+  },
+  "VindicatorRenderer": {
+   "file": "net/minecraft/client/renderer/entity/VindicatorRenderer.java",
+   "decl": "public class VindicatorRenderer extends IllagerRenderer<Vindicator>",
+   "generic": false
+  },
+  "PhantomRenderer": {
+   "file": "net/minecraft/client/renderer/entity/PhantomRenderer.java",
+   "decl": "public class PhantomRenderer extends MobRenderer<Phantom,",
+   "generic": false
+  },
+  "CowRenderer": {
+   "file": "net/minecraft/client/renderer/entity/CowRenderer.java",
+   "decl": "public class CowRenderer extends MobRenderer<Cow,",
+   "generic": false
+  },
+  "VillagerRenderer": {
+   "file": "net/minecraft/client/renderer/entity/VillagerRenderer.java",
+   "decl": "public class VillagerRenderer extends MobRenderer<Villager,",
+   "generic": false
+  },
+  "WitchRenderer": {
+   "file": "net/minecraft/client/renderer/entity/WitchRenderer.java",
+   "decl": "public class WitchRenderer extends MobRenderer<Witch,",
+   "generic": false
+  },
+  "SalmonRenderer": {
+   "file": "net/minecraft/client/renderer/entity/SalmonRenderer.java",
+   "decl": "public class SalmonRenderer extends MobRenderer<Salmon,",
+   "generic": false
+  },
+  "IllusionerRenderer": {
+   "file": "net/minecraft/client/renderer/entity/IllusionerRenderer.java",
+   "decl": "public class IllusionerRenderer extends IllagerRenderer<Illusioner>",
+   "generic": false
+  }
+ },
+ "entities": {
+  "Zombie": {
+   "pkg": "monster",
+   "decl": "public class Zombie extends Monster",
+   "createAttributes": true,
+   "ctor": "public Zombie(EntityType<? extends Zombie> entityType, Level level)"
+  },
+  "Drowned": {
+   "pkg": "monster",
+   "decl": "public class Drowned extends Zombie",
+   "createAttributes": true,
+   "ctor": "public Drowned(EntityType<? extends Drowned> entityType, Level level)"
+  },
+  "Skeleton": {
+   "pkg": "monster",
+   "decl": "public class Skeleton extends AbstractSkeleton",
+   "createAttributes": false,
+   "ctor": "public Skeleton(EntityType<? extends Skeleton> entityType, Level level)"
+  },
+  "Stray": {
+   "pkg": "monster",
+   "decl": "public class Stray extends AbstractSkeleton",
+   "createAttributes": false,
+   "ctor": "public Stray(EntityType<? extends Stray> entityType, Level level)"
+  },
+  "WitherSkeleton": {
+   "pkg": "monster",
+   "decl": "public class WitherSkeleton extends AbstractSkeleton",
+   "createAttributes": false,
+   "ctor": "public WitherSkeleton(EntityType<? extends WitherSkeleton> entityType, Level level)"
+  },
+  "Creeper": {
+   "pkg": "monster",
+   "decl": "public class Creeper extends Monster",
+   "createAttributes": true,
+   "ctor": "public Creeper(EntityType<? extends Creeper> entityType, Level level)"
+  },
+  "Bat": {
+   "pkg": "ambient",
+   "decl": "public class Bat extends AmbientCreature",
+   "createAttributes": true,
+   "ctor": "public Bat(EntityType<? extends Bat> entityType, Level level)"
+  },
+  "Ghast": {
+   "pkg": "monster",
+   "decl": "public class Ghast extends FlyingMob",
+   "createAttributes": true,
+   "ctor": "public Ghast(EntityType<? extends Ghast> entityType, Level level)"
+  },
+  "Blaze": {
+   "pkg": "monster",
+   "decl": "public class Blaze extends Monster",
+   "createAttributes": true,
+   "ctor": "public Blaze(EntityType<? extends Blaze> entityType, Level level)"
+  },
+  "Slime": {
+   "pkg": "monster",
+   "decl": "public class Slime extends Mob",
+   "createAttributes": false,
+   "ctor": "public Slime(EntityType<? extends Slime> entityType, Level level)"
+  },
+  "MagmaCube": {
+   "pkg": "monster",
+   "decl": "public class MagmaCube extends Slime",
+   "createAttributes": true,
+   "ctor": "public MagmaCube(EntityType<? extends MagmaCube> entityType, Level level)"
+  },
+  "Vex": {
+   "pkg": "monster",
+   "decl": "public class Vex extends Monster",
+   "createAttributes": true,
+   "ctor": "public Vex(EntityType<? extends Vex> entityType, Level level)"
+  },
+  "Guardian": {
+   "pkg": "monster",
+   "decl": "public class Guardian extends Monster",
+   "createAttributes": true,
+   "ctor": "public Guardian(EntityType<? extends Guardian> entityType, Level level)"
+  },
+  "IronGolem": {
+   "pkg": "animal",
+   "decl": "public class IronGolem extends AbstractGolem",
+   "createAttributes": true,
+   "ctor": "public IronGolem(EntityType<? extends IronGolem> entityType, Level level)"
+  },
+  "SnowGolem": {
+   "pkg": "animal",
+   "decl": "public class SnowGolem extends AbstractGolem",
+   "createAttributes": true,
+   "ctor": "public SnowGolem(EntityType<? extends SnowGolem> entityType, Level level)"
+  },
+  "PolarBear": {
+   "pkg": "animal",
+   "decl": "public class PolarBear extends Animal",
+   "createAttributes": true,
+   "ctor": "public PolarBear(EntityType<? extends PolarBear> entityType, Level level)"
+  },
+  "CaveSpider": {
+   "pkg": "monster",
+   "decl": "public class CaveSpider extends Spider",
+   "createAttributes": false,
+   "ctor": "public CaveSpider(EntityType<? extends CaveSpider> entityType, Level level)"
+  },
+  "Spider": {
+   "pkg": "monster",
+   "decl": "public class Spider extends Monster",
+   "createAttributes": true,
+   "ctor": "public Spider(EntityType<? extends Spider> entityType, Level level)"
+  },
+  "EnderMan": {
+   "pkg": "monster",
+   "decl": "public class EnderMan extends Monster",
+   "createAttributes": true,
+   "ctor": "public EnderMan(EntityType<? extends EnderMan> entityType, Level level)"
+  },
+  "Cod": {
+   "pkg": "animal",
+   "decl": "public class Cod extends AbstractSchoolingFish",
+   "createAttributes": false,
+   "ctor": "public Cod(EntityType<? extends Cod> entityType, Level level)"
+  },
+  "Chicken": {
+   "pkg": "animal",
+   "decl": "public class Chicken extends Animal",
+   "createAttributes": true,
+   "ctor": "public Chicken(EntityType<? extends Chicken> entityType, Level level)"
+  },
+  "Evoker": {
+   "pkg": "monster",
+   "decl": "public class Evoker extends SpellcasterIllager",
+   "createAttributes": true,
+   "ctor": "public Evoker(EntityType<? extends Evoker> entityType, Level level)"
+  },
+  "Silverfish": {
+   "pkg": "monster",
+   "decl": "public class Silverfish extends Monster",
+   "createAttributes": true,
+   "ctor": "public Silverfish(EntityType<? extends Silverfish> entityType, Level level)"
+  },
+  "Wolf": {
+   "pkg": "animal",
+   "decl": "public class Wolf extends TamableAnimal",
+   "createAttributes": true,
+   "ctor": "public Wolf(EntityType<? extends Wolf> entityType, Level level)"
+  },
+  "Pillager": {
+   "pkg": "monster",
+   "decl": "public class Pillager extends AbstractIllager",
+   "createAttributes": true,
+   "ctor": "public Pillager(EntityType<? extends Pillager> entityType, Level level)"
+  },
+  "Vindicator": {
+   "pkg": "monster",
+   "decl": "public class Vindicator extends AbstractIllager",
+   "createAttributes": true,
+   "ctor": "public Vindicator(EntityType<? extends Vindicator> entityType, Level level)"
+  },
+  "Phantom": {
+   "pkg": "monster",
+   "decl": "public class Phantom extends FlyingMob",
+   "createAttributes": false,
+   "ctor": "public Phantom(EntityType<? extends Phantom> entityType, Level level)"
+  },
+  "Cow": {
+   "pkg": "animal",
+   "decl": "public class Cow extends Animal",
+   "createAttributes": true,
+   "ctor": "public Cow(EntityType<? extends Cow> entityType, Level level)"
+  },
+  "Villager": {
+   "pkg": "npc",
+   "decl": "public class Villager extends AbstractVillager",
+   "createAttributes": true,
+   "ctor": "public Villager(EntityType<? extends Villager> entityType, Level level)"
+  },
+  "Witch": {
+   "pkg": "monster",
+   "decl": "public class Witch extends Raider",
+   "createAttributes": true,
+   "ctor": "public Witch(EntityType<? extends Witch> entityType, Level level)"
+  },
+  "Salmon": {
+   "pkg": "animal",
+   "decl": "public class Salmon extends AbstractSchoolingFish",
+   "createAttributes": false,
+   "ctor": "public Salmon(EntityType<? extends Salmon> entityType, Level level)"
+  },
+  "Illusioner": {
+   "pkg": "monster",
+   "decl": "public class Illusioner extends SpellcasterIllager",
+   "createAttributes": true,
+   "ctor": "public Illusioner(EntityType<? extends Illusioner> entityType, Level level)"
+  },
+  "SpellcasterIllager": {
+   "pkg": "monster",
+   "decl": "public abstract class SpellcasterIllager extends AbstractIllager {",
+   "createAttributes": false,
+   "ctor": null
+  },
+  "AbstractSkeleton": {
+   "pkg": "monster",
+   "decl": "public abstract class AbstractSkeleton extends Monster implements RangedAttackMob {",
+   "createAttributes": true,
+   "ctor": null
+  }
+ },
+ "vanillaItemCount": 238,
+ "hasItems": [
+  [
+   "netherrack",
+   false
+  ],
+  [
+   "snow",
+   false
+  ],
+  [
+   "ice",
+   false
+  ],
+  [
+   "tnt",
+   false
+  ],
+  [
+   "sponge",
+   false
+  ],
+  [
+   "music_disc_13",
+   false
+  ],
+  [
+   "cod",
+   true
+  ],
+  [
+   "skeleton_skull",
+   false
+  ],
+  [
+   "lily_pad",
+   false
+  ],
+  [
+   "nether_quartz_ore",
+   false
+  ],
+  [
+   "poppy",
+   false
+  ],
+  [
+   "sweet_berries",
+   false
+  ],
+  [
+   "amethyst_shard",
+   true
+  ],
+  [
+   "copper_ingot",
+   true
+  ],
+  [
+   "iron_sword",
+   false
+  ],
+  [
+   "bow",
+   true
+  ],
+  [
+   "crossbow",
+   false
+  ],
+  [
+   "enchanted_book",
+   false
+  ],
+  [
+   "iron_helmet",
+   false
+  ],
+  [
+   "netherite_scrap",
+   true
+  ],
+  [
+   "crimson_fungus",
+   false
+  ],
+  [
+   "nether_wart_block",
+   false
+  ],
+  [
+   "end_stone",
+   false
+  ],
+  [
+   "coal_ore",
+   false
+  ],
+  [
+   "diamond_ore",
+   false
+  ],
+  [
+   "redstone",
+   true
+  ],
+  [
+   "end_pearl",
+   false
+  ]
+ ],
+ "vanillaTex": {
+  "block/ice.png": false,
+  "entity/skeleton/stray.png": false,
+  "entity/zombie/zombie.png": false,
+  "block/tnt.png": false
+ }
+}

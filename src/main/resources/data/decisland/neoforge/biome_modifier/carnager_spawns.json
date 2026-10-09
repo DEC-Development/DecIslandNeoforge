@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#decisland:spawns_carnager",
+  "spawners": {
+    "type": "decisland:carnager",
+    "weight": 1,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

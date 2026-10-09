@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#decisland:spawns_nether_skeleton",
+  "spawners": {
+    "type": "decisland:nether_skeleton",
+    "weight": 10,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "decisland:radiate_stone"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "decisland:small_stone"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:cobblestone"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "decisland:blocks/radiate_stonebrick"
+}

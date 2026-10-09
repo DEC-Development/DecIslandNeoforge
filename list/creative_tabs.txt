@@ -1,4 +1,5 @@
 decisland_accessories_tab
+decisland_blocks_tab
 decisland_crops_tab
 decisland_foods_tab
 decisland_masks_tab

@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#decisland:spawns_soul_insect",
+  "spawners": {
+    "type": "decisland:soul_insect",
+    "weight": 10,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

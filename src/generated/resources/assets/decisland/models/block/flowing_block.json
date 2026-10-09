@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "decisland:block/flowing_block_down",
+    "side": "decisland:block/flowing_block_side_0",
+    "top": "decisland:block/flowing_block_up"
+  }
+}

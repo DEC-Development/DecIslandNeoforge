@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#decisland:spawns_life_insect",
+  "spawners": {
+    "type": "decisland:life_insect",
+    "weight": 3,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

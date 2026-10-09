@@ -13,17 +13,17 @@ import net.minecraft.client.model.geom.builders.PartDefinition
 import net.minecraft.world.entity.Entity
 import kotlin.math.PI
 
-class BedrockAnimatedEntityModel private constructor(
+open class BedrockAnimatedEntityModel<T : Entity> private constructor(
     private val bakedModel: BakedBedrockModel,
-    private val animation: BedrockAnimationClip,
-) : EntityModel<Entity>() {
+    var animation: BedrockAnimationClip,
+) : EntityModel<T>() {
     constructor(geometry: BedrockGeometry, animation: BedrockAnimationClip) : this(
         bakeModel(geometry),
         animation,
     )
 
     override fun setupAnim(
-        entity: Entity,
+        entity: T,
         limbSwing: Float,
         limbSwingAmount: Float,
         ageInTicks: Float,
@@ -31,6 +31,11 @@ class BedrockAnimatedEntityModel private constructor(
         headPitch: Float,
     ) {
         applyAnimation(ageInTicks / 20.0f)
+    }
+
+    fun applyClip(clip: BedrockAnimationClip, timeSeconds: Float) {
+        animation = clip
+        applyAnimation(timeSeconds)
     }
 
     override fun renderToBuffer(
@@ -116,6 +121,7 @@ class BedrockAnimatedEntityModel private constructor(
                     geometry,
                     bone,
                     parentPivot = BedrockVec3.ZERO,
+                    isRootBone = true,
                 )
             }
 
@@ -142,10 +148,14 @@ class BedrockAnimatedEntityModel private constructor(
             geometry: BedrockGeometry,
             bone: BedrockBone,
             parentPivot: BedrockVec3,
+            isRootBone: Boolean = false,
         ) {
+            // 基岩几何 Y 轴向上、原点在脚底；Java 模型 Y 轴向下、脚底在 y=24：
+            // 根骨骼锚定 24 − pivot.y，子骨骼用 父pivot − 子pivot；X 镜像、Z 不镜像
+            val boneYOffset = if (isRootBone) 24f - bone.pivot.y else parentPivot.y - bone.pivot.y
             val bonePose = PartPoseSnapshot(
                 x = parentPivot.x - bone.pivot.x,
-                y = bone.pivot.y - parentPivot.y,
+                y = boneYOffset,
                 z = bone.pivot.z - parentPivot.z,
                 xRot = bone.rotation.x.toModelRadX(),
                 yRot = bone.rotation.y.toModelRadY(),
@@ -177,8 +187,8 @@ class BedrockAnimatedEntityModel private constructor(
             bone.cubes.forEachIndexed { index, cube ->
                 val cubeName = "${bone.name}__cube_$index"
                 val cubePose = PartPoseSnapshot(
-                    x = cube.pivot.x - bone.pivot.x,
-                    y = cube.pivot.y - bone.pivot.y,
+                    x = bone.pivot.x - cube.pivot.x,
+                    y = bone.pivot.y - cube.pivot.y,
                     z = cube.pivot.z - bone.pivot.z,
                     xRot = cube.rotation.x.toModelRadX(),
                     yRot = cube.rotation.y.toModelRadY(),
@@ -195,7 +205,7 @@ class BedrockAnimatedEntityModel private constructor(
                     mirror(cube.mirror)
                     addBox(
                         cube.pivot.x - cube.origin.x - cube.size.x,
-                        cube.origin.y - cube.pivot.y,
+                        cube.pivot.y - cube.origin.y - cube.size.y,
                         cube.origin.z - cube.pivot.z,
                         cube.size.x,
                         cube.size.y,

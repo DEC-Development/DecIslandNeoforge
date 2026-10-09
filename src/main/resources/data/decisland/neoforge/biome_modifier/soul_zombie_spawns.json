@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#decisland:spawns_soul_zombie",
+  "spawners": {
+    "type": "decisland:soul_zombie",
+    "weight": 40,
+    "minCount": 1,
+    "maxCount": 3
+  }
+}

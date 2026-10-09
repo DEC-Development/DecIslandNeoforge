@@ -21,6 +21,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePrope
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator
 import net.minecraft.world.level.storage.loot.LootPool
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue
+import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition
 import net.minecraft.advancements.critereon.StatePropertiesPredicate
 import java.util.function.Function
 
@@ -67,6 +68,41 @@ class ModBlockLootTablesProvider(registries: HolderLookup.Provider) :
         max: Float,
     ) {
         super.add(block, createSingleItemTableWithSilkTouch(block, item, UniformGenerator.between(min, max)))
+    }
+
+    fun addNoDrop(block: Block) {
+        super.add(block, LootTable.lootTable())
+    }
+
+    fun addChanceDrop(
+        block: Block,
+        item: ItemLike,
+        chance: Float,
+    ) {
+        super.add(
+            block,
+            LootTable.lootTable().withPool(
+                LootPool.lootPool()
+                    .setRolls(ConstantValue.exactly(1.0f))
+                    .add(LootItem.lootTableItem(item))
+                    .`when`(LootItemRandomChanceCondition.randomChance(chance)),
+            ),
+        )
+    }
+
+    fun addWeightedDrop(
+        block: Block,
+        entries: List<Triple<ItemLike, Int, Int>>,
+    ) {
+        val pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0f))
+        entries.forEach { (item, weight, maxCount) ->
+            val entry = LootItem.lootTableItem(item).setWeight(weight)
+            if (maxCount > 1) {
+                entry.apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0f, maxCount.toFloat())))
+            }
+            pool.add(entry)
+        }
+        super.add(block, LootTable.lootTable().withPool(pool))
     }
 
     override fun add(block: Block, factory: Function<Block, LootTable.Builder>) {

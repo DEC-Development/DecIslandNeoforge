@@ -1,0 +1,115 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:group",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:cod",
+              "weight": 400
+            },
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:salmon",
+              "weight": 250
+            },
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:tropical_fish",
+              "weight": 20
+            },
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:pufferfish",
+              "weight": 130
+            },
+            {
+              "type": "minecraft:item",
+              "name": "decisland:ender_fish",
+              "weight": 10
+            },
+            {
+              "type": "minecraft:item",
+              "name": "decisland:coal_fish",
+              "weight": 10
+            },
+            {
+              "type": "minecraft:item",
+              "name": "decisland:iron_fish",
+              "weight": 5
+            },
+            {
+              "type": "minecraft:item",
+              "name": "decisland:gold_fish",
+              "weight": 3
+            },
+            {
+              "type": "minecraft:item",
+              "name": "decisland:emerald_fish",
+              "weight": 2
+            },
+            {
+              "type": "minecraft:item",
+              "name": "decisland:diamond_fish",
+              "weight": 1
+            },
+            {
+              "type": "minecraft:item",
+              "name": "decisland:sword_fish",
+              "weight": 4
+            },
+            {
+              "type": "minecraft:item",
+              "name": "decisland:spiral_shell",
+              "weight": 40
+            },
+            {
+              "type": "minecraft:item",
+              "name": "decisland:snailfish",
+              "weight": 30
+            },
+            {
+              "type": "minecraft:item",
+              "name": "decisland:tropical_fish",
+              "weight": 400
+            },
+            {
+              "type": "minecraft:item",
+              "name": "decisland:yellow_jellyfish",
+              "weight": 1
+            },
+            {
+              "type": "minecraft:item",
+              "name": "decisland:pink_jellyfish",
+              "weight": 1
+            },
+            {
+              "type": "minecraft:item",
+              "name": "decisland:blue_jellyfish",
+              "weight": 1
+            },
+            {
+              "type": "minecraft:item",
+              "name": "decisland:moon_jellyfish",
+              "weight": 1
+            },
+            {
+              "type": "minecraft:item",
+              "name": "decisland:lamprey",
+              "weight": 1
+            },
+            {
+              "type": "minecraft:item",
+              "name": "decisland:nautilus_alive",
+              "weight": 1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

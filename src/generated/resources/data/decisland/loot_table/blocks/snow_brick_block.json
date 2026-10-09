@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "decisland:snow_brick_block"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "decisland:blocks/snow_brick_block"
+}

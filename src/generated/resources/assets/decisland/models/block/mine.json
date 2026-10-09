@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "decisland:block/mine",
+    "side": "decisland:block/mine",
+    "top": "decisland:block/mine_top"
+  }
+}

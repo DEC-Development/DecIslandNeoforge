@@ -1,5 +1,12 @@
 {
   "values": [
-    "decisland:lurk_log"
+    "decisland:lurk_log",
+    "decisland:eye_of_nature_log",
+    "decisland:crate",
+    "decisland:frozen_crate",
+    "decisland:cave_crate",
+    "decisland:golden_bookshelf",
+    "decisland:golden_bookshelf_frame",
+    "decisland:magic_letter_box"
   ]
 }

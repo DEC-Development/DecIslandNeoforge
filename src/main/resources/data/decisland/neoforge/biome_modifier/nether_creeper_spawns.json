@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#decisland:spawns_nether_creeper",
+  "spawners": {
+    "type": "decisland:nether_creeper",
+    "weight": 20,
+    "minCount": 1,
+    "maxCount": 3
+  }
+}

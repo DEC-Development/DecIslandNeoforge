@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#decisland:spawns_swamp_drowned",
+  "spawners": {
+    "type": "decisland:swamp_drowned",
+    "weight": 10,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

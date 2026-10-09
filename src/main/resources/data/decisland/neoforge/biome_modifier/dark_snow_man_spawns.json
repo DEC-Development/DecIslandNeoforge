@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#decisland:spawns_dark_snow_man",
+  "spawners": {
+    "type": "decisland:dark_snow_man",
+    "weight": 1,
+    "minCount": 1,
+    "maxCount": 3
+  }
+}

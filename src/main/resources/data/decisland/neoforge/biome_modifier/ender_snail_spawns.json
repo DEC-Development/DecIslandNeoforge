@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#decisland:spawns_ender_snail",
+  "spawners": {
+    "type": "decisland:ender_snail",
+    "weight": 1,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#decisland:spawns_shadow_of_sea",
+  "spawners": {
+    "type": "decisland:shadow_of_sea",
+    "weight": 1,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

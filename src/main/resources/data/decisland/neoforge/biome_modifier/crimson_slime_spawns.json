@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#decisland:spawns_crimson_slime",
+  "spawners": {
+    "type": "decisland:crimson_slime",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 4
+  }
+}

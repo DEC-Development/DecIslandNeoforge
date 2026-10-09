@@ -83,3 +83,5 @@ ender_spurt.particle.json
 ender_bomb.particle.json
 bubble_spurt_middle.particle.json
 wither_cloud_wake.particle.json
+
+leaves_essence.particle.json

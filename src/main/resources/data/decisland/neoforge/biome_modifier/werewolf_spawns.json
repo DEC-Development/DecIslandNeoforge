@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#decisland:spawns_werewolf",
+  "spawners": {
+    "type": "decisland:werewolf",
+    "weight": 10,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

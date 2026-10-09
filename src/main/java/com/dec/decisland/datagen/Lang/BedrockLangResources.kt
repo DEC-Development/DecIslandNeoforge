@@ -27,6 +27,10 @@ object BedrockLangResources {
     fun itemName(locale: String, name: String): String? = get(locale, javaItemKey(name))
 
     @JvmStatic
+    fun spawnEggName(locale: String, name: String): String? =
+        get(locale, "item.spawn_egg.entity.dec:$name.name")
+
+    @JvmStatic
     fun blockName(locale: String, name: String): String? =
         get(locale, javaBlockKey(name))
             ?: get(locale, javaBlockKey("${name}_crop"))

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "decisland:block/lurk_log_up",
+    "side": "decisland:block/monitor",
+    "top": "decisland:block/lurk_log_up"
+  }
+}

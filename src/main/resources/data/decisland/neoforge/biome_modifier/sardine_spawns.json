@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#decisland:spawns_sardine",
+  "spawners": {
+    "type": "decisland:sardine",
+    "weight": 2,
+    "minCount": 2,
+    "maxCount": 3
+  }
+}

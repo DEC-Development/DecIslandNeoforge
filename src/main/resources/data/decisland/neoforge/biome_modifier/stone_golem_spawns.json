@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#decisland:spawns_stone_golem",
+  "spawners": {
+    "type": "decisland:stone_golem",
+    "weight": 15,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

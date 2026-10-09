@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#decisland:spawns_nether_golem",
+  "spawners": {
+    "type": "decisland:nether_golem",
+    "weight": 2,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

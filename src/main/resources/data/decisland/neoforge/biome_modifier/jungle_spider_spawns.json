@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#decisland:spawns_jungle_spider",
+  "spawners": {
+    "type": "decisland:jungle_spider",
+    "weight": 200,
+    "minCount": 4,
+    "maxCount": 4
+  }
+}

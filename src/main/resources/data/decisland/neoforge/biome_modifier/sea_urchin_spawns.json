@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#decisland:spawns_sea_urchin",
+  "spawners": {
+    "type": "decisland:sea_urchin",
+    "weight": 50,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

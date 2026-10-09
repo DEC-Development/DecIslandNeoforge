@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#decisland:spawns_obsidian_golem",
+  "spawners": {
+    "type": "decisland:obsidian_golem",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#decisland:spawns_warped_skeleton",
+  "spawners": {
+    "type": "decisland:warped_skeleton",
+    "weight": 1,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

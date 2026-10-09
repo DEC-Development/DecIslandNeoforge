@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "decisland:block/ice_brick_block",
+    "side": "decisland:block/ice_bookshelf_side",
+    "top": "decisland:block/ice_brick_block"
+  }
+}

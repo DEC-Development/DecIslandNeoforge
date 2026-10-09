@@ -3,6 +3,7 @@ package com.dec.decisland.datagen
 import com.dec.decisland.DecIsland
 import com.dec.decisland.block.ModBlocks
 import com.dec.decisland.effect.ModEffects
+import com.dec.decisland.entity.GeneratedMobs
 import com.dec.decisland.item.ModCreativeModeTabs
 import com.dec.decisland.item.ModItems
 import com.dec.decisland.datagen.Lang.BedrockLangResources
@@ -37,6 +38,18 @@ abstract class ModLangProvider protected constructor(
         ModCreativeModeTabs.getTabConfigs().forEach { config ->
             val translation = config.langMap[locale] ?: return@forEach
             translations["itemGroup.${config.name}"] = translation
+        }
+
+        // 生成生物刷怪蛋：基岩版 spawn_egg 条目优先，缺失时用实体名生成（生成 哥布林法师 / Spawn Goblin Wizard）
+        GeneratedMobs.SPAWN_EGGS.entries.forEach { entry ->
+            val entityName = entry.id.path.removeSuffix("_spawn_egg")
+            val eggName = BedrockLangResources.spawnEggName(locale, entityName)
+                ?: translations["entity.${DecIsland.MOD_ID}.$entityName"]?.let { base ->
+                    if (locale == "zh_cn") "生成$base" else "Spawn $base"
+                }
+            if (eggName != null) {
+                translations["item.${DecIsland.MOD_ID}.${entry.id.path}"] = eggName
+            }
         }
 
         when (locale) {

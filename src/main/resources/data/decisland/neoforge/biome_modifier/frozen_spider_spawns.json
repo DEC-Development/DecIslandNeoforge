@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#decisland:spawns_frozen_spider",
+  "spawners": {
+    "type": "decisland:frozen_spider",
+    "weight": 1,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

@@ -6,6 +6,7 @@ import com.dec.decisland.block.custom.FlowerGhostBlock
 import com.dec.decisland.block.custom.NightmareBlock
 import com.dec.decisland.block.custom.SimpleCropBlock
 import com.dec.decisland.block.custom.SimplePlantBlock
+import com.dec.decisland.block.custom.ShapedBlock
 import com.dec.decisland.block.custom.SnowPortalBlock
 import com.dec.decisland.block.custom.CornCropBlock
 import com.dec.decisland.datagen.ModBlockLootTablesProvider
@@ -14,6 +15,8 @@ import com.dec.decisland.item.ModItems
 import com.dec.decisland.item.category.Material
 import com.dec.decisland.item.category.Food
 import com.dec.decisland.item.category.Crop
+import com.dec.decisland.item.category.Weapon
+import com.dec.decisland.item.category.Fashion
 import net.minecraft.core.Direction
 import net.minecraft.data.models.BlockModelGenerators
 import net.minecraft.data.models.model.DelegatedModel
@@ -49,6 +52,8 @@ import net.minecraft.world.level.block.state.properties.Property
 import net.minecraft.world.level.material.PushReaction
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition
+import net.minecraft.world.phys.shapes.Shapes
+import net.minecraft.world.phys.shapes.VoxelShape
 import net.minecraft.advancements.critereon.StatePropertiesPredicate
 import net.neoforged.bus.api.IEventBus
 import net.neoforged.neoforge.registries.DeferredBlock
@@ -68,15 +73,20 @@ object ModBlocks {
         val sideTexture: String? = null,
         val topTexture: String? = null,
         val bottomTexture: String? = null,
+        val texture: String? = null,
+        val customPath: String? = null,
     ) {
         enum class Kind {
             CUBE_ALL,
             CUBE_BOTTOM_TOP,
             COLUMN,
+            CUSTOM,
         }
 
         companion object {
             fun cubeAll(): BlockModelSpec = BlockModelSpec(Kind.CUBE_ALL)
+
+            fun cubeAll(texture: String): BlockModelSpec = BlockModelSpec(Kind.CUBE_ALL, texture = texture)
 
             fun cubeBottomTop(
                 sideTexture: String,
@@ -88,6 +98,8 @@ object ModBlocks {
                 sideTexture: String,
                 topTexture: String,
             ): BlockModelSpec = BlockModelSpec(Kind.COLUMN, sideTexture, topTexture)
+
+            fun custom(path: String): BlockModelSpec = BlockModelSpec(Kind.CUSTOM, customPath = path)
         }
     }
 
@@ -99,9 +111,10 @@ object ModBlocks {
         val lightLevel: Int = 0,
         val friction: Float? = null,
         val requiresCorrectTool: Boolean = false,
+        val noOcclusion: Boolean = false,
         val tags: List<TagKey<Block>> = emptyList(),
         val model: BlockModelSpec = BlockModelSpec.cubeAll(),
-        val creativeTab: Supplier<CreativeModeTab> = ModCreativeModeTabs.DECISLAND_MATERIALS_TAB,
+        val creativeTab: Supplier<CreativeModeTab> = ModCreativeModeTabs.DECISLAND_BLOCKS_TAB,
         val factory: Function<BlockBehaviour.Properties, out Block> = Function(::Block),
         val loot: LootSpec = LootSpec.self(),
     )
@@ -126,14 +139,25 @@ object ModBlocks {
         val crossModel: Boolean,
     )
 
+    private data class WeightedDrop(
+        val item: Supplier<out ItemLike>,
+        val weight: Int,
+        val maxCount: Int = 1,
+    )
+
     private data class LootSpec(
         val dropItem: Supplier<out ItemLike>? = null,
         val minCount: Float = 1.0f,
         val maxCount: Float = 1.0f,
         val silkTouch: Boolean = false,
+        val chance: Float? = null,
+        val weighted: List<WeightedDrop>? = null,
+        val noDrop: Boolean = false,
     ) {
         companion object {
             fun self(): LootSpec = LootSpec()
+
+            fun none(): LootSpec = LootSpec(noDrop = true)
 
             fun drop(
                 item: Supplier<out ItemLike>,
@@ -141,6 +165,13 @@ object ModBlocks {
                 maxCount: Float = 1.0f,
                 silkTouch: Boolean = false,
             ): LootSpec = LootSpec(item, minCount, maxCount, silkTouch)
+
+            fun chance(
+                item: Supplier<out ItemLike>,
+                chance: Float,
+            ): LootSpec = LootSpec(item, chance = chance)
+
+            fun weighted(entries: List<WeightedDrop>): LootSpec = LootSpec(weighted = entries)
         }
     }
 
@@ -742,6 +773,710 @@ object ModBlocks {
             .build(),
     )
 
+    // ==================== 基岩版移植方块（第二波：笼子/灯笼/书架/特殊掉落） ====================
+
+    // 红灯笼碰撞箱：基岩版 origin [-5,1,-5] size [10,12,10]
+    private val RED_LANTERN_SHAPE: VoxelShape = Shapes.box(3.0 / 16, 1.0 / 16, 3.0 / 16, 13.0 / 16, 13.0 / 16, 13.0 / 16)
+    // 圣诞礼物碰撞箱：origin [-4,0,-4] size [8,8,8]
+    private val CHRISTMAS_GIFT_SHAPE: VoxelShape = Shapes.box(4.0 / 16, 0.0, 4.0 / 16, 12.0 / 16, 8.0 / 16, 12.0 / 16)
+    // 金链碰撞箱：origin [-2.5,0,-2.5] size [5,16,5]
+    private val GOLDEN_CHAIN_SHAPE: VoxelShape = Shapes.box(5.5 / 16, 0.0, 5.5 / 16, 10.5 / 16, 1.0, 10.5 / 16)
+    // 灯罩碰撞箱：origin [-8,0,5] size [16,16,3]（贴背板的竖直板）
+    private val LAMPSHADE_SHAPE: VoxelShape = Shapes.box(0.0, 0.0, 13.0 / 16, 1.0, 1.0, 1.0)
+    // 石堆碰撞箱：origin [-6,0,-6] size [13,2,13]
+    private val STONE_HEAP_SHAPE: VoxelShape = Shapes.box(2.0 / 16, 0.0, 2.0 / 16, 15.0 / 16, 2.0 / 16, 15.0 / 16)
+    // 石板路碰撞箱：origin [-8,0,-8] size [16,2,16]
+    private val STONE_ROAD_SHAPE: VoxelShape = Shapes.box(0.0, 0.0, 0.0, 1.0, 2.0 / 16, 1.0)
+    // 小石子碰撞箱：origin [-2,0,-2] size [3,2,3]
+    private val SMALL_STONE_SHAPE: VoxelShape = Shapes.box(6.0 / 16, 0.0, 6.0 / 16, 9.0 / 16, 2.0 / 16, 9.0 / 16)
+
+    @JvmField
+    val ASH_CAGE: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "ash_cage",
+            destroyTime = 3.2f, explosionResistance = 500.0f,
+            sound = SoundType.METAL,
+            requiresCorrectTool = true, noOcclusion = true,
+            tags = pickaxeTags(),
+        ),
+    )
+
+    @JvmField
+    val FROZEN_CAGE: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "frozen_cage",
+            destroyTime = 3.2f, explosionResistance = 500.0f,
+            sound = SoundType.GLASS, friction = 0.55f,
+            requiresCorrectTool = true, noOcclusion = true,
+            tags = pickaxeTags(),
+        ),
+    )
+
+    @JvmField
+    val RED_LANTERN: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "red_lantern",
+            destroyTime = 0.01f, explosionResistance = 0.0f,
+            sound = SoundType.GLASS,
+            lightLevel = 15, noOcclusion = true,
+            factory = Function { properties -> ShapedBlock(properties, RED_LANTERN_SHAPE) },
+            model = BlockModelSpec.custom("red_lantern"),
+        ),
+    )
+
+    @JvmField
+    val ICE_BOOKSHELF: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "ice_bookshelf",
+            destroyTime = 1.5f, explosionResistance = 10.0f,
+            sound = SoundType.GLASS, friction = 0.55f,
+            model = BlockModelSpec.cubeBottomTop("ice_bookshelf_side", "ice_brick_block", "ice_brick_block"),
+            loot = LootSpec.weighted(
+                listOf(
+                    WeightedDrop(Supplier { Items.BOOK }, 40, 3),
+                    WeightedDrop(Supplier { Weapon.SNOWBALL_MAGIC_BOOK.get() }, 1),
+                    WeightedDrop(Supplier { Material.OLD_BOOK.get() }, 3),
+                    WeightedDrop(Supplier { Weapon.LAPIS_MAGIC_BOOK.get() }, 1),
+                    WeightedDrop(Supplier { ModItems.EXPERIENCE_BOOK_EMPTY.get() }, 1),
+                    WeightedDrop(Supplier { ModItems.EXPERIENCE_BOOK.get() }, 1),
+                ),
+            ),
+        ),
+    )
+
+    @JvmField
+    val LURK_BLOCK: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "lurk_block",
+            destroyTime = 0.5f, explosionResistance = 20.0f,
+            sound = SoundType.GRASS, noOcclusion = true,
+            loot = LootSpec.chance(Supplier { SimplePlant.LURK_SPRING.get() }, 0.1f),
+        ),
+    )
+
+    @JvmField
+    val LURK_END_STONE: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "lurk_end_stone",
+            destroyTime = 3.0f, explosionResistance = 30.0f,
+            sound = SoundType.STONE,
+            requiresCorrectTool = true,
+            tags = pickaxeTags(),
+            model = BlockModelSpec.cubeBottomTop("lurk_end_stone_side", "lurk_end_stone_up", "minecraft:end_stone"),
+            loot = LootSpec.weighted(
+                listOf(
+                    WeightedDrop(Supplier { ModBlocks.LURK_END_STONE.get() }, 1),
+                    WeightedDrop(Supplier { Items.END_STONE }, 4),
+                ),
+            ),
+        ),
+    )
+
+    @JvmField
+    val RADIATE_STONE: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "radiate_stone",
+            destroyTime = 1.5f, explosionResistance = 15.0f,
+            sound = SoundType.STONE,
+            requiresCorrectTool = true, noOcclusion = true,
+            tags = pickaxeTags(),
+            loot = LootSpec.weighted(
+                listOf(
+                    WeightedDrop(Supplier { ModBlocks.RADIATE_STONE.get() }, 1),
+                    WeightedDrop(Supplier { Material.SMALL_STONE.get() }, 1),
+                    WeightedDrop(Supplier { Items.COBBLESTONE }, 1),
+                ),
+            ),
+        ),
+    )
+
+    @JvmField
+    val RADIATE_DIRT: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "radiate_dirt",
+            destroyTime = 1.0f, explosionResistance = 5.0f,
+            sound = SoundType.GRAVEL, noOcclusion = true,
+            loot = LootSpec.weighted(
+                listOf(
+                    WeightedDrop(Supplier { ModBlocks.RADIATE_DIRT.get() }, 1),
+                    WeightedDrop(Supplier { Items.DIRT }, 1),
+                ),
+            ),
+        ),
+    )
+
+    @JvmField
+    val RADIATE_STONEBRICK: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "radiate_stonebrick",
+            destroyTime = 1.5f, explosionResistance = 15.0f,
+            sound = SoundType.STONE,
+            requiresCorrectTool = true, noOcclusion = true,
+            tags = pickaxeTags(),
+            // 基岩版 radiate_stonebrick 的战利品表就是 radiate_stone.json（权重三选一）
+            loot = LootSpec.weighted(
+                listOf(
+                    WeightedDrop(Supplier { ModBlocks.RADIATE_STONE.get() }, 1),
+                    WeightedDrop(Supplier { Material.SMALL_STONE.get() }, 1),
+                    WeightedDrop(Supplier { Items.COBBLESTONE }, 1),
+                ),
+            ),
+        ),
+    )
+
+    @JvmField
+    val RED_PATTERNED_STONEBRICK: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "red_patterned_stonebrick",
+            destroyTime = 2.1f, explosionResistance = 10.0f,
+            sound = SoundType.STONE,
+            requiresCorrectTool = true, noOcclusion = true,
+            tags = pickaxeTags(),
+            model = BlockModelSpec.cubeAll("red_patterned_stonebrick_side"),
+        ),
+    )
+
+    // ==================== 基岩版移植方块（第三波：建筑/装饰/储物） ====================
+
+    @JvmField
+    val BROKEN_DIRT: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec("broken_dirt", 0.7f, 0.0f, SoundType.GRAVEL, noOcclusion = true),
+    )
+
+    @JvmField
+    val FLESH_BLOCK: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "flesh_block",
+            destroyTime = 1.0f, explosionResistance = 0.0f,
+            sound = SoundType.HONEY_BLOCK, noOcclusion = true,
+            loot = LootSpec.none(),
+        ),
+    )
+
+    @JvmField
+    val SCALE_BLOCK: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "scale_block",
+            destroyTime = 4.0f, explosionResistance = 0.0f,
+            sound = SoundType.METAL,
+            lightLevel = 3, noOcclusion = true,
+            requiresCorrectTool = true,
+            tags = pickaxeTags(),
+        ),
+    )
+
+    @JvmField
+    val SWEET_BERRIES_BLOCK: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec("sweet_berries_block", 0.3f, 0.0f, SoundType.GRASS, noOcclusion = true),
+    )
+
+    @JvmField
+    val SNOW_BRICK_BLOCK: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "snow_brick_block",
+            destroyTime = 1.5f, explosionResistance = 10.0f,
+            sound = SoundType.SNOW,
+            requiresCorrectTool = true, noOcclusion = true,
+            tags = pickaxeTags(),
+        ),
+    )
+
+    @JvmField
+    val GHOST_ICE: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "ghost_ice",
+            destroyTime = 1.0f, explosionResistance = 10.0f,
+            sound = SoundType.GLASS, friction = 0.98f,
+            noOcclusion = true,
+            loot = LootSpec.none(),
+        ),
+    )
+
+    @JvmField
+    val DIRT_GHOST_BLOCK: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "dirt_ghost_block",
+            destroyTime = 0.01f, explosionResistance = 0.0f,
+            sound = SoundType.GRAVEL, noOcclusion = true,
+            loot = LootSpec.none(),
+        ),
+    )
+
+    @JvmField
+    val FUSE: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "fuse",
+            destroyTime = 0.3f, explosionResistance = 0.0f,
+            sound = SoundType.WOOL, noOcclusion = true,
+        ),
+    )
+
+    @JvmField
+    val EYE_OF_NATURE_LOG: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "eye_of_nature_log",
+            destroyTime = 3.0f, explosionResistance = 0.0f,
+            sound = SoundType.WOOD, noOcclusion = true,
+            tags = axeTags(),
+            loot = LootSpec.weighted(
+                listOf(
+                    WeightedDrop(Supplier { Material.EYE_OF_NATURE.get() }, 1, 1),
+                    WeightedDrop(Supplier { Items.OAK_LOG }, 1, 1),
+                ),
+            ),
+        ),
+    )
+
+    @JvmField
+    val LACE_BLOCK_BLACK: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "lace_block_black",
+            destroyTime = 1.0f, explosionResistance = 0.0f,
+            sound = SoundType.WOOL, noOcclusion = true,
+            model = BlockModelSpec.cubeAll("lace_block_black_side"),
+        ),
+    )
+
+    @JvmField
+    val LACE_BLOCK_LIGHT_RED: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "lace_block_light_red",
+            destroyTime = 1.0f, explosionResistance = 0.0f,
+            sound = SoundType.WOOL, noOcclusion = true,
+            model = BlockModelSpec.cubeAll("lace_block_light_red_side"),
+        ),
+    )
+
+    @JvmField
+    val THIN_ROPE_BLOCK: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "thin_rope_block",
+            destroyTime = 0.01f, explosionResistance = 0.0f,
+            sound = SoundType.WOOL, noOcclusion = true,
+            loot = LootSpec.none(),
+        ),
+    )
+
+    @JvmField
+    val ICE_ROPE_BLOCK: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "ice_rope_block",
+            destroyTime = 0.01f, explosionResistance = 0.0f,
+            sound = SoundType.GLASS, noOcclusion = true,
+            model = BlockModelSpec.cubeAll("ice_rope_block_0"),
+            loot = LootSpec.none(),
+        ),
+    )
+
+    @JvmField
+    val CRATE: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "crate",
+            destroyTime = 2.0f, explosionResistance = 10.0f,
+            sound = SoundType.WOOD,
+            tags = axeTags(),
+            model = BlockModelSpec.cubeAll("crate_locked"),
+        ),
+    )
+
+    @JvmField
+    val FROZEN_CRATE: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "frozen_crate",
+            destroyTime = 2.0f, explosionResistance = 10.0f,
+            sound = SoundType.WOOD,
+            tags = axeTags(),
+            model = BlockModelSpec.cubeBottomTop("frozen_crate_locked", "frozen_crate_up", "crate_locked"),
+        ),
+    )
+
+    @JvmField
+    val CAVE_CRATE: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "cave_crate",
+            destroyTime = 2.2f, explosionResistance = 10.0f,
+            sound = SoundType.WOOD,
+            tags = axeTags(),
+            model = BlockModelSpec.cubeAll("cave_crate_locked"),
+        ),
+    )
+
+    @JvmField
+    val GOLDEN_FENCE_BLOCK: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "golden_fence_block",
+            destroyTime = 2.0f, explosionResistance = 30.0f,
+            sound = SoundType.METAL,
+            requiresCorrectTool = true,
+            tags = pickaxeTags(),
+        ),
+    )
+
+    @JvmField
+    val GOLDEN_BOOKSHELF: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "golden_bookshelf",
+            destroyTime = 1.5f, explosionResistance = 30.0f,
+            sound = SoundType.WOOD,
+            lightLevel = 3,
+            tags = axeTags(),
+            // 前/后/侧面各不相同，使用手写六面模型
+            model = BlockModelSpec.custom("golden_bookshelf"),
+        ),
+    )
+
+    @JvmField
+    val GOLDEN_BOOKSHELF_FRAME: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "golden_bookshelf_frame",
+            destroyTime = 1.5f, explosionResistance = 30.0f,
+            sound = SoundType.WOOD,
+            tags = axeTags(),
+            model = BlockModelSpec.custom("golden_bookshelf_frame"),
+        ),
+    )
+
+    @JvmField
+    val NUKE_BLOCK: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "nuke_block",
+            destroyTime = 1.0f, explosionResistance = 10.0f,
+            sound = SoundType.METAL,
+            model = BlockModelSpec.cubeBottomTop("nuke_side", "minecraft:tnt_top", "minecraft:tnt_bottom"),
+        ),
+    )
+
+    @JvmField
+    val END_ALTAR: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "end_altar",
+            destroyTime = 3.0f, explosionResistance = 100.0f,
+            sound = SoundType.STONE,
+            requiresCorrectTool = true,
+            tags = pickaxeTags(),
+            model = BlockModelSpec.cubeBottomTop("end_altar_side", "end_altar_up", "end_altar_down"),
+        ),
+    )
+
+    // ==================== 基岩版移植方块（第四波：召唤器/机器） ====================
+
+    @JvmField
+    val LIGHTNING_SUMMONER: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "lightning_summoner",
+            destroyTime = 3.0f, explosionResistance = 10.0f,
+            sound = SoundType.METAL,
+            model = BlockModelSpec.cubeBottomTop("lightning_summoner", "weather_console_up", "weather_console_down"),
+        ),
+    )
+
+    @JvmField
+    val RAINING_SUMMONER: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "raining_summoner",
+            destroyTime = 3.0f, explosionResistance = 10.0f,
+            sound = SoundType.METAL,
+            model = BlockModelSpec.cubeBottomTop("raining_summoner", "weather_console_up", "weather_console_down"),
+        ),
+    )
+
+    @JvmField
+    val SUNNY_SUMMONER: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "sunny_summoner",
+            destroyTime = 3.0f, explosionResistance = 10.0f,
+            sound = SoundType.METAL,
+            model = BlockModelSpec.cubeBottomTop("sunny_summoner", "weather_console_up", "weather_console_down"),
+        ),
+    )
+
+    @JvmField
+    val PURPUR_SUMMONER: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "purpur_summoner",
+            destroyTime = 5.0f, explosionResistance = 100.0f,
+            sound = SoundType.STONE,
+            requiresCorrectTool = true,
+            tags = pickaxeTags(),
+            model = BlockModelSpec.cubeBottomTop("purpur_summoner_side", "purpur_summoner_up", "purpur_summoner_up"),
+        ),
+    )
+
+    @JvmField
+    val ENCHANTED_SUMMONER: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "enchanted_summoner",
+            destroyTime = 3.0f, explosionResistance = 100.0f,
+            sound = SoundType.STONE,
+            requiresCorrectTool = true,
+            tags = pickaxeTags(),
+            model = BlockModelSpec.cubeBottomTop("enchanted_summoner_side", "enchanted_summoner_up", "enchanted_summoner_up"),
+            loot = LootSpec.none(),
+        ),
+    )
+
+    @JvmField
+    val PLAIN_TOWER_SUMMONER: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "plain_tower_summoner",
+            destroyTime = 3.0f, explosionResistance = 100.0f,
+            sound = SoundType.STONE,
+            requiresCorrectTool = true,
+            tags = pickaxeTags(),
+            model = BlockModelSpec.cubeBottomTop("plain_tower_summoner_side", "plain_tower_summoner_up", "plain_tower_summoner_up"),
+            loot = LootSpec.none(),
+        ),
+    )
+
+    @JvmField
+    val ASH_SUMMONER: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "ash_summoner",
+            destroyTime = 3.0f, explosionResistance = 100.0f,
+            sound = SoundType.STONE,
+            requiresCorrectTool = true,
+            tags = pickaxeTags(),
+            loot = LootSpec.none(),
+        ),
+    )
+
+    @JvmField
+    val ABYSSAL_SUMMONER: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "abyssal_summoner",
+            destroyTime = 3.0f, explosionResistance = 100.0f,
+            sound = SoundType.STONE,
+            requiresCorrectTool = true,
+            tags = pickaxeTags(),
+            loot = LootSpec.none(),
+        ),
+    )
+
+    @JvmField
+    val BAT_SUMMONER: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "bat_summoner",
+            destroyTime = 3.0f, explosionResistance = 100.0f,
+            sound = SoundType.STONE,
+            requiresCorrectTool = true,
+            tags = pickaxeTags(),
+            loot = LootSpec.none(),
+        ),
+    )
+
+    @JvmField
+    val DEEP_SUMMONER: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "deep_summoner",
+            destroyTime = 3.0f, explosionResistance = 100.0f,
+            sound = SoundType.STONE,
+            requiresCorrectTool = true,
+            tags = pickaxeTags(),
+            loot = LootSpec.none(),
+        ),
+    )
+
+    @JvmField
+    val FOREST_SUMMONER: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "forest_summoner",
+            destroyTime = 3.0f, explosionResistance = 100.0f,
+            sound = SoundType.STONE,
+            requiresCorrectTool = true,
+            tags = pickaxeTags(),
+            loot = LootSpec.none(),
+        ),
+    )
+
+    @JvmField
+    val SOUL_SUMMONER: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "soul_summoner",
+            destroyTime = 3.0f, explosionResistance = 100.0f,
+            sound = SoundType.STONE,
+            requiresCorrectTool = true,
+            tags = pickaxeTags(),
+            loot = LootSpec.none(),
+        ),
+    )
+
+    @JvmField
+    val EVERLASTING_WINTER_SUMMONER: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "everlasting_winter_summoner",
+            destroyTime = 3.0f, explosionResistance = 100.0f,
+            sound = SoundType.STONE,
+            requiresCorrectTool = true,
+            tags = pickaxeTags(),
+        ),
+    )
+
+    @JvmField
+    val MONITOR: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "monitor",
+            destroyTime = 3.0f, explosionResistance = 50.0f,
+            sound = SoundType.METAL,
+            requiresCorrectTool = true,
+            tags = pickaxeTags(),
+            model = BlockModelSpec.cubeBottomTop("monitor", "lurk_log_up", "lurk_log_up"),
+        ),
+    )
+
+    @JvmField
+    val MONITOR_ACTIVATED: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "monitor_activated",
+            destroyTime = 3.0f, explosionResistance = 50.0f,
+            sound = SoundType.METAL,
+            lightLevel = 1,
+            requiresCorrectTool = true,
+            tags = pickaxeTags(),
+            model = BlockModelSpec.cubeBottomTop("monitor_activated", "lurk_log_up", "lurk_log_up"),
+            // 激活态掉落普通监视器
+            loot = LootSpec.drop(Supplier { MONITOR.get() }),
+        ),
+    )
+
+    @JvmField
+    val ITEM_PICKER: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "item_picker",
+            destroyTime = 3.0f, explosionResistance = 10.0f,
+            sound = SoundType.METAL,
+            requiresCorrectTool = true,
+            tags = pickaxeTags(),
+            model = BlockModelSpec.cubeBottomTop("item_picker_side", "item_picker_up", "item_picker_down"),
+        ),
+    )
+
+    @JvmField
+    val MINING_MACHINE: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "mining_machine",
+            destroyTime = 3.0f, explosionResistance = 10.0f,
+            sound = SoundType.METAL,
+            requiresCorrectTool = true,
+            tags = pickaxeTags(),
+            model = BlockModelSpec.cubeBottomTop("mining_machine_side", "mining_machine_up", "mining_machine_down"),
+        ),
+    )
+
+    @JvmField
+    val MINE: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "mine",
+            destroyTime = 1.2f, explosionResistance = 7.0f,
+            sound = SoundType.METAL,
+            requiresCorrectTool = true,
+            tags = pickaxeTags(),
+            model = BlockModelSpec.cubeBottomTop("mine", "mine_top", "mine"),
+        ),
+    )
+
+    @JvmField
+    val MAGIC_LETTER_BOX: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "magic_letter_box",
+            destroyTime = 1.0f, explosionResistance = 30.0f,
+            sound = SoundType.WOOD,
+            tags = axeTags(),
+            // 正面投信口与侧面不同，使用手写六面模型
+            model = BlockModelSpec.custom("magic_letter_box"),
+        ),
+    )
+
+    @JvmField
+    val FLOWING_BLOCK: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "flowing_block",
+            destroyTime = 3.0f, explosionResistance = 100.0f,
+            sound = SoundType.STONE,
+            requiresCorrectTool = true,
+            tags = pickaxeTags(),
+            model = BlockModelSpec.cubeBottomTop("flowing_block_side_0", "flowing_block_up", "flowing_block_down"),
+        ),
+    )
+
+    // ==================== 基岩版移植方块（第五波：自定义碰撞箱） ====================
+
+    @JvmField
+    val CHRISTMAS_GIFT_BLOCK: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "christmas_gift_block",
+            destroyTime = 0.3f, explosionResistance = 0.0f,
+            sound = SoundType.WOOL, noOcclusion = true,
+            factory = Function { properties -> ShapedBlock(properties, CHRISTMAS_GIFT_SHAPE) },
+            model = BlockModelSpec.cubeAll("christmas_gift_block"),
+            loot = LootSpec.weighted(
+                listOf(
+                    WeightedDrop(Supplier { Fashion.CHRISTMAS_CAP.get() }, 3),
+                    WeightedDrop(Supplier { Food.GINGERBREAD_MAN.get() }, 5),
+                    WeightedDrop(Supplier { Weapon.GINGERBREAD_SWORD.get() }, 2),
+                    WeightedDrop(Supplier { Weapon.CANDY_CANE.get() }, 3),
+                ),
+            ),
+        ),
+    )
+
+    @JvmField
+    val GOLDEN_CHAIN: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "golden_chain",
+            destroyTime = 1.7f, explosionResistance = 40.0f,
+            sound = SoundType.CHAIN, noOcclusion = true,
+            requiresCorrectTool = true,
+            tags = pickaxeTags(),
+            factory = Function { properties -> ShapedBlock(properties, GOLDEN_CHAIN_SHAPE) },
+        ),
+    )
+
+    @JvmField
+    val LAMPSHADE: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "lampshade",
+            destroyTime = 1.0f, explosionResistance = 20.0f,
+            sound = SoundType.WOOL, noOcclusion = true,
+            factory = Function { properties -> ShapedBlock(properties, LAMPSHADE_SHAPE) },
+        ),
+    )
+
+    @JvmField
+    val STONE_HEAP: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "stone_heap",
+            destroyTime = 0.2f, explosionResistance = 0.0f,
+            sound = SoundType.STONE, noOcclusion = true,
+            factory = Function { properties -> ShapedBlock(properties, STONE_HEAP_SHAPE) },
+            model = BlockModelSpec.cubeAll("small_stone"),
+            loot = LootSpec.drop(Supplier { Material.SMALL_STONE.get() }, 2.0f, 5.0f),
+        ),
+    )
+
+    @JvmField
+    val STONE_ROAD: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "stone_road",
+            destroyTime = 0.2f, explosionResistance = 0.0f,
+            sound = SoundType.STONE, noOcclusion = true,
+            factory = Function { properties -> ShapedBlock(properties, STONE_ROAD_SHAPE) },
+            model = BlockModelSpec.cubeAll("small_stone"),
+            loot = LootSpec.drop(Supplier { Material.SMALL_STONE.get() }, 2.0f, 5.0f),
+        ),
+    )
+
+    @JvmField
+    val SMALL_STONE_BLOCK_ENTITY: DeferredBlock<Block> = registerSimpleBedrockBlock(
+        SimpleBlockSpec(
+            name = "small_stone_block_entity",
+            destroyTime = 0.01f, explosionResistance = 0.0f,
+            sound = SoundType.STONE, noOcclusion = true,
+            factory = Function { properties -> ShapedBlock(properties, SMALL_STONE_SHAPE) },
+            model = BlockModelSpec.cubeAll("small_stone"),
+            loot = LootSpec.drop(Supplier { Material.SMALL_STONE.get() }),
+        ),
+    )
+
     private fun <T : Block> registerBlock(
         name: String,
         func: Function<BlockBehaviour.Properties, out T>,
@@ -880,6 +1615,9 @@ object ModBlocks {
         if (spec.requiresCorrectTool) {
             properties.requiresCorrectToolForDrops()
         }
+        if (spec.noOcclusion) {
+            properties.noOcclusion()
+        }
 
         return properties
     }
@@ -907,11 +1645,31 @@ object ModBlocks {
         val block = getBlockByName("block.${DecIsland.MOD_ID}.${spec.name}").value()
         when (spec.model.kind) {
             BlockModelSpec.Kind.CUBE_ALL -> {
-                blockModels.createTrivialCube(block)
-                // createTrivialCube 只生成方块模型与 blockstate，需要为 BlockItem 补一个委托物品模型
-                if (block.asItem() != Items.AIR) {
-                    delegateItemModel(blockModels, block, ModelLocationUtils.getModelLocation(block))
+                val texture = spec.model.texture
+                if (texture != null) {
+                    val model = ModelTemplates.CUBE_ALL.create(
+                        block,
+                        TextureMapping.cube(blockTexture(texture)),
+                        blockModels.modelOutput,
+                    )
+                    blockModels.blockStateOutput.accept(simpleBlock(block, model))
+                    delegateItemModel(blockModels, block, model)
+                } else {
+                    blockModels.createTrivialCube(block)
+                    // createTrivialCube 只生成方块模型与 blockstate，需要为 BlockItem 补一个委托物品模型
+                    if (block.asItem() != Items.AIR) {
+                        delegateItemModel(blockModels, block, ModelLocationUtils.getModelLocation(block))
+                    }
                 }
+            }
+
+            BlockModelSpec.Kind.CUSTOM -> {
+                // 手写模型放在 assets/decisland/models/block/ 与 blockstates/ 下，这里仅委托物品模型
+                delegateItemModel(
+                    blockModels,
+                    block,
+                    ResourceLocation.fromNamespaceAndPath(DecIsland.MOD_ID, "block/" + spec.model.customPath),
+                )
             }
 
             BlockModelSpec.Kind.CUBE_BOTTOM_TOP -> {
@@ -992,7 +1750,13 @@ object ModBlocks {
         }
     }
 
-    private fun blockTexture(name: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath(DecIsland.MOD_ID, "block/$name")
+    private fun blockTexture(name: String): ResourceLocation =
+        if (':' in name) {
+            val (namespace, path) = name.split(':', limit = 2)
+            ResourceLocation.fromNamespaceAndPath(namespace, "block/$path")
+        } else {
+            ResourceLocation.fromNamespaceAndPath(DecIsland.MOD_ID, "block/$name")
+        }
 
     private fun generateSimpleBlockLoot(
         spec: SimpleBlockSpec,
@@ -1001,6 +1765,13 @@ object ModBlocks {
         val block = getBlockByName("block.${DecIsland.MOD_ID}.${spec.name}").value()
         val dropItem = spec.loot.dropItem?.get()
         when {
+            spec.loot.noDrop -> lootTables.addNoDrop(block)
+            spec.loot.weighted != null ->
+                lootTables.addWeightedDrop(
+                    block,
+                    spec.loot.weighted.map { Triple(it.item.get(), it.weight, it.maxCount) },
+                )
+            spec.loot.chance != null && dropItem != null -> lootTables.addChanceDrop(block, dropItem, spec.loot.chance)
             dropItem == null -> lootTables.addDropSelf(block)
             spec.loot.silkTouch -> lootTables.addSilkTouchRangeDrop(block, dropItem, spec.loot.minCount, spec.loot.maxCount)
             spec.loot.minCount == 1.0f && spec.loot.maxCount == 1.0f -> lootTables.addSingleItemDrop(block, dropItem)

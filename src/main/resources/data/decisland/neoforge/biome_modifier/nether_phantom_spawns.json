@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#decisland:spawns_nether_phantom",
+  "spawners": {
+    "type": "decisland:nether_phantom",
+    "weight": 1,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

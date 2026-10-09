@@ -14,7 +14,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.resources.ResourceLocation
 
 class PumpkinBombRenderer(context: EntityRendererProvider.Context) : EntityRenderer<PumpkinBombEntity>(context) {
-    private val model = BedrockAnimatedEntityModel(
+    private val model = BedrockAnimatedEntityModel<PumpkinBombEntity>(
         BedrockEntityAssets.geometry(GEOMETRY_LOCATION),
         BedrockEntityAssets.animation(ANIMATION_LOCATION, EXPLODE_ANIMATION),
     )
@@ -34,6 +34,8 @@ class PumpkinBombRenderer(context: EntityRendererProvider.Context) : EntityRende
         packedLight: Int,
     ) {
         poseStack.pushPose()
+        // 模型烘焙锚点为脚底（y=24），直接渲染的实体按缩放比例补偿对齐
+        poseStack.translate(0.0, -1.5 * SCALE, 0.0)
         poseStack.scale(SCALE, SCALE, SCALE)
         model.applyAnimation((entity.tickCount + partialTick) / 20.0f)
         val vertexConsumer = bufferSource.getBuffer(RenderType.entityCutout(TEXTURE_LOCATION))

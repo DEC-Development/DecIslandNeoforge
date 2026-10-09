@@ -94,7 +94,10 @@ object BedrockEmitterManager {
                 val velocity = computeVelocity(spawn.direction)
                 val minecraft = Minecraft.getInstance()
                 val engine = minecraft.particleEngine
-                val atlas = minecraft.modelManager.getAtlas(TextureAtlas.LOCATION_PARTICLES)
+                // NeoForge 21.1 的粒子图集由 ParticleEngine 私有持有并注册进 TextureManager
+                // （ModelManager 的 AtlasSet 不含 particles，getTextureAtlas 会 NPE）
+                val atlas = minecraft.textureManager.getTexture(TextureAtlas.LOCATION_PARTICLES) as? TextureAtlas
+                if (atlas == null) return
                 val spriteId = spriteIds[(Math.random() * spriteIds.size).toInt().coerceIn(0, spriteIds.lastIndex)]
                 val sprite = atlas.getSprite(spriteId)
                 val particle = BedrockBillboardParticle(

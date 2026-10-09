@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#decisland:spawns_ash_pufferfish",
+  "spawners": {
+    "type": "decisland:ash_pufferfish",
+    "weight": 2,
+    "minCount": 2,
+    "maxCount": 4
+  }
+}
