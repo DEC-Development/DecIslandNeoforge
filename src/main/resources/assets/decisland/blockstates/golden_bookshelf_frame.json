@@ -1,7 +1,8 @@
 {
   "variants": {
-    "": {
-      "model": "decisland:block/golden_bookshelf_frame"
-    }
+    "facing=north": { "model": "decisland:block/golden_bookshelf_frame" },
+    "facing=east": { "model": "decisland:block/golden_bookshelf_frame", "y": 90 },
+    "facing=south": { "model": "decisland:block/golden_bookshelf_frame", "y": 180 },
+    "facing=west": { "model": "decisland:block/golden_bookshelf_frame", "y": 270 }
   }
 }

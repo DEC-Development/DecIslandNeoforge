@@ -3,6 +3,7 @@ package com.dec.decisland.block
 import com.dec.decisland.DecIsland
 import com.dec.decisland.block.category.SimplePlant
 import com.dec.decisland.block.custom.FlowerGhostBlock
+import com.dec.decisland.block.custom.GoldenBookshelfBlock
 import com.dec.decisland.block.custom.NightmareBlock
 import com.dec.decisland.block.custom.SimpleCropBlock
 import com.dec.decisland.block.custom.SimplePlantBlock
@@ -367,6 +368,7 @@ object ModBlocks {
             friction = 0.97f,
             requiresCorrectTool = true,
             tags = pickaxeTags(),
+            model = BlockModelSpec.cubeAll("compressed_ice"),
         ),
     )
 
@@ -1120,6 +1122,7 @@ object ModBlocks {
             sound = SoundType.WOOD,
             lightLevel = 3,
             tags = axeTags(),
+            factory = Function(::GoldenBookshelfBlock),
             // 前/后/侧面各不相同，使用手写六面模型
             model = BlockModelSpec.custom("golden_bookshelf"),
         ),
@@ -1132,6 +1135,7 @@ object ModBlocks {
             destroyTime = 1.5f, explosionResistance = 30.0f,
             sound = SoundType.WOOD,
             tags = axeTags(),
+            factory = Function(::GoldenBookshelfBlock),
             model = BlockModelSpec.custom("golden_bookshelf_frame"),
         ),
     )
