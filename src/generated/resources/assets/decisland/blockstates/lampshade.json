@@ -1,7 +1,19 @@
 {
   "variants": {
-    "": {
+    "facing=east": {
+      "model": "decisland:block/lampshade",
+      "y": 270
+    },
+    "facing=north": {
+      "model": "decisland:block/lampshade",
+      "y": 180
+    },
+    "facing=south": {
       "model": "decisland:block/lampshade"
+    },
+    "facing=west": {
+      "model": "decisland:block/lampshade",
+      "y": 90
     }
   }
 }

@@ -1,4 +1,23 @@
 {
+  "display": {
+    "gui": {
+      "rotation": [
+        30,
+        225,
+        0
+      ],
+      "scale": [
+        0.625,
+        0.625,
+        0.625
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ]
+    }
+  },
   "geometry": "decisland:bedrock/models/blocks/lampshade.geo.json",
   "loader": "decisland:bedrock_block",
   "textures": {

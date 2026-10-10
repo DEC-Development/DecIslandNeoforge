@@ -58,19 +58,56 @@ class BedrockBlockGeometry(
 
         geometry.bones.flatMap { bone -> bone.cubes.map { cube -> cube to bone } }
             .forEach { (cube, bone) ->
-                if (cube.size.x == 0.0f || cube.size.y == 0.0f || cube.size.z == 0.0f) {
-                    zeroThicknessQuads(cube, bone, geometry, sprite, modelState).forEach(builder::addUnculledFace)
-                    return@forEach
-                }
-                val element = toElement(cube, bone, geometry)
-                Direction.values().forEach { direction ->
-                    val face = element.faces[direction] ?: return@forEach
-                    val quad = UnbakedGeometryHelper.bakeElementFace(element, face, sprite, direction, modelState)
-                    if (face.cullForDirection() == null) builder.addUnculledFace(quad)
-                    else builder.addCulledFace(direction, quad)
-                }
+                bakeCubeQuads(cube, bone, geometry, sprite, modelState)
+                    .forEach(builder::addUnculledFace)
             }
         return builder.build()
+    }
+
+    /**
+     * Bake every Bedrock cube through one coordinate pipeline.  The template
+     * is deliberately unrotated; all cube and bone transforms are applied to
+     * its vertices in Bedrock space, exactly like GeckoLib's PoseStack path.
+     * This also supports combined/multi-axis rotations which
+     * BlockElementRotation cannot represent.
+     */
+    private fun bakeCubeQuads(
+        cube: BedrockCube,
+        bone: BedrockBone,
+        geometry: BedrockGeometry,
+        sprite: TextureAtlasSprite,
+        modelState: ModelState,
+    ): List<BakedQuad> {
+        val templateCube = cube.copy(rotation = BedrockVec3.ZERO, hasRotation = false)
+        val element = toElement(templateCube, bone, geometry)
+        return Direction.values().flatMap { direction ->
+            val face = element.faces[direction] ?: return@flatMap emptyList()
+            val template = UnbakedGeometryHelper.bakeElementFace(element, face, sprite, direction, modelState)
+            val data = template.vertices.copyOf()
+            for (vertex in 0 until 4) {
+                val base = vertex * 8
+                val point = Vector3f(
+                    java.lang.Float.intBitsToFloat(data[base]) * 16.0f,
+                    java.lang.Float.intBitsToFloat(data[base + 1]) * 16.0f,
+                    java.lang.Float.intBitsToFloat(data[base + 2]) * 16.0f,
+                )
+                transformJavaVertex(point, cube, bone)
+                data[base] = java.lang.Float.floatToRawIntBits(point.x / 16.0f)
+                data[base + 1] = java.lang.Float.floatToRawIntBits(point.y / 16.0f)
+                data[base + 2] = java.lang.Float.floatToRawIntBits(point.z / 16.0f)
+            }
+            val front = BakedQuad(data, template.tintIndex, direction, sprite, true, true)
+            listOf(front, reverseWinding(front))
+        }
+    }
+
+    private fun reverseWinding(quad: BakedQuad): BakedQuad {
+        val source = quad.vertices
+        val reversed = IntArray(source.size)
+        for (vertex in 0 until 4) {
+            java.lang.System.arraycopy(source, (3 - vertex) * 8, reversed, vertex * 8, 8)
+        }
+        return BakedQuad(reversed, quad.tintIndex, quad.direction.getOpposite(), quad.sprite, true, true)
     }
 
     private fun toElement(cube: BedrockCube, bone: BedrockBone, geometry: BedrockGeometry): BlockElement {
@@ -78,9 +115,9 @@ class BedrockBlockGeometry(
         // y=0 is the bottom of the block. The entity renderer has a different
         // 24-y conversion, but it must not be used here.
         val from = Vector3f(
-            blockX(cube.origin.x, cube.size.x, geometry),
-            cube.origin.y + blockOffsetY(geometry),
-            cube.origin.z + 8.0f + blockOffsetZ(geometry),
+            blockX(cube.origin.x, cube.size.x),
+            cube.origin.y,
+            cube.origin.z + 8.0f,
         )
         val to = Vector3f(
             from.x + cube.size.x,
@@ -105,8 +142,7 @@ class BedrockBlockGeometry(
             faces[direction] = BlockElementFace(null, -1, "texture", faceUv)
         }
 
-        val rotation = rotationFor(cube, bone, geometry)
-        return BlockElement(from, to, faces, rotation, true)
+        return BlockElement(from, to, faces, null, true)
     }
 
     /**
@@ -200,9 +236,9 @@ class BedrockBlockGeometry(
         bone: BedrockBone,
         geometry: BedrockGeometry,
     ): List<Vector3f> {
-        val x = blockX(cube.origin.x, cube.size.x, geometry)
-        val y = cube.origin.y + blockOffsetY(geometry)
-        val z = cube.origin.z + 8.0f + blockOffsetZ(geometry)
+        val x = blockX(cube.origin.x, cube.size.x)
+        val y = cube.origin.y
+        val z = cube.origin.z + 8.0f
         val points = when {
             cube.size.x == 0.0f -> listOf(
                 Vector3f(x, y, z), Vector3f(x, y, z + cube.size.z),
@@ -220,69 +256,46 @@ class BedrockBlockGeometry(
         // GeckoLib renders cube-local transforms first, then lets the bone
         // PoseStack transform the complete cube. An omitted cube pivot or
         // rotation is zero; it never inherits the bone pivot.
-        if (cube.hasRotation) {
-            rotateAround(points, cube.rotation, cube.pivot, geometry)
-        }
-        rotateAround(points, bone.rotation, bone.pivot, geometry)
+        points.forEach { transformJavaVertex(it, cube, bone) }
         return points
     }
 
-    private fun rotateAround(points: List<Vector3f>, rotation: BedrockVec3, pivot: BedrockVec3, geometry: BedrockGeometry) {
+    private fun transformJavaVertex(point: Vector3f, cube: BedrockCube, bone: BedrockBone) {
+        // Convert the already mirrored block-space point back to Bedrock
+        // coordinates, apply GeckoLib's local-then-bone order, then convert
+        // it back.  Keeping rotations in one coordinate system is essential:
+        // applying Bedrock angles directly after the X mirror changes their
+        // handedness and produces the large lampshade displacement.
+        val bedrockPoint = Vector3f(8.0f - point.x, point.y, point.z - 8.0f)
+        if (cube.hasRotation) {
+            rotateBedrockAround(bedrockPoint, cube.rotation, cube.pivot)
+        }
+        rotateBedrockAround(bedrockPoint, bone.rotation, bone.pivot)
+        point.set(8.0f - bedrockPoint.x, bedrockPoint.y, bedrockPoint.z + 8.0f)
+    }
+
+    private fun rotateBedrockAround(point: Vector3f, rotation: BedrockVec3, pivot: BedrockVec3) {
         if (rotation == BedrockVec3.ZERO) return
-        val px = blockPivotX(pivot.x, geometry)
-        val py = pivot.y + blockOffsetY(geometry)
-        val pz = pivot.z + 8.0f + blockOffsetZ(geometry)
-        val rx = -rotation.x * PI.toFloat() / 180.0f
-        val ry = -rotation.y * PI.toFloat() / 180.0f
+        // The point is in the original Bedrock coordinate system here. The
+        // X-mirrored GeckoLib/vanilla angles (-X, -Y, +Z) must therefore be
+        // conjugated by the mirror first, yielding the original Bedrock
+        // angles (+X, +Y, +Z). Applying the mirrored signs here rotates a
+        // Y=90 cube to the opposite side of the block.
+        val rx = rotation.x * PI.toFloat() / 180.0f
+        val ry = rotation.y * PI.toFloat() / 180.0f
         val rz = rotation.z * PI.toFloat() / 180.0f
-        points.forEach { point ->
-            point.sub(px, py, pz)
-            point.rotateX(rx).rotateY(ry).rotateZ(rz)
-            point.add(px, py, pz)
-        }
+        point.sub(pivot.x, pivot.y, pivot.z)
+        point.rotateX(rx).rotateY(ry).rotateZ(rz)
+        point.add(pivot.x, pivot.y, pivot.z)
     }
 
-    private fun blockOffsetX(geometry: BedrockGeometry): Float =
-        if (geometry.identifier.endsWith("stone_heap")) 1.0f else 0.0f
-
-    /** GeckoLib's Bedrock loader mirrors X when converting model coordinates. */
-    private fun blockX(originX: Float, sizeX: Float, geometry: BedrockGeometry): Float =
-        if (geometry.identifier.endsWith("golden_chain")) {
-            8.0f - originX - sizeX + blockOffsetX(geometry)
-        } else {
-            originX + 8.0f + blockOffsetX(geometry)
-        }
-
-    private fun blockPivotX(pivotX: Float, geometry: BedrockGeometry): Float =
-        if (geometry.identifier.endsWith("golden_chain")) {
-            8.0f - pivotX + blockOffsetX(geometry)
-        } else {
-            pivotX + 8.0f + blockOffsetX(geometry)
-        }
-
-    private fun blockOffsetY(geometry: BedrockGeometry): Float = 0.0f
-
-    private fun blockOffsetZ(geometry: BedrockGeometry): Float =
-        if (geometry.identifier.endsWith("stone_heap")) 1.0f else 0.0f
-
-    private fun rotationFor(cube: BedrockCube, bone: BedrockBone, geometry: BedrockGeometry): BlockElementRotation? {
-        val rotation = if (cube.hasRotation) cube.rotation else bone.rotation
-        val components = listOf(rotation.x, rotation.y, rotation.z)
-            .withIndex().filter { it.value != 0.0f }
-        if (components.size != 1) return null
-        val axis = when (components.single().index) {
-            0 -> Direction.Axis.X
-            1 -> Direction.Axis.Y
-            else -> Direction.Axis.Z
-        }
-        val pivot = if (cube.hasRotation) cube.pivot else bone.pivot
-        return BlockElementRotation(
-            Vector3f(blockPivotX(pivot.x, geometry), pivot.y, pivot.z + 8.0f),
-            axis,
-            -components.single().value,
-            false,
-        )
-    }
+    /** No per-model translation is applied: Bedrock JSON coordinates are authoritative. */
+    /**
+     * GeckoLib's Bedrock loader mirrors the X axis for every geometry. This
+     * is a coordinate-system conversion, not a per-model correction.
+     */
+    private fun blockX(originX: Float, sizeX: Float): Float =
+        8.0f - originX - sizeX
 
     private val Direction.bedrockName: String
         get() = when (this) {

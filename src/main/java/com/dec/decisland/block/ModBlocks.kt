@@ -8,6 +8,7 @@ import com.dec.decisland.block.custom.NightmareBlock
 import com.dec.decisland.block.custom.SimpleCropBlock
 import com.dec.decisland.block.custom.SimplePlantBlock
 import com.dec.decisland.block.custom.ShapedBlock
+import com.dec.decisland.block.custom.HorizontalShapedBlock
 import com.dec.decisland.block.custom.SnowPortalBlock
 import com.dec.decisland.block.custom.CornCropBlock
 import com.dec.decisland.datagen.ModBlockLootTablesProvider
@@ -18,6 +19,7 @@ import com.dec.decisland.item.category.Food
 import com.dec.decisland.item.category.Crop
 import com.dec.decisland.item.category.Weapon
 import com.dec.decisland.item.category.Fashion
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import net.minecraft.core.Direction
 import net.minecraft.data.models.BlockModelGenerators
@@ -1453,7 +1455,7 @@ object ModBlocks {
             name = "lampshade",
             destroyTime = 1.0f, explosionResistance = 20.0f,
             sound = SoundType.WOOL, noOcclusion = true,
-            factory = Function { properties -> ShapedBlock(properties, LAMPSHADE_SHAPE) },
+            factory = Function { properties -> HorizontalShapedBlock(properties, LAMPSHADE_SHAPE) },
             model = BlockModelSpec.custom("lampshade"),
         ),
     )
@@ -1708,9 +1710,44 @@ object ModBlocks {
                             addProperty("texture", "${DecIsland.MOD_ID}:block/$texturePath")
                             addProperty("particle", "${DecIsland.MOD_ID}:block/$texturePath")
                         })
+                        // Keep the vanilla block-item GUI presentation. A
+                        // custom geometry has no inherited display transform,
+                        // so without this it is rendered front-on in the
+                        // inventory instead of with Minecraft's isometric tilt.
+                        add("display", JsonObject().apply {
+                            add("gui", JsonObject().apply {
+                                add("rotation", JsonArray().apply {
+                                    add(30)
+                                    add(225)
+                                    add(0)
+                                })
+                                add("translation", JsonArray().apply {
+                                    add(0)
+                                    add(0)
+                                    add(0)
+                                })
+                                add("scale", JsonArray().apply {
+                                    add(0.625)
+                                    add(0.625)
+                                    add(0.625)
+                                })
+                            })
+                        })
                     }
                 }
-                blockModels.blockStateOutput.accept(simpleBlock(block, modelLocation))
+                val stateGenerator = if (customPath == "lampshade") {
+                    MultiVariantGenerator.multiVariant(block, Variant.variant().with(VariantProperties.MODEL, modelLocation))
+                        .with(
+                            PropertyDispatch.property(BlockStateProperties.HORIZONTAL_FACING)
+                                .select(Direction.NORTH, Variant.variant().with(VariantProperties.Y_ROT, VariantProperties.Rotation.R180))
+                                .select(Direction.EAST, Variant.variant().with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270))
+                                .select(Direction.SOUTH, Variant.variant())
+                                .select(Direction.WEST, Variant.variant().with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90)),
+                        )
+                } else {
+                    simpleBlock(block, modelLocation)
+                }
+                blockModels.blockStateOutput.accept(stateGenerator)
                 delegateItemModel(blockModels, block, modelLocation)
                 /*
                 // 手写模型放在 assets/decisland/models/block/ 与 blockstates/ 下，这里仅委托物品模型
