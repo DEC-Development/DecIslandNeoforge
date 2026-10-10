@@ -17,6 +17,10 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent
 import net.neoforged.neoforge.client.gui.ConfigurationScreen
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory
 import net.neoforged.neoforge.common.NeoForge
+import net.neoforged.neoforge.client.event.ModelEvent
+import net.neoforged.neoforge.client.model.geometry.IGeometryLoader
+import com.dec.decisland.client.bedrock.model.BedrockBlockGeometry
+import net.minecraft.resources.ResourceLocation
 
 @Mod(value = DecIsland.MOD_ID, dist = [Dist.CLIENT])
 class DecIslandClient(container: ModContainer) {
@@ -29,8 +33,17 @@ class DecIslandClient(container: ModContainer) {
     }
 }
 
-@EventBusSubscriber(modid = DecIsland.MOD_ID, value = [Dist.CLIENT])
+@EventBusSubscriber(modid = DecIsland.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = [Dist.CLIENT])
 object DecIslandClientEvents {
+    @SubscribeEvent
+    @JvmStatic
+    fun registerGeometryLoaders(event: ModelEvent.RegisterGeometryLoaders) {
+        event.register(
+            ResourceLocation.fromNamespaceAndPath(DecIsland.MOD_ID, "bedrock_block"),
+            IGeometryLoader { json, context -> BedrockBlockGeometry.read(json, context) },
+        )
+    }
+
     @SubscribeEvent
     @JvmStatic
     fun onClientSetup(event: FMLClientSetupEvent) {
@@ -99,7 +112,10 @@ object DecIslandClientEvents {
             ItemBlockRenderTypes.setRenderLayer(ModBlocks.MAGIC_LETTER_BOX.get(), RenderType.cutout())
             ItemBlockRenderTypes.setRenderLayer(ModBlocks.FLOWING_BLOCK.get(), RenderType.cutout())
             ItemBlockRenderTypes.setRenderLayer(ModBlocks.CHRISTMAS_GIFT_BLOCK.get(), RenderType.cutout())
-            ItemBlockRenderTypes.setRenderLayer(ModBlocks.GOLDEN_CHAIN.get(), RenderType.cutout())
+            // Golden chain contains genuine zero-thickness Bedrock planes.
+            // Use the no-cull translucent layer, like GeckoLib's entity
+            // render types, so those planes remain visible from both sides.
+            ItemBlockRenderTypes.setRenderLayer(ModBlocks.GOLDEN_CHAIN.get(), RenderType.translucent())
             ItemBlockRenderTypes.setRenderLayer(ModBlocks.LAMPSHADE.get(), RenderType.cutout())
             ItemBlockRenderTypes.setRenderLayer(ModBlocks.STONE_HEAP.get(), RenderType.cutout())
             ItemBlockRenderTypes.setRenderLayer(ModBlocks.STONE_ROAD.get(), RenderType.cutout())

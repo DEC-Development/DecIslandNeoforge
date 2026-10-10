@@ -1,6 +1,8 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "geometry": "decisland:bedrock/models/blocks/christmas_gift_block.geo.json",
+  "loader": "decisland:bedrock_block",
   "textures": {
-    "all": "decisland:block/christmas_gift_block"
+    "particle": "decisland:block/christmas_gift_block",
+    "texture": "decisland:block/christmas_gift_block"
   }
 }

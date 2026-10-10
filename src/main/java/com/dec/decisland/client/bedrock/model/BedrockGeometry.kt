@@ -21,14 +21,24 @@ data class BedrockLocator(
     val position: BedrockVec3,
 )
 
+data class BedrockFaceUv(
+    val u: Float,
+    val v: Float,
+    val width: Float,
+    val height: Float,
+)
+
 data class BedrockCube(
     val origin: BedrockVec3,
     val size: BedrockVec3,
     val pivot: BedrockVec3,
     val rotation: BedrockVec3,
     val uv: Pair<Int, Int>?,
+    val faceUvs: Map<String, BedrockFaceUv> = emptyMap(),
     val inflate: Float,
     val mirror: Boolean,
+    val hasPivot: Boolean = false,
+    val hasRotation: Boolean = false,
 )
 
 data class BedrockTextureMesh(

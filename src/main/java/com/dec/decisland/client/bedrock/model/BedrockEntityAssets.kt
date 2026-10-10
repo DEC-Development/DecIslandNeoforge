@@ -115,11 +115,16 @@ object BedrockEntityAssets {
                 BedrockCube(
                     origin = parseVec3(cubeObject.get("origin")),
                     size = parseVec3(cubeObject.get("size")),
-                    pivot = parseVec3(cubeObject.get("pivot"), parseVec3(obj.get("pivot"))),
+                    // GeckoLib treats an omitted cube pivot as the model
+                    // origin. It does not inherit the bone pivot.
+                    pivot = parseVec3(cubeObject.get("pivot")),
                     rotation = parseVec3(cubeObject.get("rotation")),
                     uv = parseUv(cubeObject.get("uv")),
+                    faceUvs = parseFaceUvs(cubeObject.get("uv")),
                     inflate = cubeObject.getAsJsonPrimitiveOrNull("inflate")?.asFloat ?: 0.0f,
                     mirror = cubeObject.getAsJsonPrimitiveOrNull("mirror")?.asBoolean ?: false,
+                    hasPivot = cubeObject.has("pivot"),
+                    hasRotation = cubeObject.has("rotation"),
                 )
             }
             ?: emptyList(),
@@ -184,6 +189,28 @@ object BedrockEntityAssets {
             return null
         }
         return array[0].asInt to array[1].asInt
+    }
+
+    private fun parseFaceUvs(element: JsonElement?): Map<String, BedrockFaceUv> {
+        if (element == null || !element.isJsonObject) return emptyMap()
+        return buildMap {
+            element.asJsonObject.entrySet().forEach { (face, value) ->
+                if (!value.isJsonObject) return@forEach
+                val obj = value.asJsonObject
+                val uv = obj.getAsJsonArrayOrNull("uv") ?: return@forEach
+                val size = obj.getAsJsonArrayOrNull("uv_size")
+                if (uv.size() < 2 || size == null || size.size() < 2) return@forEach
+                put(
+                    face.lowercase(),
+                    BedrockFaceUv(
+                        uv[0].asFloat,
+                        uv[1].asFloat,
+                        size[0].asFloat,
+                        size[1].asFloat,
+                    ),
+                )
+            }
+        }
     }
 
     private fun parseVec3(element: JsonElement?, fallback: BedrockVec3 = BedrockVec3.ZERO): BedrockVec3 =

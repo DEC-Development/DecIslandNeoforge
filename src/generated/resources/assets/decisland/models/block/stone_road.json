@@ -1,6 +1,8 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "geometry": "decisland:bedrock/models/entity/stone_road.json",
+  "loader": "decisland:bedrock_block",
   "textures": {
-    "all": "decisland:block/small_stone"
+    "particle": "decisland:block/small_stone",
+    "texture": "decisland:block/small_stone"
   }
 }

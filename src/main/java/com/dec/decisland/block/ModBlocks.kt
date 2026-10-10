@@ -18,6 +18,7 @@ import com.dec.decisland.item.category.Food
 import com.dec.decisland.item.category.Crop
 import com.dec.decisland.item.category.Weapon
 import com.dec.decisland.item.category.Fashion
+import com.google.gson.JsonObject
 import net.minecraft.core.Direction
 import net.minecraft.data.models.BlockModelGenerators
 import net.minecraft.data.models.model.DelegatedModel
@@ -68,6 +69,16 @@ object ModBlocks {
     val BLOCKS: DeferredRegister.Blocks = DeferredRegister.createBlocks(DecIsland.MOD_ID)
 
     private val blockConfigs = mutableListOf<BlockConfig>()
+
+    private val BEDROCK_BLOCK_MODELS = setOf(
+        "red_lantern",
+        "christmas_gift_block",
+        "golden_chain",
+        "lampshade",
+        "stone_heap",
+        "stone_road",
+        "small_stone_block_entity",
+    )
 
     private data class BlockModelSpec(
         val kind: Kind,
@@ -1411,7 +1422,7 @@ object ModBlocks {
             destroyTime = 0.3f, explosionResistance = 0.0f,
             sound = SoundType.WOOL, noOcclusion = true,
             factory = Function { properties -> ShapedBlock(properties, CHRISTMAS_GIFT_SHAPE) },
-            model = BlockModelSpec.cubeAll("christmas_gift_block"),
+            model = BlockModelSpec.custom("christmas_gift_block"),
             loot = LootSpec.weighted(
                 listOf(
                     WeightedDrop(Supplier { Fashion.CHRISTMAS_CAP.get() }, 3),
@@ -1432,6 +1443,7 @@ object ModBlocks {
             requiresCorrectTool = true,
             tags = pickaxeTags(),
             factory = Function { properties -> ShapedBlock(properties, GOLDEN_CHAIN_SHAPE) },
+            model = BlockModelSpec.custom("golden_chain"),
         ),
     )
 
@@ -1442,6 +1454,7 @@ object ModBlocks {
             destroyTime = 1.0f, explosionResistance = 20.0f,
             sound = SoundType.WOOL, noOcclusion = true,
             factory = Function { properties -> ShapedBlock(properties, LAMPSHADE_SHAPE) },
+            model = BlockModelSpec.custom("lampshade"),
         ),
     )
 
@@ -1452,7 +1465,7 @@ object ModBlocks {
             destroyTime = 0.2f, explosionResistance = 0.0f,
             sound = SoundType.STONE, noOcclusion = true,
             factory = Function { properties -> ShapedBlock(properties, STONE_HEAP_SHAPE) },
-            model = BlockModelSpec.cubeAll("small_stone"),
+            model = BlockModelSpec.custom("stone_heap"),
             loot = LootSpec.drop(Supplier { Material.SMALL_STONE.get() }, 2.0f, 5.0f),
         ),
     )
@@ -1464,7 +1477,7 @@ object ModBlocks {
             destroyTime = 0.2f, explosionResistance = 0.0f,
             sound = SoundType.STONE, noOcclusion = true,
             factory = Function { properties -> ShapedBlock(properties, STONE_ROAD_SHAPE) },
-            model = BlockModelSpec.cubeAll("small_stone"),
+            model = BlockModelSpec.custom("stone_road"),
             loot = LootSpec.drop(Supplier { Material.SMALL_STONE.get() }, 2.0f, 5.0f),
         ),
     )
@@ -1476,7 +1489,7 @@ object ModBlocks {
             destroyTime = 0.01f, explosionResistance = 0.0f,
             sound = SoundType.STONE, noOcclusion = true,
             factory = Function { properties -> ShapedBlock(properties, SMALL_STONE_SHAPE) },
-            model = BlockModelSpec.cubeAll("small_stone"),
+            model = BlockModelSpec.custom("small_stone_block_entity"),
             loot = LootSpec.drop(Supplier { Material.SMALL_STONE.get() }),
         ),
     )
@@ -1668,12 +1681,48 @@ object ModBlocks {
             }
 
             BlockModelSpec.Kind.CUSTOM -> {
+                val customPath = spec.model.customPath!!
+                if (customPath !in BEDROCK_BLOCK_MODELS) {
+                    delegateItemModel(
+                        blockModels,
+                        block,
+                        ResourceLocation.fromNamespaceAndPath(DecIsland.MOD_ID, "block/$customPath"),
+                    )
+                } else {
+                val geometryPath = when (customPath) {
+                    "stone_heap" -> "bedrock/models/entity/stone_heap.geo.json"
+                    "stone_road" -> "bedrock/models/entity/stone_road.json"
+                    "small_stone_block_entity" -> "bedrock/models/entity/small_stone.geo.json"
+                    else -> "bedrock/models/blocks/$customPath.geo.json"
+                }
+                val texturePath = when (customPath) {
+                    "stone_heap", "stone_road", "small_stone_block_entity" -> "small_stone"
+                    else -> customPath
+                }
+                val modelLocation = ResourceLocation.fromNamespaceAndPath(DecIsland.MOD_ID, "block/$customPath")
+                blockModels.modelOutput.accept(modelLocation) {
+                    JsonObject().apply {
+                        addProperty("loader", "${DecIsland.MOD_ID}:bedrock_block")
+                        addProperty("geometry", "${DecIsland.MOD_ID}:$geometryPath")
+                        add("textures", JsonObject().apply {
+                            addProperty("texture", "${DecIsland.MOD_ID}:block/$texturePath")
+                            addProperty("particle", "${DecIsland.MOD_ID}:block/$texturePath")
+                        })
+                    }
+                }
+                blockModels.blockStateOutput.accept(simpleBlock(block, modelLocation))
+                delegateItemModel(blockModels, block, modelLocation)
+                /*
                 // 手写模型放在 assets/decisland/models/block/ 与 blockstates/ 下，这里仅委托物品模型
                 delegateItemModel(
                     blockModels,
                     block,
                     ResourceLocation.fromNamespaceAndPath(DecIsland.MOD_ID, "block/" + spec.model.customPath),
                 )
+            }
+
+                */
+                }
             }
 
             BlockModelSpec.Kind.CUBE_BOTTOM_TOP -> {

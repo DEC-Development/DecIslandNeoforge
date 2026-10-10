@@ -1,6 +1,8 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "geometry": "decisland:bedrock/models/blocks/golden_chain.geo.json",
+  "loader": "decisland:bedrock_block",
   "textures": {
-    "all": "decisland:block/golden_chain"
+    "particle": "decisland:block/golden_chain",
+    "texture": "decisland:block/golden_chain"
   }
 }

@@ -1,0 +1,8 @@
+{
+  "geometry": "decisland:bedrock/models/blocks/red_lantern.geo.json",
+  "loader": "decisland:bedrock_block",
+  "textures": {
+    "particle": "decisland:block/red_lantern",
+    "texture": "decisland:block/red_lantern"
+  }
+}
