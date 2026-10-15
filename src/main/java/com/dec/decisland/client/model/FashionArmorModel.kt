@@ -7,6 +7,7 @@ import com.dec.decisland.client.bedrock.model.BedrockEntityAssets
 import com.dec.decisland.client.bedrock.model.BedrockTextureMeshSupport
 import com.dec.decisland.item.category.Fashion
 import com.mojang.blaze3d.vertex.PoseStack
+import com.mojang.blaze3d.vertex.VertexConsumer
 import net.minecraft.client.model.HumanoidModel
 import net.minecraft.client.model.geom.ModelLayerLocation
 import net.minecraft.client.model.geom.ModelPart
@@ -22,7 +23,34 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.ItemStack
 import kotlin.math.PI
 
-class FashionArmorModel<T : LivingEntity>(root: ModelPart) : HumanoidModel<T>(root) {
+private fun prepareFashionArmorRoot(root: ModelPart): ModelPart {
+    // HumanoidModel accesses head/hat during its superclass constructor. Keep
+    // this invariant at the constructor boundary so inventory previews cannot
+    // race or bypass the armor extension's model preparation.
+    return BedrockTextureMeshSupport.ensureHumanoidRoot(root)
+}
+
+class FashionArmorModel<T : LivingEntity>(root: ModelPart) : HumanoidModel<T>(prepareFashionArmorRoot(root)) {
+    private val modelRoot: ModelPart = root
+
+    override fun renderToBuffer(
+        poseStack: PoseStack,
+        buffer: VertexConsumer,
+        packedLight: Int,
+        packedOverlay: Int,
+        color: Int,
+    ) {
+        super.renderToBuffer(poseStack, buffer, packedLight, packedOverlay, color)
+        BedrockTextureMeshSupport.renderDefaultMeshes(
+            modelRoot,
+            poseStack,
+            buffer,
+            packedLight,
+            packedOverlay,
+            color,
+        )
+    }
+
     fun submitTextureMeshSides(
         poseStack: PoseStack,
         bufferSource: MultiBufferSource,
@@ -139,6 +167,13 @@ class FashionArmorModel<T : LivingEntity>(root: ModelPart) : HumanoidModel<T>(ro
                     else -> BedrockTextureMeshSupport.TransformMode.HUMANOID_ARMOR
                 },
                 textureId,
+                when (modelKind) {
+                    // The Bedrock geometry keeps the conventional `default`
+                    // material name; this definition explicitly binds that
+                    // material to the wings texture instead of an item texture.
+                    Fashion.ModelKind.GIANT_BAT_WINGS -> mapOf("default" to textureId)
+                    else -> mapOf("default" to textureId)
+                },
                 BedrockTextureMeshSupport.MeshRenderMode.POLYGON,
             )
         }

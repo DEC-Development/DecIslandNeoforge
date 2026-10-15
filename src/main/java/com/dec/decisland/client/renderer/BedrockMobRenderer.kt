@@ -1,8 +1,10 @@
 package com.dec.decisland.client.renderer
 
+import com.dec.decisland.client.bedrock.model.BedrockAnimatedEntityModel
 import com.dec.decisland.client.bedrock.model.BedrockEntityAssets
 import com.dec.decisland.client.bedrock.model.SimpleBedrockMobModel
 import com.mojang.blaze3d.vertex.PoseStack
+import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.entity.EntityRendererProvider
 import net.minecraft.client.renderer.entity.MobRenderer
 import net.minecraft.resources.ResourceLocation
@@ -19,15 +21,31 @@ open class BedrockMobRenderer<T : Mob>(
     walkName: String,
     private val textureLocation: ResourceLocation,
     private val scale: Float = 1.0f,
+    private val materialTextures: Map<String, ResourceLocation> = emptyMap(),
 ) : MobRenderer<T, SimpleBedrockMobModel<T>>(
     context,
     SimpleBedrockMobModel(
         BedrockEntityAssets.geometry(geometryLocation),
         BedrockEntityAssets.animation(animationLocation, idleName),
         BedrockEntityAssets.animation(animationLocation, walkName),
+        textureLocation,
+        materialTextures,
     ),
     0.45f * scale,
 ) {
+    override fun render(
+        entity: T,
+        entityYaw: Float,
+        partialTick: Float,
+        poseStack: PoseStack,
+        bufferSource: MultiBufferSource,
+        packedLight: Int,
+    ) {
+        BedrockAnimatedEntityModel.withActiveBufferSource(bufferSource) {
+            super.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight)
+        }
+    }
+
     override fun getTextureLocation(entity: T): ResourceLocation = textureLocation
 
     override fun scale(entity: T, poseStack: PoseStack, partialTick: Float) {

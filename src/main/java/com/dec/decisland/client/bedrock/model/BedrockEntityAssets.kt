@@ -154,7 +154,8 @@ object BedrockEntityAssets {
             return emptyList()
         }
         if (element.isJsonArray) {
-            return listOf(BedrockKeyframe(0.0f, parseVec3(element)))
+            val vector = parseAnimationVectorWithExpressions(element) ?: return emptyList()
+            return listOf(BedrockKeyframe(0.0f, vector.value, vector.expressions))
         }
         if (!element.isJsonObject) {
             return emptyList()
@@ -163,24 +164,61 @@ object BedrockEntityAssets {
         return element.asJsonObject.entrySet()
             .mapNotNull { (timeKey, value) ->
                 val time = timeKey.toFloatOrNull() ?: return@mapNotNull null
-                val vector = parseAnimationVector(value) ?: return@mapNotNull null
-                BedrockKeyframe(time, vector)
+                val vector = parseAnimationVectorWithExpressions(value) ?: return@mapNotNull null
+                BedrockKeyframe(time, vector.value, vector.expressions)
             }
             .sortedBy(BedrockKeyframe::timeSeconds)
     }
 
-    private fun parseAnimationVector(element: JsonElement): BedrockVec3? {
-        if (element.isJsonArray) {
-            return parseVec3(element)
+    private data class ParsedAnimationVector(
+        val value: BedrockVec3,
+        val expressions: List<String?>,
+    )
+
+    private fun parseAnimationVectorWithExpressions(element: JsonElement): ParsedAnimationVector? {
+        val vectorElement = when {
+            element.isJsonArray -> element
+            element.isJsonObject -> {
+                val obj = element.asJsonObject
+                obj.get("post") ?: obj.get("vector") ?: obj.get("pre")
+            }
+            else -> null
+        } ?: return null
+
+        if (!vectorElement.isJsonArray) {
+            return null
         }
-        if (!element.isJsonObject) {
+        val array = vectorElement.asJsonArray
+        if (array.size() < 3) {
             return null
         }
 
-        val obj = element.asJsonObject
-        return parseVec3OrNull(obj.get("post"))
-            ?: parseVec3OrNull(obj.get("vector"))
-            ?: parseVec3OrNull(obj.get("pre"))
+        val values = FloatArray(3)
+        val expressions = arrayListOf<String?>()
+        for (index in 0 until 3) {
+            val primitive = array[index].takeIf(JsonElement::isJsonPrimitive)?.asJsonPrimitive
+            when {
+                primitive?.isNumber == true -> {
+                    values[index] = primitive.asFloat
+                    expressions += null
+                }
+                primitive?.isString == true -> {
+                    val text = primitive.asString
+                    val staticValue = text.toFloatOrNull()
+                    values[index] = staticValue ?: 0.0f
+                    expressions += if (staticValue == null) text else null
+                }
+                else -> {
+                    values[index] = 0.0f
+                    expressions += null
+                }
+            }
+        }
+
+        return ParsedAnimationVector(
+            value = BedrockVec3(values[0], values[1], values[2]),
+            expressions = expressions,
+        )
     }
 
     private fun parseUv(element: JsonElement?): Pair<Int, Int>? {

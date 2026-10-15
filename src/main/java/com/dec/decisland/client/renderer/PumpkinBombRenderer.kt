@@ -17,6 +17,7 @@ class PumpkinBombRenderer(context: EntityRendererProvider.Context) : EntityRende
     private val model = BedrockAnimatedEntityModel<PumpkinBombEntity>(
         BedrockEntityAssets.geometry(GEOMETRY_LOCATION),
         BedrockEntityAssets.animation(ANIMATION_LOCATION, EXPLODE_ANIMATION),
+        TEXTURE_LOCATION,
     )
 
     init {
@@ -39,7 +40,14 @@ class PumpkinBombRenderer(context: EntityRendererProvider.Context) : EntityRende
         poseStack.scale(SCALE, SCALE, SCALE)
         model.applyAnimation((entity.tickCount + partialTick) / 20.0f)
         val vertexConsumer = bufferSource.getBuffer(RenderType.entityCutout(TEXTURE_LOCATION))
-        model.renderToBuffer(poseStack, vertexConsumer, packedLight, OverlayTexture.NO_OVERLAY, -1)
+        model.renderWithMaterials(
+            poseStack,
+            vertexConsumer,
+            bufferSource,
+            packedLight,
+            OverlayTexture.NO_OVERLAY,
+            -1,
+        )
         poseStack.popPose()
         super.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight)
     }

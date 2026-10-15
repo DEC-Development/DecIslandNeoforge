@@ -26,6 +26,8 @@ open class MagicWeapon(properties: Properties) : Item(properties) {
 
     protected open fun getCastSoundPitch(): Float = 1.0f
 
+    protected open fun getCooldownTicks(): Int = 0
+
     open fun shoot(attackCounter: Int, serverLevel: ServerLevel, source: LivingEntity, stack: ItemStack) {
     }
 
@@ -62,6 +64,9 @@ open class MagicWeapon(properties: Properties) : Item(properties) {
 
     override fun use(level: Level, player: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
         val stack = player.getItemInHand(hand)
+        if (player.cooldowns.isOnCooldown(stack.item)) {
+            return InteractionResultHolder.fail(stack)
+        }
         if (level.isClientSide) {
             return InteractionResultHolder.success(stack)
         }
@@ -72,6 +77,7 @@ open class MagicWeapon(properties: Properties) : Item(properties) {
         }
 
         shootTrigger(player.getItemInHand(hand), serverLevel, player)
+        getCooldownTicks().takeIf { it > 0 }?.let { player.cooldowns.addCooldown(stack.item, it) }
         serverLevel.playSound(
             null,
             player.x,

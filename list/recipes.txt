@@ -25,6 +25,7 @@ emerald_pickaxe
 everlasting_winter_dagger
 everlasting_winter_stick
 everlasting_winter_sword
+exploding_pellets
 flintlock_bullet
 frozen_power
 furnace_copper_battleaxe

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "X",
+    "A"
+  ],
+  "key": {
+    "X": {
+      "item": "minecraft:gunpowder"
+    },
+    "A": {
+      "item": "decisland:small_stone"
+    }
+  },
+  "result": {
+    "id": "decisland:exploding_pellets",
+    "count": 3
+  }
+}

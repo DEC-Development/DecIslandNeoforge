@@ -6,11 +6,14 @@ import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.client.model.geom.PartPose
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.RenderType
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.item.Items
 import net.minecraft.world.item.ItemStack
 import org.joml.Vector3f
 import java.awt.image.BufferedImage
 import java.io.InputStream
+import java.util.IdentityHashMap
 import java.util.concurrent.ConcurrentHashMap
 import javax.imageio.ImageIO
 import kotlin.math.PI
@@ -55,34 +58,149 @@ object BedrockTextureMeshSupport {
 
     private val textureMaskCache = ConcurrentHashMap<ResourceLocation, TextureMask>()
 
+    /**
+     * Texture meshes are geometry parts, but each mesh may use a different
+     * material.  Keep them outside the normal ModelPart child tree so that a
+     * model can submit every material with its own RenderType.
+     */
+    private data class StoredTextureMesh(
+        val parentPath: List<ModelPart>,
+        val part: ModelPart,
+        val texture: ResourceLocation?,
+        val usesDefaultBuffer: Boolean,
+    )
+
+    private val storedMeshesByRoot = IdentityHashMap<ModelPart, List<StoredTextureMesh>>()
+
+    /**
+     * Resolves the vanilla item model for a Bedrock texture mesh when the mesh
+     * points at an item texture. Generated item models use the same rendering
+     * path as DartRenderer, including the correct front/back/edge quads and
+     * cutout handling. This avoids rebuilding item extrusion from the alpha
+     * mask, which can make the mesh sides sample transparent texels.
+     */
+    fun itemStackForTextureMesh(
+        geometry: BedrockGeometry,
+        textureId: ResourceLocation,
+        materialTextures: Map<String, ResourceLocation> = emptyMap(),
+    ): ItemStack? {
+        if (geometry.bones.none { it.textureMeshes.isNotEmpty() }) {
+            return null
+        }
+
+        val resolvedTextures = geometry.bones
+            .flatMap { it.textureMeshes }
+            .map { mesh ->
+                materialTextures[mesh.texture]
+                    ?: materialTextures["default"]
+                    ?: textureId
+            }
+            .distinct()
+        if (resolvedTextures.size != 1) {
+            return null
+        }
+
+        val itemTexture = resolvedTextures.single()
+        val itemPath = itemTexture.path
+            .removePrefix("textures/item/")
+            .removeSuffix(".png")
+        if (itemPath == itemTexture.path || itemPath.isEmpty()) {
+            return null
+        }
+
+        val itemId = ResourceLocation.fromNamespaceAndPath(itemTexture.namespace, itemPath)
+        val item = BuiltInRegistries.ITEM.get(itemId)
+        return if (item == Items.AIR) null else ItemStack(item)
+    }
+
     fun attachMeshesToNamedBones(
         root: ModelPart,
         geometry: BedrockGeometry,
         transformMode: TransformMode = TransformMode.DIRECT,
         textureId: ResourceLocation? = null,
+        materialTextures: Map<String, ResourceLocation> = emptyMap(),
         meshRenderMode: MeshRenderMode = MeshRenderMode.POLYGON,
     ) {
         if (meshRenderMode != MeshRenderMode.POLYGON || geometry.bones.none { it.textureMeshes.isNotEmpty() }) {
+            storedMeshesByRoot.remove(root)
             return
         }
 
-        val textureMask = textureId?.let(::textureMask)
-        val lookup = createPartLookup(root)
+        val paths = createPartPaths(root)
+        val defaultTexture = materialTextures["default"] ?: textureId
+        val storedMeshes = ArrayList<StoredTextureMesh>()
         geometry.bones.forEach { bone ->
-            val parent = lookup(bone.name) ?: return@forEach
+            val parentPath = paths[bone.name] ?: return@forEach
             bone.textureMeshes.forEachIndexed { index, textureMesh ->
-                val childName = "__texture_mesh_$index"
-                if (!parent.hasChild(childName)) {
-                    mutableChildren(parent)[childName] = createTextureMeshPart(
+                val resolvedTexture = materialTextures[textureMesh.texture]
+                    ?: materialTextures["default"]
+                    ?: textureId
+                storedMeshes += StoredTextureMesh(
+                    parentPath = parentPath,
+                    part = createTextureMeshPart(
                         bone = bone,
                         textureMesh = textureMesh,
                         geometry = geometry,
                         transformMode = transformMode,
-                        textureMask = textureMask,
-                    )
-                }
+                        textureMask = resolvedTexture?.let(::textureMask),
+                    ),
+                    texture = resolvedTexture,
+                    usesDefaultBuffer = textureMesh.texture == "default" || resolvedTexture == defaultTexture,
+                )
             }
         }
+        storedMeshesByRoot[root] = storedMeshes
+    }
+
+    /**
+     * Renders meshes whose material resolves to the model's normal buffer.
+     * This is used by vanilla EntityModel/HumanoidModel call sites, which only
+     * provide a VertexConsumer and therefore cannot select another texture.
+     */
+    fun renderDefaultMeshes(
+        root: ModelPart,
+        poseStack: PoseStack,
+        buffer: com.mojang.blaze3d.vertex.VertexConsumer,
+        packedLight: Int,
+        packedOverlay: Int,
+        color: Int,
+    ) {
+        renderStoredMeshes(
+            root = root,
+            poseStack = poseStack,
+            packedLight = packedLight,
+            packedOverlay = packedOverlay,
+            color = color,
+            defaultBuffer = buffer,
+            bufferSource = null,
+            includeNonDefault = false,
+        )
+    }
+
+    /**
+     * Renders all stored meshes.  Named materials use an independent cutout
+     * buffer while the default material uses the caller's already-selected
+     * buffer (armor, emissive, energy swirl, etc.).
+     */
+    fun renderAllMeshes(
+        root: ModelPart,
+        poseStack: PoseStack,
+        defaultBuffer: com.mojang.blaze3d.vertex.VertexConsumer,
+        bufferSource: MultiBufferSource,
+        packedLight: Int,
+        packedOverlay: Int,
+        color: Int,
+    ) {
+        renderStoredMeshes(
+            root = root,
+            poseStack = poseStack,
+            packedLight = packedLight,
+            packedOverlay = packedOverlay,
+            color = color,
+            defaultBuffer = defaultBuffer,
+            bufferSource = bufferSource,
+            includeNonDefault = true,
+        )
     }
 
     fun submitStoredSideMeshes(
@@ -101,16 +219,79 @@ object BedrockTextureMeshSupport {
     private fun mutableChildren(part: ModelPart): MutableMap<String, ModelPart> =
         childrenField.get(part) as MutableMap<String, ModelPart>
 
-    private fun createPartLookup(root: ModelPart): (String) -> ModelPart? {
-        val partsByName = HashMap<String, ModelPart>()
-        collectParts(root, partsByName)
-        return { name -> partsByName[name] }
+    /**
+     * Returns a root that is safe to pass to HumanoidModel.  A baked custom
+     * layer is allowed to omit vanilla parts, but HumanoidModel eagerly reads
+     * head, hat, and all limb parts from its constructor.  In the vanilla
+     * humanoid layout, `hat` is a sibling of `head` at the root level (it is
+     * not a child of `head`).  When a part is
+     * missing, build a shallow safe root while retaining every existing
+     * custom part (including body attachments and texture meshes).
+     */
+    fun ensureHumanoidRoot(root: ModelPart): ModelPart {
+        val existingChildren = mutableChildren(root).toMutableMap()
+        existingChildren.putIfAbsent("hat", emptyPart())
+
+        listOf("body", "right_arm", "left_arm", "right_leg", "left_leg").forEach { name ->
+            existingChildren.putIfAbsent(name, emptyPart())
+        }
+
+        val hasAllParts = root.hasChild("head") && root.hasChild("hat") &&
+            listOf("body", "right_arm", "left_arm", "right_leg", "left_leg").all(root::hasChild)
+        return if (hasAllParts) root else ModelPart(emptyList(), existingChildren)
     }
 
-    private fun collectParts(part: ModelPart, partsByName: MutableMap<String, ModelPart>) {
+    /** Backward-compatible helper for existing callers that do not need the returned root. */
+    fun ensureHumanoidParts(root: ModelPart): ModelPart = ensureHumanoidRoot(root)
+
+    private fun emptyPart(): ModelPart = ModelPart(emptyList(), hashMapOf())
+
+    private fun createPartPaths(root: ModelPart): Map<String, List<ModelPart>> {
+        val pathsByName = HashMap<String, List<ModelPart>>()
+        collectPartPaths(root, listOf(root), pathsByName)
+        return pathsByName
+    }
+
+    private fun collectPartPaths(
+        part: ModelPart,
+        path: List<ModelPart>,
+        pathsByName: MutableMap<String, List<ModelPart>>,
+    ) {
         mutableChildren(part).forEach { (name, child) ->
-            partsByName[name] = child
-            collectParts(child, partsByName)
+            val childPath = path + child
+            pathsByName[name] = childPath
+            collectPartPaths(child, childPath, pathsByName)
+        }
+    }
+
+    private fun renderStoredMeshes(
+        root: ModelPart,
+        poseStack: PoseStack,
+        defaultBuffer: com.mojang.blaze3d.vertex.VertexConsumer,
+        bufferSource: MultiBufferSource?,
+        packedLight: Int,
+        packedOverlay: Int,
+        color: Int,
+        includeNonDefault: Boolean,
+    ) {
+        storedMeshesByRoot[root].orEmpty().forEach { mesh ->
+            if (!includeNonDefault && !mesh.usesDefaultBuffer) {
+                return@forEach
+            }
+            if (mesh.parentPath.any { !it.visible }) {
+                return@forEach
+            }
+
+            val meshBuffer = if (mesh.usesDefaultBuffer || bufferSource == null || mesh.texture == null) {
+                defaultBuffer
+            } else {
+                bufferSource.getBuffer(RenderType.entityCutoutNoCull(mesh.texture))
+            }
+
+            poseStack.pushPose()
+            mesh.parentPath.forEach { it.translateAndRotate(poseStack) }
+            mesh.part.render(poseStack, meshBuffer, packedLight, packedOverlay, color)
+            poseStack.popPose()
         }
     }
 

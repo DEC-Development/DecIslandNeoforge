@@ -11,6 +11,9 @@ import com.dec.decisland.item.ModToolMaterial
 import com.dec.decisland.entity.projectile.dart.DartDefinition
 import com.dec.decisland.entity.projectile.dart.ModDarts
 import com.dec.decisland.item.custom.*
+import com.dec.decisland.entity.ModEntities
+import com.dec.decisland.entity.GeneratedMobs
+import com.dec.decisland.entity.projectile.BedrockSpecialProjectile
 import com.dec.decisland.item.custom.dart.Dart
 import com.dec.decisland.item.gun.EverlastingWinterFlintlock
 import com.dec.decisland.item.gun.Flintlock
@@ -51,6 +54,7 @@ object Weapon {
     private val dartWeaponTags: List<TagKey<Item>> = listOf(ModItemTags.THROWN_WEAPON, ModItemTags.DART)
     private val sundriesThrownWeaponTags: List<TagKey<Item>> = listOf(ModItemTags.THROWN_WEAPON, ModItemTags.SUNDRIES)
     private val gunWeaponTags: List<TagKey<Item>> = listOf(ModItemTags.RANGE_WEAPON, ModItemTags.GUN)
+    private val catapultWeaponTags: List<TagKey<Item>> = listOf(ModItemTags.RANGE_WEAPON, ModItemTags.CATAPULT)
     private val staffWeaponTags: List<TagKey<Item>> = listOf(ModItemTags.MAGIC_WEAPON, ModItemTags.STAFF)
     private val magicBookWeaponTags: List<TagKey<Item>> = listOf(ModItemTags.MAGIC_WEAPON, ModItemTags.MAGIC_BOOK)
     private val swordWeaponTags: List<TagKey<Item>> = listOf(ModItemTags.MELEE_WEAPON, ModItemTags.SWORD)
@@ -59,6 +63,126 @@ object Weapon {
     private val daggerWeaponTags: List<TagKey<Item>> = listOf(ModItemTags.MELEE_WEAPON, ModItemTags.DAGGER)
     private val battleaxeWeaponTags: List<TagKey<Item>> = listOf(ModItemTags.MELEE_WEAPON, ModItemTags.AXE)
     private val rapierWeaponTags: List<TagKey<Item>> = listOf(ModItemTags.MELEE_WEAPON, ModItemTags.RAPIER)
+
+    private fun configuredStaff(
+        name: String,
+        manaCost: Float,
+        durability: Int,
+        cooldown: Float,
+        lang: Map<String, String>,
+    ): DeferredItem<Item> = ModItems.registerItem(
+        ItemConfig.Builder(name, lang)
+            .func { properties -> BedrockConfiguredStaff(properties, manaCost) }
+            .props { Item.Properties().stacksTo(1).durability(durability).useCooldown(cooldown).enchantable(15) }
+            .tags(staffWeaponTags)
+            .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
+            .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
+            .build(),
+    )
+
+    private fun configuredSword(
+        name: String,
+        damage: Float,
+        durability: Int,
+        cooldown: Float,
+        manaCost: Float,
+        lang: Map<String, String>,
+    ): DeferredItem<Item> = ModItems.registerItem(
+        ItemConfig.Builder(name, lang)
+            .func { properties -> BedrockConfiguredWeapon(properties, manaCost) }
+            .props { Item.Properties().sword(ModToolMaterial.STEEL_SWORD, damage, -2.4f).stacksTo(1).durability(durability).useCooldown(cooldown).enchantable(15) }
+            .tags(swordWeaponTags)
+            .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
+            .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
+            .build(),
+    )
+
+    private fun configuredProjectileStaff(
+        name: String,
+        manaCost: Float,
+        durability: Int,
+        cooldown: Float,
+        shots: Int = 1,
+        launchPowers: List<Float>? = null,
+        inaccuracy: Float = 2.0f,
+        durabilityCost: Int = 1,
+        projectile: (net.minecraft.world.level.Level, net.minecraft.world.entity.LivingEntity, net.minecraft.world.item.ItemStack) -> net.minecraft.world.entity.projectile.Projectile,
+        lang: Map<String, String>,
+    ): DeferredItem<Item> = ModItems.registerItem(
+        ItemConfig.Builder(name, lang)
+            .func { properties -> BedrockConfiguredProjectileStaff(properties, manaCost, projectile, launchPowers ?: List(shots) { 1.0f }, inaccuracy, durabilityCost, (cooldown * 20.0f).toInt()) }
+            .props { Item.Properties().stacksTo(1).durability(durability).useCooldown(cooldown).enchantable(15) }
+            .tags(staffWeaponTags)
+            .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
+            .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
+            .build(),
+    )
+
+    private fun configuredProjectileSword(
+        name: String,
+        damage: Float,
+        durability: Int,
+        cooldown: Float,
+        manaCost: Float,
+        shots: Int = 1,
+        launchPowers: List<Float>? = null,
+        inaccuracy: Float = 2.0f,
+        durabilityCost: Int = 1,
+        projectile: (net.minecraft.world.level.Level, net.minecraft.world.entity.LivingEntity, net.minecraft.world.item.ItemStack) -> net.minecraft.world.entity.projectile.Projectile,
+        lang: Map<String, String>,
+    ): DeferredItem<Item> = ModItems.registerItem(
+        ItemConfig.Builder(name, lang)
+            .func { properties -> BedrockConfiguredProjectileWeapon(properties, manaCost, projectile, launchPowers ?: List(shots) { 1.0f }, inaccuracy, durabilityCost, (cooldown * 20.0f).toInt()) }
+            .props { Item.Properties().sword(ModToolMaterial.STEEL_SWORD, damage, -2.4f).stacksTo(1).durability(durability).useCooldown(cooldown).enchantable(15) }
+            .tags(swordWeaponTags)
+            .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
+            .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
+            .build(),
+    )
+
+    private fun configuredProjectileRanged(
+        name: String,
+        manaCost: Float,
+        durability: Int,
+        cooldown: Float,
+        launchPowers: List<Float>,
+        inaccuracy: Float,
+        projectile: (net.minecraft.world.level.Level, net.minecraft.world.entity.LivingEntity, net.minecraft.world.item.ItemStack) -> net.minecraft.world.entity.projectile.Projectile,
+        lang: Map<String, String>,
+    ): DeferredItem<Item> = ModItems.registerItem(
+        ItemConfig.Builder(name, lang)
+            .func { properties -> BedrockConfiguredProjectileWeapon(properties, manaCost, projectile, launchPowers, inaccuracy, 1, (cooldown * 20.0f).toInt()) }
+            .props { Item.Properties().stacksTo(1).durability(durability).useCooldown(cooldown).enchantable(15) }
+            .tags(gunWeaponTags)
+            .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
+            .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
+            .build(),
+    )
+
+    private fun configuredSummon(
+        name: String,
+        manaCost: Float,
+        durability: Int,
+        cooldown: Float,
+        tags: List<TagKey<Item>> = staffWeaponTags,
+        lifetimeTicks: Int = 200,
+        entityFactory: (net.minecraft.server.level.ServerLevel) -> net.minecraft.world.entity.Mob,
+        lang: Map<String, String>,
+    ): DeferredItem<Item> = ModItems.registerItem(
+        ItemConfig.Builder(name, lang)
+            .func { properties -> BedrockSummonWeapon(properties, manaCost, entityFactory, lifetimeTicks, (cooldown * 20.0f).toInt()) }
+            .props { Item.Properties().stacksTo(1).durability(durability).useCooldown(cooldown).enchantable(15) }
+            .tags(tags)
+            .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
+            .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
+            .build(),
+    )
+
+    private fun specialProjectile(
+        entityType: java.util.function.Supplier<net.minecraft.world.entity.EntityType<BedrockSpecialProjectile>>,
+        variant: String? = null,
+    ): (net.minecraft.world.level.Level, net.minecraft.world.entity.LivingEntity, net.minecraft.world.item.ItemStack) -> net.minecraft.world.entity.projectile.Projectile =
+        { level, owner, stack -> BedrockSpecialProjectile.create(level, owner, stack, entityType.get(), variant) }
 
     @JvmField
     val AMETHYST_DART: DeferredItem<Item> = registerDart(ModDarts.AMETHYST_DART)
@@ -311,6 +435,39 @@ object Weapon {
         repairItem = Supplier { Material.STREAM_STONE.get() },
         burnTime = 10,
     )
+
+    // Bedrock item definitions without a dedicated NeoForge implementation.
+    // They use the shared configured adapters above so their registration,
+    // mana usage, cooldowns, tags and models remain consistent.
+    @JvmField val ANGEL_PURIFICATION = configuredProjectileSword("angel_purification", 7.0f, 502, 3.0f, 0.0f, launchPowers = listOf(1.0f), inaccuracy = 2.0f, projectile = specialProjectile(ModEntities.ANGEL_PURIFICATION_BLADE), lang = mapOf("en_us" to "Angel Purification", "zh_cn" to "净化使者"))
+    @JvmField val BAMBOO_YATAGHAN = configuredProjectileSword("bamboo_yataghan", 6.0f, 60, 1.5f, 0.0f, launchPowers = listOf(3.0f), inaccuracy = 3.0f, durabilityCost = 7, projectile = specialProjectile(ModEntities.BAMBOO_YATAGHAN_PROJECTILE), lang = mapOf("en_us" to "Bamboo Yataghan", "zh_cn" to "竹长剑"))
+    @JvmField val BLUE_OF_THE_SEA = configuredProjectileSword("blue_of_the_sea", 6.0f, 412, 0.7f, 3.0f, launchPowers = listOf(3.0f, 1.0f, 0.6f, 0.6f), inaccuracy = 12.0f, projectile = specialProjectile(ModEntities.HARD_BUBBLE), lang = mapOf("en_us" to "Blue Of The Sea", "zh_cn" to "海之忧伤"))
+    @JvmField val RADIATE_SWORD = configuredProjectileSword("radiate_sword", 10.0f, 1024, 0.2f, 2.0f, launchPowers = listOf(0.4f), inaccuracy = 15.0f, projectile = specialProjectile(ModEntities.RADIATE_FOG), lang = mapOf("en_us" to "Radiate Sword", "zh_cn" to "堕落圣刃"))
+    @JvmField val STAR_SWORD: DeferredItem<Item> = ModItems.registerItem(ItemConfig.Builder("star_sword", mapOf("en_us" to "The Bursting Star", "zh_cn" to "迸发之星")).func(::BedrockChargedStarSword).props { Item.Properties().sword(ModToolMaterial.STEEL_SWORD, 12.0f, -2.4f).stacksTo(1).durability(4096).enchantable(10) }.tags(swordWeaponTags).modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM).creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB).build())
+    @JvmField val STORM_GIANT_SWORD: DeferredItem<Item> = ModItems.registerItem(ItemConfig.Builder("storm_giant_sword", mapOf("en_us" to "Storm Giant Sword", "zh_cn" to "风暴巨剑")).func(::BedrockStormGiantSword).props { Item.Properties().sword(ModToolMaterial.STEEL_SWORD, 6.0f, -2.4f).stacksTo(1).durability(533).useCooldown(2.0f) }.tags(swordWeaponTags).modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM).creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB).build())
+    @JvmField val VILLAGE_GUARDIAN: DeferredItem<Item> = ModItems.registerItem(ItemConfig.Builder("village_guardian", mapOf("en_us" to "Village Guardian", "zh_cn" to "村庄守卫")).func(::BedrockVillageGuardianWeapon).props { Item.Properties().sword(ModToolMaterial.STEEL_SWORD, 6.0f, -2.4f).stacksTo(1).durability(513).useCooldown(60.0f).enchantable(15) }.tags(swordWeaponTags).modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM).creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB).build())
+    @JvmField val DESTROY_STAFF: DeferredItem<Item> = ModItems.registerItem(ItemConfig.Builder("destroy_staff", mapOf("en_us" to "Destroy Staff", "zh_cn" to "破坏法杖")).func { properties -> BedrockBlockBreakerWeapon(properties, BedrockBlockBreakerWeapon.DESTROY_STAFF_BLOCKS) }.props { Item.Properties().sword(ModToolMaterial.STEEL_SWORD, 5.0f, -2.4f).stacksTo(1).durability(5651) }.tags(swordWeaponTags).modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM).creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB).build())
+    @JvmField val GOD_OF_DESTROY: DeferredItem<Item> = ModItems.registerItem(ItemConfig.Builder("god_of_destroy", mapOf("en_us" to "God Of Destroy", "zh_cn" to "破坏之神")).func { properties -> BedrockBlockBreakerWeapon(properties, BedrockBlockBreakerWeapon.GOD_OF_DESTROY_BLOCKS) }.props { Item.Properties().sword(ModToolMaterial.STEEL_SWORD, 6.0f, -2.4f).stacksTo(1).durability(12310) }.tags(swordWeaponTags).modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM).creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB).build())
+    @JvmField val CATAPULT: DeferredItem<Item> = ModItems.registerItem(
+        ItemConfig.Builder("catapult", mapOf("en_us" to "Catapult", "zh_cn" to "弹弓"))
+            .func(::CatapultItem)
+            .props { Item.Properties().stacksTo(1).durability(75).useCooldown(1.5f) }
+            .tags(catapultWeaponTags)
+            .modelTemplate(ModelTemplates.FLAT_HANDHELD_ITEM)
+            .creativeTab(ModCreativeModeTabs.DECISLAND_WEAPONS_TAB)
+            .build(),
+    )
+    @JvmField val ECHO_OF_DEEP = configuredProjectileRanged("echo_of_deep", 15.0f, 2012, 1.0f, launchPowers = listOf(1.0f, 0.2f), inaccuracy = 0.1f, projectile = specialProjectile(ModEntities.BULLET_BY_ECHO_OF_DEEP), lang = mapOf("en_us" to "Echo of Deep", "zh_cn" to "深渊回影"))
+    @JvmField val BAT_STAFF = configuredSummon("bat_staff", 4.0f, 98, 0.9f, entityFactory = { GeneratedMobs.LITTLE_BAT.get().create(it)!! }, lang = mapOf("en_us" to "Bat Staff", "zh_cn" to "蝙蝠法杖"))
+    @JvmField val BLAZE_STAFF = configuredSummon("blaze_staff", 6.0f, 346, 0.9f, entityFactory = { GeneratedMobs.FIRE_STORM.get().create(it)!! }, lang = mapOf("en_us" to "Blaze Staff", "zh_cn" to "烈焰法杖"))
+    @JvmField val CHAOS_STAFF = configuredSummon("chaos_staff", 10.0f, 268, 2.0f, entityFactory = { GeneratedMobs.SON_OF_CHAOS.get().create(it)!! }, lang = mapOf("en_us" to "Chaos Staff", "zh_cn" to "混沌召唤杖"))
+    @JvmField val CHICKEN_STAFF = configuredSummon("chicken_staff", 3.0f, 34, 0.9f, lifetimeTicks = 160, entityFactory = { GeneratedMobs.ANGRY_CHICKEN.get().create(it)!! }, lang = mapOf("en_us" to "Chicken Staff", "zh_cn" to "小鸡法杖"))
+    @JvmField val DUST_STAFF = configuredSummon("dust_staff", 6.0f, 268, 1.0f, lifetimeTicks = 400, entityFactory = { GeneratedMobs.ELF_OF_DUST.get().create(it)!! }, lang = mapOf("en_us" to "Dust Staff", "zh_cn" to "尘埃召唤杖"))
+    @JvmField val GOD_OF_SUN = configuredProjectileStaff("god_of_sun", 7.0f, 356, 1.5f, launchPowers = listOf(1.0f), projectile = specialProjectile(ModEntities.SUN_ENERGY), lang = mapOf("en_us" to "God Of Sun", "zh_cn" to "太阳神"))
+    @JvmField val NATURAL_SPEAR = configuredSummon("natural_spear", 9.0f, 103, 1.1f, entityFactory = { GeneratedMobs.SON_OF_NATURE.get().create(it)!! }, lang = mapOf("en_us" to "Natural Spear", "zh_cn" to "自然之矛"))
+    @JvmField val RADIATE_SPREADER = configuredProjectileStaff("radiate_spreader", 8.0f, 647, 1.5f, launchPowers = listOf(0.4f, 0.4f, 0.4f), projectile = specialProjectile(ModEntities.RADIATE_CLOUD), lang = mapOf("en_us" to "Radiate Spreader", "zh_cn" to "堕落之神"))
+    @JvmField val SPIDER_STAFF = configuredSummon("spider_staff", 1.0f, 34, 0.4f, lifetimeTicks = 160, entityFactory = { GeneratedMobs.FRIENDLY_SPIDER.get().create(it)!! }, lang = mapOf("en_us" to "Spider Staff", "zh_cn" to "蜘蛛法杖"))
+    @JvmField val WOODEN_ENCHANT_BOOK = configuredSummon("wooden_enchant_book", 5.0f, 189, 1.0f, tags = magicBookWeaponTags, entityFactory = { GeneratedMobs.GHOST_WOODEN_SWORD.get().create(it)!! }, lang = mapOf("en_us" to "Wooden Enchant Book", "zh_cn" to "木制附魔书"))
 
     @JvmField
     val FLINTLOCK_BULLET: DeferredItem<Item> = ModItems.registerItem(

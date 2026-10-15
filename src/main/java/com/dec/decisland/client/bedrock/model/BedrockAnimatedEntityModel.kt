@@ -1,5 +1,7 @@
 package com.dec.decisland.client.bedrock.model
 
+import com.dec.decisland.particles.bedrock.Molang
+import com.dec.decisland.particles.bedrock.MolangContext
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
 import net.minecraft.client.model.EntityModel
@@ -10,16 +12,36 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder
 import net.minecraft.client.model.geom.builders.LayerDefinition
 import net.minecraft.client.model.geom.builders.MeshDefinition
 import net.minecraft.client.model.geom.builders.PartDefinition
+import net.minecraft.client.renderer.MultiBufferSource
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.Entity
 import kotlin.math.PI
 
 open class BedrockAnimatedEntityModel<T : Entity> private constructor(
     private val bakedModel: BakedBedrockModel,
     var animation: BedrockAnimationClip,
+    private var animations: List<BedrockAnimationClip>,
 ) : EntityModel<T>() {
-    constructor(geometry: BedrockGeometry, animation: BedrockAnimationClip) : this(
-        bakeModel(geometry),
+    constructor(
+        geometry: BedrockGeometry,
+        animation: BedrockAnimationClip,
+        defaultTexture: ResourceLocation? = null,
+        materialTextures: Map<String, ResourceLocation> = emptyMap(),
+    ) : this(
+        bakeModel(geometry, defaultTexture, materialTextures),
         animation,
+        listOf(animation),
+    )
+
+    constructor(
+        geometry: BedrockGeometry,
+        animations: List<BedrockAnimationClip>,
+        defaultTexture: ResourceLocation? = null,
+        materialTextures: Map<String, ResourceLocation> = emptyMap(),
+    ) : this(
+        bakeModel(geometry, defaultTexture, materialTextures),
+        animations.firstOrNull() ?: error("At least one Bedrock animation is required"),
+        animations,
     )
 
     override fun setupAnim(
@@ -35,7 +57,21 @@ open class BedrockAnimatedEntityModel<T : Entity> private constructor(
 
     fun applyClip(clip: BedrockAnimationClip, timeSeconds: Float) {
         animation = clip
+        animations = listOf(clip)
         applyAnimation(timeSeconds)
+    }
+
+    fun applyClips(
+        clips: List<BedrockAnimationClip>,
+        timeSeconds: Float,
+        variables: Map<String, Double> = emptyMap(),
+    ) {
+        if (clips.isEmpty()) {
+            return
+        }
+        animation = clips.first()
+        animations = clips
+        applyAnimation(timeSeconds, variables)
     }
 
     override fun renderToBuffer(
@@ -46,14 +82,79 @@ open class BedrockAnimatedEntityModel<T : Entity> private constructor(
         color: Int,
     ) {
         bakedModel.root.render(poseStack, buffer, packedLight, packedOverlay, color)
+        val activeSource = activeBufferSource.get()
+        if (activeSource == null) {
+            BedrockTextureMeshSupport.renderDefaultMeshes(
+                bakedModel.root,
+                poseStack,
+                buffer,
+                packedLight,
+                packedOverlay,
+                color,
+            )
+        } else {
+            BedrockTextureMeshSupport.renderAllMeshes(
+                bakedModel.root,
+                poseStack,
+                buffer,
+                activeSource,
+                packedLight,
+                packedOverlay,
+                color,
+            )
+        }
     }
 
-    fun applyAnimation(timeSeconds: Float) {
+    /**
+     * Renders the model and submits named texture meshes with their own
+     * material buffers.  Vanilla EntityModel callers use renderToBuffer;
+     * custom renderers that have a MultiBufferSource should use this overload
+     * to render every material.
+     */
+    fun renderWithMaterials(
+        poseStack: PoseStack,
+        defaultBuffer: VertexConsumer,
+        bufferSource: MultiBufferSource,
+        packedLight: Int,
+        packedOverlay: Int,
+        color: Int,
+    ) {
+        bakedModel.root.render(poseStack, defaultBuffer, packedLight, packedOverlay, color)
+        BedrockTextureMeshSupport.renderAllMeshes(
+            bakedModel.root,
+            poseStack,
+            defaultBuffer,
+            bufferSource,
+            packedLight,
+            packedOverlay,
+            color,
+        )
+    }
+
+    fun applyAnimation(timeSeconds: Float, variables: Map<String, Double> = emptyMap()) {
         bakedModel.resetPoses()
+        val context = MolangContext(variables = variables)
+        val evaluate: (String) -> Float? = { expression ->
+            Molang.evalDouble(expression, context)?.toFloat()
+        }
 
         bakedModel.animatedBones.forEach { (boneName, part) ->
-            val sampledRotation = animation.sampleRotation(boneName, timeSeconds)
-            val sampledScale = animation.sampleScale(boneName, timeSeconds)
+            var sampledRotation = BedrockVec3.ZERO
+            var sampledScale = BedrockVec3(1.0f, 1.0f, 1.0f)
+            animations.forEach { clip ->
+                val rotation = clip.sampleRotation(boneName, timeSeconds, evaluate)
+                val scale = clip.sampleScale(boneName, timeSeconds, evaluate)
+                sampledRotation = BedrockVec3(
+                    sampledRotation.x + rotation.x,
+                    sampledRotation.y + rotation.y,
+                    sampledRotation.z + rotation.z,
+                )
+                sampledScale = BedrockVec3(
+                    sampledScale.x * scale.x,
+                    sampledScale.y * scale.y,
+                    sampledScale.z * scale.z,
+                )
+            }
             part.xRot += sampledRotation.x.toModelRadX()
             part.yRot += sampledRotation.y.toModelRadY()
             part.zRot += sampledRotation.z.toModelRadZ()
@@ -105,7 +206,27 @@ open class BedrockAnimatedEntityModel<T : Entity> private constructor(
     }
 
     companion object {
-        private fun bakeModel(geometry: BedrockGeometry): BakedBedrockModel {
+        private val activeBufferSource = ThreadLocal<MultiBufferSource?>()
+
+        fun <R> withActiveBufferSource(bufferSource: MultiBufferSource, action: () -> R): R {
+            val previous = activeBufferSource.get()
+            activeBufferSource.set(bufferSource)
+            return try {
+                action()
+            } finally {
+                if (previous == null) {
+                    activeBufferSource.remove()
+                } else {
+                    activeBufferSource.set(previous)
+                }
+            }
+        }
+
+        private fun bakeModel(
+            geometry: BedrockGeometry,
+            defaultTexture: ResourceLocation?,
+            materialTextures: Map<String, ResourceLocation>,
+        ): BakedBedrockModel {
             val meshDefinition = MeshDefinition()
             val rootDefinition = meshDefinition.root
             val rootNode = NamedPartNode(
@@ -130,7 +251,12 @@ open class BedrockAnimatedEntityModel<T : Entity> private constructor(
                 geometry.textureWidth,
                 geometry.textureHeight,
             ).bakeRoot()
-            BedrockTextureMeshSupport.attachMeshesToNamedBones(bakedRoot, geometry)
+            BedrockTextureMeshSupport.attachMeshesToNamedBones(
+                root = bakedRoot,
+                geometry = geometry,
+                textureId = defaultTexture,
+                materialTextures = materialTextures,
+            )
 
             val animatedBones = LinkedHashMap<String, ModelPart>()
             val snapshots = ArrayList<Pair<ModelPart, PartPoseSnapshot>>()

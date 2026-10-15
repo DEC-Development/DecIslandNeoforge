@@ -19,6 +19,7 @@ amethyst_pickaxe
 amethyst_ray_staff
 amethyst_sword
 ancient_ice
+angel_purification
 apple_juice
 apple_pie
 archer_bullet_bag
@@ -42,8 +43,10 @@ axolotl_wild_mask
 baby_blue_eyes_flower
 balloon_flower
 bamboo_katana
+bamboo_yataghan
 bat_bait
 bat_mask
+bat_staff
 bat_summoner
 bat_wing
 bee_mask
@@ -54,6 +57,7 @@ black_flower_block
 black_shoes
 black_shorts
 blaze_mask
+blaze_staff
 blizzard_staff
 blizzard_sword
 blood_bullet_bag
@@ -68,6 +72,7 @@ blue_gem_hat
 blue_gem_ore
 blue_ice_brick_block
 blue_jellyfish
+blue_of_the_sea
 bone_sword
 book_of_deep
 boomber_mask
@@ -85,10 +90,13 @@ camouflage_pants
 candy
 candy_block
 candy_cane
+catapult
 cave_crate
 cave_spider_mask
 challenge_of_ash
+chaos_staff
 chicken_mask
+chicken_staff
 chiseled_ice_brick
 chocolate_cookie
 chocolates
@@ -145,6 +153,7 @@ deep_staff
 deep_summoner
 depart_grass
 desert_fan_flower
+destroy_staff
 diamond_apple
 diamond_apple_enchanted
 diamond_crystal_nucleus
@@ -164,6 +173,8 @@ dolphin_mask
 drowned_mask
 dust_destroyer
 dust_ring
+dust_staff
+echo_of_deep
 elf_of_ash_mask
 elf_of_chaos_mask
 elf_of_deep_mask
@@ -233,6 +244,7 @@ experience_book
 experience_book_empty
 experience_book_pro_empty
 experience_flower_seeds
+exploding_pellets
 eye_of_nature
 eye_of_nature_log
 fan_flower
@@ -297,6 +309,8 @@ glass_ingot
 glass_pickaxe
 glass_tank
 goblin_mask
+god_of_destroy
+god_of_sun
 gold_dart
 gold_fish
 gold_flower
@@ -452,6 +466,7 @@ mysterious_key
 mysterious_key_debris
 mystical_skeleton_mask
 natural_ring
+natural_spear
 nature_essence
 nautilus_alive
 nether_coal_ore
@@ -509,8 +524,10 @@ radiate_creeper_mask
 radiate_crystal
 radiate_dirt
 radiate_enderman_mask
+radiate_spreader
 radiate_stone
 radiate_stonebrick
+radiate_sword
 raining_summoner
 rapier
 red_flower_block
@@ -587,12 +604,14 @@ soybean
 spark_flower
 spell_flower
 spider_mask
+spider_staff
 spiral_shell
 spurt_egg
 squid_mask
 star_debris
 star_flintlock
 star_flower
+star_sword
 steel_battleaxe
 steel_block
 steel_boots
@@ -619,6 +638,7 @@ stone_road
 stones_bag
 storm_battleaxe
 storm_flintlock
+storm_giant_sword
 storm_staff
 straw_rope
 stray_chestplate
@@ -663,6 +683,7 @@ uranium_block
 uranium_ore
 vengeful_ghost_mask
 vex_mask
+village_guardian
 villager_mask
 void_whispering_dagger
 vortex
@@ -693,6 +714,7 @@ wood_dart
 wood_helmet
 wood_leggings
 wooden_dagger
+wooden_enchant_book
 wooden_staff
 yellow_butterfly_flower
 yellow_flower_block

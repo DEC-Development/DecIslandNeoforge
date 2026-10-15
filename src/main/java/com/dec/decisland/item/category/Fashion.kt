@@ -5,6 +5,7 @@ import com.dec.decisland.item.ModArmorMaterials
 import com.dec.decisland.item.ModArmorMaterials.ModArmorMaterial
 import com.dec.decisland.item.ModCreativeModeTabs
 import com.dec.decisland.item.ModItems
+import com.dec.decisland.item.custom.FashionArmorItem
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.item.ArmorItem
 import net.minecraft.world.item.CreativeModeTab
@@ -50,7 +51,7 @@ object Fashion {
         definitionsByName[definition.name] = definition
         return ModItems.registerItem(
             ItemConfig.Builder(definition.name)
-                .func { props -> ArmorItem(material.holder, definition.armorType, props) }
+                .func { props -> FashionArmorItem(material.holder, definition.armorType, props, definition.name) }
                 .props { Item.Properties().durability(definition.armorType.getDurability(material.durabilityMultiplier)) }
                 .creativeTab(tab)
                 .build(),

@@ -18,6 +18,7 @@ import net.minecraft.resources.ResourceLocation
 class LeavesGolemModel : BedrockAnimatedEntityModel<LeavesGolem>(
     BedrockEntityAssets.geometry(GEOMETRY_LOCATION),
     BedrockEntityAssets.animation(ANIMATION_LOCATION, MOVE_CLIP),
+    TEXTURE_LOCATION,
 ) {
     private val moveClip = BedrockEntityAssets.animation(ANIMATION_LOCATION, MOVE_CLIP)
     private val attackClip = BedrockEntityAssets.animation(ANIMATION_LOCATION, ATTACK_CLIP)
@@ -76,6 +77,11 @@ class LeavesGolemModel : BedrockAnimatedEntityModel<LeavesGolem>(
             ResourceLocation.fromNamespaceAndPath(
                 com.dec.decisland.DecIsland.MOD_ID,
                 "bedrock/animations/entity/leaves_golem.animation.json",
+            )
+        private val TEXTURE_LOCATION: ResourceLocation =
+            ResourceLocation.fromNamespaceAndPath(
+                com.dec.decisland.DecIsland.MOD_ID,
+                "textures/entity/leaves_golem.png",
             )
     }
 }

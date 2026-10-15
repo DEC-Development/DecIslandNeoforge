@@ -1,5 +1,6 @@
 package com.dec.decisland.client.bedrock.model
 
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.Entity
 
 /**
@@ -9,7 +10,9 @@ class SimpleBedrockMobModel<T : Entity>(
     geometry: BedrockGeometry,
     private val idleClip: BedrockAnimationClip,
     private val walkClip: BedrockAnimationClip,
-) : BedrockAnimatedEntityModel<T>(geometry, idleClip) {
+    defaultTexture: ResourceLocation? = null,
+    materialTextures: Map<String, ResourceLocation> = emptyMap(),
+) : BedrockAnimatedEntityModel<T>(geometry, idleClip, defaultTexture, materialTextures) {
 
     override fun setupAnim(
         entity: T,

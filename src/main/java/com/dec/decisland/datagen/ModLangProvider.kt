@@ -20,16 +20,17 @@ abstract class ModLangProvider protected constructor(
         // Layer 2: Bedrock entries are imported first and act as the global fallback.
         translations.putAll(BedrockLangResources.javaTranslations(locale))
 
-        // Layer 1: explicit Java-side definitions override Bedrock when both are present.
+        // Bedrock is the source of truth for migrated content. Java-side text is only
+        // a fallback for entries that are not present in the Bedrock language files.
         ModItems.getItemConfigs().forEach { config ->
-            val translation = config.langMap[locale] ?: BedrockLangResources.itemName(locale, config.name)
+            val translation = BedrockLangResources.itemName(locale, config.name) ?: config.langMap[locale]
             if (translation != null) {
                 translations["item.${DecIsland.MOD_ID}.${config.name}"] = translation
             }
         }
 
         ModBlocks.getBlockConfigs().forEach { config ->
-            val translation = config.langMap[locale] ?: BedrockLangResources.blockName(locale, config.name)
+            val translation = BedrockLangResources.blockName(locale, config.name) ?: config.langMap[locale]
             if (translation != null) {
                 translations["block.${DecIsland.MOD_ID}.${config.name}"] = translation
             }

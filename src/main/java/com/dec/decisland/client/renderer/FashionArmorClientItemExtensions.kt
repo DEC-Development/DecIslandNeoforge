@@ -1,6 +1,7 @@
 package com.dec.decisland.client.renderer
 
 import com.dec.decisland.DecIsland
+import com.dec.decisland.client.bedrock.model.BedrockTextureMeshSupport
 import com.dec.decisland.client.model.FashionArmorModel
 import com.dec.decisland.item.category.Fashion
 import net.minecraft.client.Minecraft
@@ -44,13 +45,17 @@ object FashionArmorClientItemExtensions : IClientItemExtensions {
         }
 
         if (definition.modelKind == Fashion.ModelKind.GIANT_BAT_WINGS) {
-            val baked = Minecraft.getInstance().entityModels.bakeLayer(layerLocation)
+            val baked = BedrockTextureMeshSupport.ensureHumanoidRoot(
+                Minecraft.getInstance().entityModels.bakeLayer(layerLocation),
+            )
             FashionArmorModel.attachTextureMeshes(baked, definition.modelKind)
             return FashionArmorModel<LivingEntity>(baked)
         }
 
         return cachedModels.getOrPut(definition.modelKind) {
-            val baked = Minecraft.getInstance().entityModels.bakeLayer(layerLocation)
+            val baked = BedrockTextureMeshSupport.ensureHumanoidRoot(
+                Minecraft.getInstance().entityModels.bakeLayer(layerLocation),
+            )
             FashionArmorModel.attachTextureMeshes(baked, definition.modelKind)
             FashionArmorModel<LivingEntity>(baked)
         }

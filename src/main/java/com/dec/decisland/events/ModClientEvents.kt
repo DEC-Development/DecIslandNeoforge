@@ -5,6 +5,7 @@ import com.dec.decisland.client.DizzinessClient
 import com.dec.decisland.client.RecoilClient
 import com.dec.decisland.client.bedrock.BedrockEmitterManager
 import com.dec.decisland.client.renderer.BedrockProjectileRenderer
+import com.dec.decisland.client.renderer.BedrockSpriteProjectileRenderer
 import com.dec.decisland.client.renderer.DartRenderer
 import com.dec.decisland.client.renderer.ElfOfLeavesRenderer
 import com.dec.decisland.client.renderer.EmptyRenderer
@@ -17,6 +18,7 @@ import com.dec.decisland.client.renderer.PumpkinBombRenderer
 import com.dec.decisland.client.renderer.ZombieWarriorRenderer
 import com.dec.decisland.client.gui.ClientManaOverlay
 import com.dec.decisland.entity.ModEntities
+import com.dec.decisland.entity.projectile.BedrockSpecialProjectile
 import com.dec.decisland.entity.projectile.AmethystEnergyBall
 import com.dec.decisland.entity.projectile.ConcentratedSoulBullet
 import com.dec.decisland.entity.projectile.DeepEnergy
@@ -145,6 +147,62 @@ object ModClientEvents {
         EntityRenderers.register(ModEntities.WAVE_ENERGY.get(), ::EmptyRenderer)
         EntityRenderers.register(ModEntities.BLIZZARD_ENERGY.get(), ::EmptyRenderer)
         EntityRenderers.register(ModEntities.STORM_FUSE.get(), ::EmptyRenderer)
+        EntityRenderers.register(ModEntities.ANGEL_PURIFICATION_BLADE.get()) { context ->
+            EmptyRenderer(context)
+        }
+        EntityRenderers.register(ModEntities.BAMBOO_YATAGHAN_PROJECTILE.get()) { context ->
+            BedrockProjectileRenderer<BedrockSpecialProjectile>(
+                context,
+                ResourceLocation.fromNamespaceAndPath(DecIsland.MOD_ID, "bedrock/models/entity/dart.geometry.json"),
+                ResourceLocation.fromNamespaceAndPath(DecIsland.MOD_ID, "bedrock/animations/entity/dart.animation.json"),
+                "animation.dart.spin",
+                itemTexture("bamboo_yataghan"),
+                1.0f,
+                useEnergySwirl = false,
+                renderWithoutCulling = true,
+                additionalAnimations = listOf(
+                    ResourceLocation.fromNamespaceAndPath(DecIsland.MOD_ID, "bedrock/animations/entity/facing.animation.json") to
+                        "animation.facing.direct",
+                ),
+            )
+        }
+        EntityRenderers.register(ModEntities.HARD_BUBBLE.get()) { context ->
+            BedrockSpriteProjectileRenderer<BedrockSpecialProjectile>(context, entityTexture("hard_bubble"), 0.35f)
+        }
+        EntityRenderers.register(ModEntities.BULLET_BY_ECHO_OF_DEEP.get()) { context ->
+            BedrockSpriteProjectileRenderer<BedrockSpecialProjectile>(context, entityTexture("bullet_by_echo_of_deep"), 0.4f)
+        }
+        EntityRenderers.register(ModEntities.SUN_ENERGY.get()) { context ->
+            BedrockSpriteProjectileRenderer<BedrockSpecialProjectile>(context, entityTexture("sun_energy"), 0.45f)
+        }
+        EntityRenderers.register(ModEntities.RADIATE_CLOUD.get()) { context ->
+            BedrockSpriteProjectileRenderer<BedrockSpecialProjectile>(context, entityTexture("radiate_crystal"), 0.4f)
+        }
+        EntityRenderers.register(ModEntities.RADIATE_FOG.get()) { context ->
+            BedrockSpriteProjectileRenderer<BedrockSpecialProjectile>(context, entityTexture("radiate_crystal"), 0.35f)
+        }
+        EntityRenderers.register(ModEntities.SPOTS_BY_SWORD.get()) { context ->
+            BedrockProjectileRenderer<BedrockSpecialProjectile>(
+                context,
+                ResourceLocation.fromNamespaceAndPath(DecIsland.MOD_ID, "bedrock/models/entity/spots.geometry.json"),
+                ResourceLocation.fromNamespaceAndPath(DecIsland.MOD_ID, "bedrock/animations/entity/spots.animation.json"),
+                "animation.spots.spinning",
+                entityTexture("spots"),
+                1.0f,
+            )
+        }
+        EntityRenderers.register(ModEntities.STORM_ENERGY.get()) { context ->
+            BedrockSpriteProjectileRenderer<BedrockSpecialProjectile>(context, entityTexture("energy_ball"), 0.25f)
+        }
+        EntityRenderers.register(ModEntities.BULLET_BY_CATAPULT_NORMAL.get()) { context ->
+            BedrockSpriteProjectileRenderer<BedrockSpecialProjectile>(context, entityTexture("throwing_stone"), 0.3f)
+        }
+        EntityRenderers.register(ModEntities.BULLET_BY_CATAPULT_EXPLODE.get()) { context ->
+            BedrockSpriteProjectileRenderer<BedrockSpecialProjectile>(context, entityTexture("throwing_stone"), 0.3f)
+        }
+        EntityRenderers.register(ModEntities.VILLAGE_PORTAL.get()) { context ->
+            BedrockSpriteProjectileRenderer<com.dec.decisland.entity.custom.VillagePortalEntity>(context, entityTexture("village_portal"), 1.5f)
+        }
         EntityRenderers.register(ModEntities.BULLET_BY_FLINTLOCK.get(), ::ThrownItemRenderer)
         EntityRenderers.register(ModEntities.BULLET_BY_FLINTLOCK_PRO.get(), ::ThrownItemRenderer)
         EntityRenderers.register(ModEntities.BULLET_BY_SHORT_FLINTLOCK.get(), ::ThrownItemRenderer)
@@ -179,6 +237,9 @@ object ModClientEvents {
     }
     private fun entityTexture(path: String): ResourceLocation =
         ResourceLocation.fromNamespaceAndPath(DecIsland.MOD_ID, "textures/entity/$path.png")
+
+    private fun itemTexture(path: String): ResourceLocation =
+        ResourceLocation.fromNamespaceAndPath(DecIsland.MOD_ID, "textures/item/$path.png")
 
     private fun <T : net.minecraft.world.entity.Entity> ballRenderer(
         context: EntityRendererProvider.Context,

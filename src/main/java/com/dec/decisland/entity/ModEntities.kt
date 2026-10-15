@@ -5,9 +5,11 @@ import com.dec.decisland.entity.custom.ElfOfLeaves
 import com.dec.decisland.entity.custom.LeavesGolem
 import com.dec.decisland.entity.custom.PumpkinBombEntity
 import com.dec.decisland.entity.custom.WitherCloudEntity
+import com.dec.decisland.entity.custom.VillagePortalEntity
 import com.dec.decisland.entity.custom.ZombieWarrior
 import com.dec.decisland.entity.projectile.AmethystEnergyBall
 import com.dec.decisland.entity.projectile.AmethystEnergyRay
+import com.dec.decisland.entity.projectile.BedrockSpecialProjectile
 import com.dec.decisland.entity.projectile.BlizzardEnergy
 import com.dec.decisland.entity.projectile.ConcentratedSoulBullet
 import com.dec.decisland.entity.projectile.DeepEnergy
@@ -352,6 +354,56 @@ object ModEntities {
         }
 
     @JvmField
+    val ANGEL_PURIFICATION_BLADE: Supplier<EntityType<BedrockSpecialProjectile>> =
+        registerSpecialProjectile("angel_purification_blade", width = 0.2f, height = 0.2f, trackingRange = 128)
+
+    @JvmField
+    val BAMBOO_YATAGHAN_PROJECTILE: Supplier<EntityType<BedrockSpecialProjectile>> =
+        registerSpecialProjectile("bamboo_yataghan", width = 0.25f, height = 0.25f)
+
+    @JvmField
+    val HARD_BUBBLE: Supplier<EntityType<BedrockSpecialProjectile>> =
+        registerSpecialProjectile("hard_bubble")
+
+    @JvmField
+    val BULLET_BY_ECHO_OF_DEEP: Supplier<EntityType<BedrockSpecialProjectile>> =
+        registerSpecialProjectile("bullet_by_echo_of_deep")
+
+    @JvmField
+    val SUN_ENERGY: Supplier<EntityType<BedrockSpecialProjectile>> =
+        registerSpecialProjectile("sun_energy")
+
+    @JvmField
+    val RADIATE_CLOUD: Supplier<EntityType<BedrockSpecialProjectile>> =
+        registerSpecialProjectile("radiate_cloud")
+
+    @JvmField
+    val RADIATE_FOG: Supplier<EntityType<BedrockSpecialProjectile>> =
+        registerSpecialProjectile("radiate_fog")
+
+    @JvmField
+    val SPOTS_BY_SWORD: Supplier<EntityType<BedrockSpecialProjectile>> =
+        registerSpecialProjectile("spots_by_sword")
+
+    @JvmField
+    val STORM_ENERGY: Supplier<EntityType<BedrockSpecialProjectile>> =
+        registerSpecialProjectile("storm_energy")
+
+    @JvmField
+    val BULLET_BY_CATAPULT_NORMAL: Supplier<EntityType<BedrockSpecialProjectile>> =
+        registerSpecialProjectile("bullet_by_catapult_normal")
+
+    @JvmField
+    val BULLET_BY_CATAPULT_EXPLODE: Supplier<EntityType<BedrockSpecialProjectile>> =
+        registerSpecialProjectile("bullet_by_catapult_explode")
+
+    @JvmField
+    val VILLAGE_PORTAL: Supplier<EntityType<VillagePortalEntity>> =
+        registerEntity("village_portal", { type, level -> VillagePortalEntity(type, level) }, MobCategory.MISC) {
+            sized(0.01f, 0.01f).clientTrackingRange(64).updateInterval(1)
+        }
+
+    @JvmField
     val BULLET_BY_FLINTLOCK: Supplier<EntityType<FlintlockBulletEntity>> = registerFlintlockBullet("bullet_by_flintlock")
 
     @JvmField
@@ -458,6 +510,17 @@ object ModEntities {
     private fun registerFlintlockBullet(path: String): Supplier<EntityType<FlintlockBulletEntity>> =
         registerEntity(path, { type, level -> FlintlockBulletEntity(type, level) }, MobCategory.MISC) {
             sized(0.2f, 0.2f).clientTrackingRange(64).updateInterval(10)
+        }
+
+    private fun registerSpecialProjectile(
+        path: String,
+        width: Float = 0.31f,
+        height: Float = 0.31f,
+        trackingRange: Int = 64,
+        updateInterval: Int = 1,
+    ): Supplier<EntityType<BedrockSpecialProjectile>> =
+        registerEntity(path, { type, level -> BedrockSpecialProjectile(type, level) }, MobCategory.MISC) {
+            sized(width, height).clientTrackingRange(trackingRange).updateInterval(updateInterval)
         }
 
     private fun registerDartEntity(

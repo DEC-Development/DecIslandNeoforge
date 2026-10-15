@@ -200,6 +200,9 @@ object Material {
     val SMALL_STONE: DeferredItem<Item> = registerMaterial("small_stone")
 
     @JvmField
+    val EXPLODING_PELLETS: DeferredItem<Item> = registerMaterial("exploding_pellets")
+
+    @JvmField
     val SMALL_STONE_BLOCK: DeferredItem<Item> = registerMaterial("small_stone_block")
 
     @JvmField
