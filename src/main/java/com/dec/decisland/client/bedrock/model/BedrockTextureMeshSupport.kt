@@ -421,55 +421,39 @@ object BedrockTextureMeshSupport {
         zCoord: (Float) -> Float,
     ): ModelPart.Cube {
         val isVerticalBoundary = sx == ex
-        var uvSx = sx
-        var uvSy = sy
-        var uvEx = ex
-        var uvEy = ey
+        // Match the edge generation used by minecraft:item/generated.  The
+        // previous implementation moved the UVs by arbitrary 0.1/0.4 pixel
+        // amounts.  On a small texture that can land the whole side quad in
+        // the transparent neighbour, which is especially visible on the
+        // thin sides of the bat wings.  Always select the actual opaque pixel
+        // adjacent to this silhouette transition instead.
+        val (baseVertices, normal) = if (isVerticalBoundary) {
+            val opaqueX = if (dir == 1) sx - 1.0f else sx
+            val u0 = pixelUvStart(opaqueX, mask.width)
+            val u1 = pixelUvEnd(opaqueX + 1.0f, mask.width)
+            val v0 = pixelVStart(sy, mask.height)
+            val v1 = pixelVEnd(ey, mask.height)
 
-        val normal = if (isVerticalBoundary) {
-            uvSx += 0.1f * -dir
-            uvEx += 0.4f * -dir
-            uvSy += 0.1f
-            uvEy -= 0.1f
-            Vector3f(-dir.toFloat(), 0.0f, 0.0f)
+            arrayOf(
+                vertex(xCoord(sx), yCoord(0.0f), zCoord(sy), u0, v0),
+                vertex(xCoord(sx), yCoord(-1.0f), zCoord(sy), u1, v0),
+                vertex(xCoord(sx), yCoord(-1.0f), zCoord(ey), u1, v1),
+                vertex(xCoord(sx), yCoord(0.0f), zCoord(ey), u0, v1),
+            ) to Vector3f(-dir.toFloat(), 0.0f, 0.0f)
         } else {
-            uvSy += 0.1f * dir
-            uvEy += 0.4f * dir
-            uvSx += 0.1f
-            uvEx -= 0.1f
-            Vector3f(0.0f, 0.0f, -dir.toFloat())
-        }
+            val opaqueY = if (dir == -1) sy - 1.0f else sy
+            val u0 = pixelUvStart(sx, mask.width)
+            val u1 = pixelUvEnd(ex, mask.width)
+            val v0 = pixelVStart(opaqueY, mask.height)
+            val v1 = pixelVEnd(opaqueY + 1.0f, mask.height)
 
-        val baseVertices: Array<Any> = arrayOf(
-            vertex(
-                xCoord(sx),
-                yCoord(0.0f),
-                zCoord(sy),
-                clampUv(uvEx / mask.width.toFloat()),
-                clampUv(1.0f - (uvSy / mask.height.toFloat())),
-            ),
-            vertex(
-                xCoord(sx),
-                yCoord(-1.0f),
-                zCoord(sy),
-                clampUv(uvEx / mask.width.toFloat()),
-                clampUv(1.0f - (uvEy / mask.height.toFloat())),
-            ),
-            vertex(
-                xCoord(ex),
-                yCoord(-1.0f),
-                zCoord(ey),
-                clampUv(uvSx / mask.width.toFloat()),
-                clampUv(1.0f - (uvEy / mask.height.toFloat())),
-            ),
-            vertex(
-                xCoord(ex),
-                yCoord(0.0f),
-                zCoord(ey),
-                clampUv(uvSx / mask.width.toFloat()),
-                clampUv(1.0f - (uvSy / mask.height.toFloat())),
-            ),
-        )
+            arrayOf(
+                vertex(xCoord(sx), yCoord(0.0f), zCoord(sy), u0, v0),
+                vertex(xCoord(sx), yCoord(-1.0f), zCoord(sy), u0, v1),
+                vertex(xCoord(ex), yCoord(-1.0f), zCoord(ey), u1, v1),
+                vertex(xCoord(ex), yCoord(0.0f), zCoord(ey), u1, v0),
+            ) to Vector3f(0.0f, 0.0f, -dir.toFloat())
+        }
 
         val orderedVertices: Array<Any> = when {
             isVerticalBoundary && dir == 1 -> baseVertices
@@ -480,6 +464,23 @@ object BedrockTextureMeshSupport {
 
         return singlePolygonCube(normal.x, normal.y, normal.z, orderedVertices)
     }
+
+    /**
+     * Returns a coordinate just inside the requested texture pixel.  Keeping
+     * the sample away from the exact pixel boundary prevents nearest-neighbour
+     * sampling from selecting the transparent side of a cutout edge.
+     */
+    private fun pixelUvStart(pixel: Float, textureSize: Int): Float =
+        clampUv((pixel + 0.01f) / textureSize.toFloat())
+
+    private fun pixelUvEnd(pixelExclusive: Float, textureSize: Int): Float =
+        clampUv((pixelExclusive - 0.01f) / textureSize.toFloat())
+
+    private fun pixelVStart(pixel: Float, textureSize: Int): Float =
+        clampUv(1.0f - ((pixel + 0.01f) / textureSize.toFloat()))
+
+    private fun pixelVEnd(pixelExclusive: Float, textureSize: Int): Float =
+        clampUv(1.0f - ((pixelExclusive - 0.01f) / textureSize.toFloat()))
 
     private fun clampUv(value: Float): Float = value.coerceIn(0.0f, 1.0f)
 
