@@ -1,5 +1,6 @@
 package com.dec.decisland.entity.projectile
 
+import com.dec.decisland.DecIsland
 import com.dec.decisland.network.Networking
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.syncher.EntityDataAccessor
@@ -17,7 +18,6 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.level.Explosion
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.EntityHitResult
@@ -241,7 +241,7 @@ class BedrockSpecialProjectile(
             pos.z,
             profile.explosionPower,
             false,
-            Level.ExplosionInteraction.NONE,
+            profile.explosionInteraction,
         )
     }
 
@@ -265,6 +265,7 @@ class BedrockSpecialProjectile(
         val poisonTicks: Int = 0,
         val poisonAmplifier: Int = 0,
         val explosionPower: Float = 0.0f,
+        val explosionInteraction: Level.ExplosionInteraction = Level.ExplosionInteraction.NONE,
         val bounceCount: Int = 0,
         val renderItem: Item? = Items.SNOWBALL,
         val hitParticle: net.minecraft.core.particles.ParticleOptions? = null,
@@ -338,16 +339,55 @@ class BedrockSpecialProjectile(
                     fuseMaxTicks = 40,
                 )
                 "hard_bubble" -> Profile(4.0f, 0.0, 1.01f, 1.01f, renderItem = Items.SNOWBALL)
-                "bullet_by_echo_of_deep" -> Profile(18.0f, 0.0, 1.0f, 1.0f, renderItem = Items.SNOWBALL)
-                "sun_energy" -> Profile(8.0f, 0.0, 0.95f, 0.8f, ignite = true, explosionPower = 1.0f, renderItem = Items.SUNFLOWER)
-                "radiate_cloud" -> Profile(19.0f, 0.0, 1.0f, 1.0f, poisonTicks = 200, poisonAmplifier = 2, renderItem = Items.SNOWBALL)
-                "radiate_fog" -> Profile(1.0f, 0.0, 1.1f, 1.1f, poisonTicks = 100, poisonAmplifier = 2, renderItem = Items.SNOWBALL)
+                "bullet_by_echo_of_deep" -> Profile(
+                    damage = 18.0f,
+                    gravity = 0.0,
+                    airInertia = 1.0f,
+                    waterInertia = 1.0f,
+                    renderItem = Items.SNOWBALL,
+                    trailParticleId = ResourceLocation.fromNamespaceAndPath(DecIsland.MOD_ID, "deep_wake_particle"),
+                )
+                "sun_energy" -> Profile(
+                    damage = 8.0f,
+                    gravity = 0.0,
+                    airInertia = 0.95f,
+                    waterInertia = 0.8f,
+                    ignite = true,
+                    explosionPower = 1.0f,
+                    explosionInteraction = Level.ExplosionInteraction.MOB,
+                    renderItem = Items.SUNFLOWER,
+                    trailParticleId = ResourceLocation.fromNamespaceAndPath(DecIsland.MOD_ID, "fire_wake_particle"),
+                    // Bedrock's fuseLength is measured in seconds; the Java
+                    // tick loop uses 20 ticks per second.
+                    fuseMinTicks = 100,
+                    fuseMaxTicks = 100,
+                )
+                "radiate_cloud" -> Profile(
+                    damage = 19.0f,
+                    gravity = 0.0,
+                    airInertia = 1.0f,
+                    waterInertia = 1.0f,
+                    poisonTicks = 200,
+                    poisonAmplifier = 2,
+                    renderItem = Items.SNOWBALL,
+                    trailParticleId = ResourceLocation.fromNamespaceAndPath(DecIsland.MOD_ID, "radiate_wake_big_particle"),
+                )
+                "radiate_fog" -> Profile(
+                    damage = 1.0f,
+                    gravity = 0.0,
+                    airInertia = 1.1f,
+                    waterInertia = 1.1f,
+                    poisonTicks = 100,
+                    poisonAmplifier = 2,
+                    renderItem = Items.SNOWBALL,
+                    trailParticleId = ResourceLocation.fromNamespaceAndPath(DecIsland.MOD_ID, "radiate_wake_particle"),
+                )
                 "spots_by_sword" -> Profile(14.0f, 0.0, 1.05f, 0.95f, stuckInGround = true, stuckLifetime = 1, ignite = true, renderItem = Items.FIRE_CHARGE)
                 "storm_energy" -> when (variant) {
-                    "a" -> Profile(4.0f, 0.01, 1.01f, 1.3f, knockback = true, renderItem = Items.SNOWBALL)
-                    "b" -> Profile(4.0f, 0.01, 1.0f, 1.3f, knockback = true, renderItem = Items.SNOWBALL)
-                    "c" -> Profile(4.0f, 0.01, 1.0f, 1.3f, knockback = true, renderItem = Items.SNOWBALL)
-                    else -> Profile(4.0f, 0.01, 1.0f, 1.3f, knockback = true, renderItem = Items.SNOWBALL)
+                    "a" -> Profile(4.0f, 0.01, 1.01f, 1.3f, knockback = true, renderItem = Items.SNOWBALL, trailParticleId = ResourceLocation.fromNamespaceAndPath(DecIsland.MOD_ID, "wave_wake_particle"))
+                    "b" -> Profile(4.0f, 0.01, 1.0f, 1.3f, knockback = true, renderItem = Items.SNOWBALL, trailParticleId = ResourceLocation.fromNamespaceAndPath(DecIsland.MOD_ID, "wave_wake_particle"))
+                    "c" -> Profile(4.0f, 0.01, 1.0f, 1.3f, knockback = true, renderItem = Items.SNOWBALL, trailParticleId = ResourceLocation.fromNamespaceAndPath(DecIsland.MOD_ID, "wave_wake_particle"))
+                    else -> Profile(4.0f, 0.01, 1.0f, 1.3f, knockback = true, renderItem = Items.SNOWBALL, trailParticleId = ResourceLocation.fromNamespaceAndPath(DecIsland.MOD_ID, "wave_wake_particle"))
                 }
                 "bullet_by_catapult_normal" -> Profile(7.0f, 0.02, 1.1f, 0.95f, knockback = true, renderItem = Items.COBBLESTONE)
                 "bullet_by_catapult_explode" -> Profile(7.0f, 0.02, 1.1f, 0.95f, knockback = true, explosionPower = 1.0f, renderItem = Items.GUNPOWDER)

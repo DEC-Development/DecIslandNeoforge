@@ -49,6 +49,8 @@ blizzard_wake.particle.json
 frozen_wake.particle.json
 small_fire_wake.particle.json
 wave_wake.particle.json
+radiate_wake.particle.json
+radiate_wake_big.particle.json
 energy_ball_hit.particle.json
 amethyst_energy_ball_hit.particle.json
 amethyst_energy_ball_wake.particle.json
@@ -77,6 +79,7 @@ bubble_ring.particle.json
 dead_wood_wake.particle.json
 bat_spurt.particle.json
 deep_range.particle.json
+deep_wake.particle.json
 bubble_vortex.particle.json
 frozen_shield.particle.json
 ender_spurt.particle.json

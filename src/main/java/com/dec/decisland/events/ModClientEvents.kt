@@ -170,17 +170,24 @@ object ModClientEvents {
             BedrockSpriteProjectileRenderer<BedrockSpecialProjectile>(context, entityTexture("hard_bubble"), 0.35f)
         }
         EntityRenderers.register(ModEntities.BULLET_BY_ECHO_OF_DEEP.get()) { context ->
-            BedrockSpriteProjectileRenderer<BedrockSpecialProjectile>(context, entityTexture("bullet_by_echo_of_deep"), 0.4f)
+            BedrockProjectileRenderer<BedrockSpecialProjectile>(
+                context,
+                ResourceLocation.fromNamespaceAndPath(DecIsland.MOD_ID, "bedrock/models/entity/bullet.geometry.json"),
+                ResourceLocation.fromNamespaceAndPath(DecIsland.MOD_ID, "bedrock/animations/entity/bullet.animation.json"),
+                "animation.bullet.wake",
+                entityTexture("bullet_by_echo_of_deep"),
+                1.0f,
+                useEnergySwirl = false,
+            )
         }
         EntityRenderers.register(ModEntities.SUN_ENERGY.get()) { context ->
-            BedrockSpriteProjectileRenderer<BedrockSpecialProjectile>(context, entityTexture("sun_energy"), 0.45f)
+            // Use the same proven energy-ball renderer configuration as the
+            // golden staff projectile. The projectile profile still supplies
+            // the Sun Energy behavior and fire wake particle.
+            ballRenderer<BedrockSpecialProjectile>(context, "sun_energy", 0.8f)
         }
-        EntityRenderers.register(ModEntities.RADIATE_CLOUD.get()) { context ->
-            BedrockSpriteProjectileRenderer<BedrockSpecialProjectile>(context, entityTexture("radiate_crystal"), 0.4f)
-        }
-        EntityRenderers.register(ModEntities.RADIATE_FOG.get()) { context ->
-            BedrockSpriteProjectileRenderer<BedrockSpecialProjectile>(context, entityTexture("radiate_crystal"), 0.35f)
-        }
+        EntityRenderers.register(ModEntities.RADIATE_CLOUD.get(), ::EmptyRenderer)
+        EntityRenderers.register(ModEntities.RADIATE_FOG.get(), ::EmptyRenderer)
         EntityRenderers.register(ModEntities.SPOTS_BY_SWORD.get()) { context ->
             BedrockProjectileRenderer<BedrockSpecialProjectile>(
                 context,
@@ -191,9 +198,7 @@ object ModClientEvents {
                 1.0f,
             )
         }
-        EntityRenderers.register(ModEntities.STORM_ENERGY.get()) { context ->
-            BedrockSpriteProjectileRenderer<BedrockSpecialProjectile>(context, entityTexture("energy_ball"), 0.25f)
-        }
+        EntityRenderers.register(ModEntities.STORM_ENERGY.get(), ::EmptyRenderer)
         EntityRenderers.register(ModEntities.BULLET_BY_CATAPULT_NORMAL.get()) { context ->
             BedrockSpriteProjectileRenderer<BedrockSpecialProjectile>(context, entityTexture("throwing_stone"), 0.3f)
         }
