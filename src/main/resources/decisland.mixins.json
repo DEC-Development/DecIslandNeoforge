@@ -9,6 +9,7 @@
     "client.FlintlockAimCameraMixin",
     "client.FlintlockAimCrosshairMixin",
     "client.FlintlockAimFovMixin",
+    "client.GuiGraphicsInvoker",
     "client.GunHoldHandsMixin",
     "client.GunHoldThirdPersonPoseMixin",
     "client.GunThirdPersonStraightArmMixin"

@@ -200,10 +200,22 @@ object ModClientEvents {
         }
         EntityRenderers.register(ModEntities.STORM_ENERGY.get(), ::EmptyRenderer)
         EntityRenderers.register(ModEntities.BULLET_BY_CATAPULT_NORMAL.get()) { context ->
-            BedrockSpriteProjectileRenderer<BedrockSpecialProjectile>(context, entityTexture("throwing_stone"), 0.3f)
+            BedrockProjectileRenderer<BedrockSpecialProjectile>(
+                context,
+                ResourceLocation.fromNamespaceAndPath(DecIsland.MOD_ID, "bedrock/models/entity/bullet.geometry.json"),
+                entityTexture("bullet_by_flintlock"),
+                1.0f,
+                useEnergySwirl = false,
+            )
         }
         EntityRenderers.register(ModEntities.BULLET_BY_CATAPULT_EXPLODE.get()) { context ->
-            BedrockSpriteProjectileRenderer<BedrockSpecialProjectile>(context, entityTexture("throwing_stone"), 0.3f)
+            BedrockProjectileRenderer<BedrockSpecialProjectile>(
+                context,
+                ResourceLocation.fromNamespaceAndPath(DecIsland.MOD_ID, "bedrock/models/entity/bullet.geometry.json"),
+                entityTexture("bullet_by_flintlock"),
+                1.0f,
+                useEnergySwirl = false,
+            )
         }
         EntityRenderers.register(ModEntities.VILLAGE_PORTAL.get()) { context ->
             BedrockSpriteProjectileRenderer<com.dec.decisland.entity.custom.VillagePortalEntity>(context, entityTexture("village_portal"), 1.5f)

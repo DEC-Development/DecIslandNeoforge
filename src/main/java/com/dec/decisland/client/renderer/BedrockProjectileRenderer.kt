@@ -20,8 +20,8 @@ import net.minecraft.world.item.ItemStack
 open class BedrockProjectileRenderer<T : Entity>(
     context: EntityRendererProvider.Context,
     geometryLocation: ResourceLocation,
-    animationLocation: ResourceLocation,
-    animationName: String,
+    animationLocation: ResourceLocation?,
+    animationName: String?,
     private val textureLocation: ResourceLocation,
     private val scale: Float,
     private val useEnergySwirl: Boolean = true,
@@ -29,13 +29,44 @@ open class BedrockProjectileRenderer<T : Entity>(
     private val additionalAnimations: List<Pair<ResourceLocation, String>> = emptyList(),
     private val materialTextures: Map<String, ResourceLocation> = emptyMap(),
 ) : EntityRenderer<T>(context) {
+    /**
+     * Constructor for a static Bedrock geometry.  Bedrock client entities do
+     * not require an animation file; the geometry must still go through the
+     * same model/material pipeline as animated entities.
+     */
+    constructor(
+        context: EntityRendererProvider.Context,
+        geometryLocation: ResourceLocation,
+        textureLocation: ResourceLocation,
+        scale: Float,
+        useEnergySwirl: Boolean = true,
+        renderWithoutCulling: Boolean = false,
+        additionalAnimations: List<Pair<ResourceLocation, String>> = emptyList(),
+        materialTextures: Map<String, ResourceLocation> = emptyMap(),
+    ) : this(
+        context,
+        geometryLocation,
+        null,
+        null,
+        textureLocation,
+        scale,
+        useEnergySwirl,
+        renderWithoutCulling,
+        additionalAnimations,
+        materialTextures,
+    )
+
     private val geometry = BedrockEntityAssets.geometry(geometryLocation)
     private val itemRenderer = context.itemRenderer
     private val textureMeshItem: ItemStack? =
         BedrockTextureMeshSupport.itemStackForTextureMesh(geometry, textureLocation, materialTextures)
     private val model = BedrockAnimatedEntityModel<T>(
         geometry,
-        listOf(BedrockEntityAssets.animation(animationLocation, animationName)) +
+        listOfNotNull(
+            animationLocation?.let { location ->
+                animationName?.let { name -> BedrockEntityAssets.animation(location, name) }
+            },
+        ) +
             additionalAnimations.map { (location, name) -> BedrockEntityAssets.animation(location, name) },
         textureLocation,
         materialTextures,

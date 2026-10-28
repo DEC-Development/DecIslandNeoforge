@@ -36,12 +36,23 @@ class CatapultItem(properties: Properties) : Item(properties) {
 
     private fun findAmmo(player: Player): Pair<Item, ItemStack>? {
         val exploding = Material.EXPLODING_PELLETS.get()
-        player.inventory.items.firstOrNull { !it.isEmpty && it.`is`(exploding) }?.let { return exploding to it }
-        val offhand = player.offhandItem
-        if (!offhand.isEmpty && offhand.`is`(exploding)) return exploding to offhand
         val smallStone = Material.SMALL_STONE.get()
-        player.inventory.items.firstOrNull { !it.isEmpty && it.`is`(smallStone) }?.let { return smallStone to it }
-        if (!offhand.isEmpty && offhand.`is`(smallStone)) return smallStone to offhand
+        val offhand = player.offhandItem
+
+        // Match vanilla projectile-weapon selection and the Bedrock bag
+        // ordering: offhand ammunition wins, regardless of its ammo type;
+        // only then scan the normal inventory slots in order.
+        when {
+            !offhand.isEmpty && offhand.`is`(exploding) -> return exploding to offhand
+            !offhand.isEmpty && offhand.`is`(smallStone) -> return smallStone to offhand
+        }
+        for (stack in player.inventory.items) {
+            if (stack.isEmpty) continue
+            when {
+                stack.`is`(exploding) -> return exploding to stack
+                stack.`is`(smallStone) -> return smallStone to stack
+            }
+        }
         return null
     }
 }

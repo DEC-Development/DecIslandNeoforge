@@ -1,12 +1,13 @@
 package com.dec.decisland.client.gui
 
 import com.dec.decisland.DecIsland
+import com.dec.decisland.mixin.client.GuiGraphicsInvoker
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.resources.ResourceLocation
 import kotlin.math.abs
+import kotlin.math.floor
 import kotlin.math.min
-import kotlin.math.sin
 
 object ClientManaOverlay {
     private var lastFullManaTime: Long = 0
@@ -25,6 +26,8 @@ object ClientManaOverlay {
     private var transitionCurrentMana: Float = 0.0f
     private var lastUpdateTime: Long = 0
     private const val TRANSITION_DURATION_MS: Long = 500
+    private const val MANA_ICON_STEP: Float = 20.0f
+    private const val LAST_MANA_ICON_INDEX: Int = 4
 
     @JvmStatic
     fun render(guiGraphics: GuiGraphics, screenWidth: Int, screenHeight: Int) {
@@ -53,75 +56,95 @@ object ClientManaOverlay {
             isFadingOut = false
         }
 
-        val (lowIndex, highIndex, alphaHigh) = when {
-            currentMana >= 80.0f -> Triple(4, 4, 1.0f)
-            currentMana <= 0.0f -> Triple(0, 0, 0.0f)
-            currentMana < 20.0f -> Triple(0, 1, interpolate((currentMana - 0.0f) / 20.0f))
-            currentMana < 40.0f -> Triple(1, 2, interpolate((currentMana - 20.0f) / 20.0f))
-            currentMana < 60.0f -> Triple(2, 3, interpolate((currentMana - 40.0f) / 20.0f))
-            else -> Triple(3, 4, interpolate((currentMana - 60.0f) / 20.0f))
+        // The five textures are consecutive mana states (0, 20, 40, 60 and
+        // 80+).  Calculate the position continuously so the two neighbouring
+        // states can be blended instead of switching at an integer boundary.
+        val iconPosition = (currentMana / MANA_ICON_STEP)
+            .coerceIn(0.0f, LAST_MANA_ICON_INDEX.toFloat())
+        val lowIndex = floor(iconPosition).toInt().coerceIn(0, LAST_MANA_ICON_INDEX)
+        val highIndex = (lowIndex + 1).coerceAtMost(LAST_MANA_ICON_INDEX)
+        val alphaHigh = if (lowIndex == highIndex) {
+            1.0f
+        } else {
+            interpolate(iconPosition - lowIndex.toFloat())
         }
 
         val iconSize = 16
         val x = (screenWidth - iconSize) / 2
         val y = screenHeight - 49
 
-        guiGraphics.setColor(1.0f, 1.0f, 1.0f, fadeAlpha)
-        guiGraphics.blit(
+        blitManaTexture(
+            guiGraphics,
             manaIcons[lowIndex],
             x,
             y,
             iconSize,
             iconSize,
-            0.0f,
-            0.0f,
-            iconSize,
-            iconSize,
-            iconSize,
-            iconSize,
+            fadeAlpha,
         )
-        guiGraphics.setColor(1.0f, 1.0f, 1.0f, 1.0f)
 
         if (lowIndex != highIndex) {
             val combinedAlpha = alphaHigh * fadeAlpha
-            guiGraphics.setColor(1.0f, 1.0f, 1.0f, combinedAlpha)
-            guiGraphics.blit(
+            blitManaTexture(
+                guiGraphics,
                 manaIcons[highIndex],
                 x,
                 y,
                 iconSize,
                 iconSize,
-                0.0f,
-                0.0f,
-                iconSize,
-                iconSize,
-                iconSize,
-                iconSize,
+                combinedAlpha,
             )
-            guiGraphics.setColor(1.0f, 1.0f, 1.0f, 1.0f)
         }
 
         val maxManaBorderIndex = getMaxManaBorderIndex(maxMana)
-        guiGraphics.setColor(1.0f, 1.0f, 1.0f, fadeAlpha)
-        guiGraphics.blit(
+        blitManaTexture(
+            guiGraphics,
             manaMaxBorderIcons[maxManaBorderIndex],
             x,
             y,
             iconSize,
             iconSize,
-            0.0f,
-            0.0f,
-            iconSize,
-            iconSize,
-            iconSize,
-            iconSize,
+            fadeAlpha,
         )
-        guiGraphics.setColor(1.0f, 1.0f, 1.0f, 1.0f)
+    }
+
+    private fun blitManaTexture(
+        guiGraphics: GuiGraphics,
+        texture: ResourceLocation,
+        x: Int,
+        y: Int,
+        width: Int,
+        height: Int,
+        alpha: Float,
+    ) {
+        val clampedAlpha = alpha.coerceIn(0.0f, 1.0f)
+        if (clampedAlpha <= 0.0f) return
+
+        (guiGraphics as GuiGraphicsInvoker).decislandInnerBlit(
+            texture,
+            x,
+            x + width,
+            y,
+            y + height,
+            0,
+            0.0f,
+            1.0f,
+            0.0f,
+            1.0f,
+            1.0f,
+            1.0f,
+            1.0f,
+            clampedAlpha,
+        )
     }
 
     private fun updateTransitionMana() {
         val currentTime = System.currentTimeMillis()
-        val deltaTime = currentTime - lastUpdateTime
+        val deltaTime = if (lastUpdateTime == 0L) {
+            0L
+        } else {
+            (currentTime - lastUpdateTime).coerceIn(0L, 100L)
+        }
         lastUpdateTime = currentTime
         if (abs(targetCurrentMana - transitionCurrentMana) > 0.1f) {
             val progress = deltaTime.toFloat() / TRANSITION_DURATION_MS
@@ -142,29 +165,31 @@ object ClientManaOverlay {
 
     private fun interpolate(x: Float): Float {
         val t = x * x
-        return (0.5 * sin(Math.PI * t - Math.PI / 2) + 0.5).toFloat()
+        return (0.5 * kotlin.math.sin(Math.PI * t - Math.PI / 2) + 0.5).toFloat()
     }
 
     @JvmStatic
     fun updateManaValues(current: Float, max: Float) {
         val manaChanged = abs(current - cachedCurrentMana) > 0.001f || abs(max - cachedMaxMana) > 0.001f
+        val now = System.currentTimeMillis()
 
         cachedCurrentMana = current
         cachedMaxMana = max
         targetCurrentMana = current
 
-        if (transitionCurrentMana == 0.0f && cachedCurrentMana != 0.0f) {
+        if (lastUpdateTime == 0L) {
             transitionCurrentMana = current
+            lastUpdateTime = now
         }
 
         if (manaChanged) {
-            lastFullManaTime = System.currentTimeMillis()
+            lastFullManaTime = now
             isFadingOut = false
         }
 
         if (current >= max && max > 0.0f) {
             if (!isFadingOut) {
-                lastFullManaTime = System.currentTimeMillis()
+                lastFullManaTime = now
             }
         } else {
             isFadingOut = false

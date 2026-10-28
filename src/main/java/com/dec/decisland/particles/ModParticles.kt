@@ -135,20 +135,20 @@ object ModParticles {
         if (bedrockLoaded) return
         synchronized(this) {
             if (bedrockLoaded) return
-            loadBedrockDefinitions()
-            bedrockLoaded = true
+            bedrockLoaded = loadBedrockDefinitions()
         }
     }
 
-    private fun loadBedrockDefinitions() {
-        val loader = Thread.currentThread().contextClassLoader ?: javaClass.classLoader
-        val manifestStream = loader.getResourceAsStream(BEDROCK_MANIFEST) ?: return
+    private fun loadBedrockDefinitions(): Boolean {
+        val contextLoader = Thread.currentThread().contextClassLoader
+        val ownLoader = ModParticles::class.java.classLoader
+        val manifestStream = openResource(BEDROCK_MANIFEST, contextLoader, ownLoader) ?: return false
         manifestStream.bufferedReader().useLines { lines ->
             lines.map(String::trim)
                 .filter { it.isNotEmpty() && !it.startsWith("#") }
                 .forEach { relativePath ->
                     val resourcePath = "assets/decisland/particles/$relativePath"
-                    val input = loader.getResourceAsStream(resourcePath) ?: return@forEach
+                    val input = openResource(resourcePath, contextLoader, ownLoader) ?: return@forEach
                     input.use { stream ->
                         parseBedrockResource(stream)?.let { parsed ->
                             bedrockDefinitionById[parsed.first] = parsed.second
@@ -157,7 +157,18 @@ object ModParticles {
                     }
                 }
         }
+        return true
     }
+
+    /**
+     * Dev runs and packaged runs can use different context class loaders.  A
+     * Bedrock particle is client-side data, so failing to find the manifest
+     * through one loader must not permanently cache an empty particle table.
+     */
+    private fun openResource(path: String, contextLoader: ClassLoader?, ownLoader: ClassLoader?): java.io.InputStream? =
+        contextLoader?.getResourceAsStream(path)
+            ?: ownLoader?.getResourceAsStream(path)
+            ?: ModParticles::class.java.getResourceAsStream("/$path")
 
     private fun parseBedrockResource(stream: java.io.InputStream): Triple<ResourceLocation, BedrockParticleEffectDefinition, List<ResourceLocation>?>? {
         val root = InputStreamReader(stream).use { JsonParser.parseReader(it) }

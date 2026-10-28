@@ -5,7 +5,7 @@
 			"identifier": "dec:fire_powering_particle",
 			"basic_render_parameters": {
 				"material": "particles_alpha",
-				"texture": "textures/particle/particles"
+				"texture": "textures/particle/fire_wake"
 			}
 		},
 		"components": {
@@ -32,9 +32,9 @@
 				"size": ["variable.particle_random_1 * 0.5 + 0.05", "variable.particle_random_1 * 0.5 + 0.05"],
 				"facing_camera_mode": "lookat_xyz",
 				"uv": {
-					"texture_width": 128,
-					"texture_height": 128,
-					"uv": [0, 24],
+					"texture_width": 8,
+					"texture_height": 8,
+					"uv": [0, 0],
 					"uv_size": [8, 8]
 				}
 			}

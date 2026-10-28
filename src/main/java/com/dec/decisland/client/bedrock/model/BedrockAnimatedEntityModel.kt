@@ -40,7 +40,15 @@ open class BedrockAnimatedEntityModel<T : Entity> private constructor(
         materialTextures: Map<String, ResourceLocation> = emptyMap(),
     ) : this(
         bakeModel(geometry, defaultTexture, materialTextures),
-        animations.firstOrNull() ?: error("At least one Bedrock animation is required"),
+        // A Bedrock client entity is allowed to have geometry without an
+        // animation.  Keep the model API usable for those static entities by
+        // retaining a no-op clip while leaving the animation list empty.
+        animations.firstOrNull() ?: BedrockAnimationClip(
+            name = "__static__",
+            loop = true,
+            lengthSeconds = 0.0f,
+            boneAnimations = emptyMap(),
+        ),
         animations,
     )
 

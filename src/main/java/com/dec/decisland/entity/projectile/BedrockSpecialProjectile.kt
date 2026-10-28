@@ -382,15 +382,39 @@ class BedrockSpecialProjectile(
                     renderItem = Items.SNOWBALL,
                     trailParticleId = ResourceLocation.fromNamespaceAndPath(DecIsland.MOD_ID, "radiate_wake_particle"),
                 )
-                "spots_by_sword" -> Profile(14.0f, 0.0, 1.05f, 0.95f, stuckInGround = true, stuckLifetime = 1, ignite = true, renderItem = Items.FIRE_CHARGE)
+                "spots_by_sword" -> Profile(
+                    damage = 14.0f,
+                    gravity = 0.0,
+                    airInertia = 1.05f,
+                    waterInertia = 0.95f,
+                    stuckInGround = true,
+                    stuckLifetime = 1,
+                    ignite = true,
+                    renderItem = Items.FIRE_CHARGE,
+                    trailParticleId = ResourceLocation.fromNamespaceAndPath(DecIsland.MOD_ID, "fire_wake_particle"),
+                )
                 "storm_energy" -> when (variant) {
                     "a" -> Profile(4.0f, 0.01, 1.01f, 1.3f, knockback = true, renderItem = Items.SNOWBALL, trailParticleId = ResourceLocation.fromNamespaceAndPath(DecIsland.MOD_ID, "wave_wake_particle"))
                     "b" -> Profile(4.0f, 0.01, 1.0f, 1.3f, knockback = true, renderItem = Items.SNOWBALL, trailParticleId = ResourceLocation.fromNamespaceAndPath(DecIsland.MOD_ID, "wave_wake_particle"))
                     "c" -> Profile(4.0f, 0.01, 1.0f, 1.3f, knockback = true, renderItem = Items.SNOWBALL, trailParticleId = ResourceLocation.fromNamespaceAndPath(DecIsland.MOD_ID, "wave_wake_particle"))
                     else -> Profile(4.0f, 0.01, 1.0f, 1.3f, knockback = true, renderItem = Items.SNOWBALL, trailParticleId = ResourceLocation.fromNamespaceAndPath(DecIsland.MOD_ID, "wave_wake_particle"))
                 }
-                "bullet_by_catapult_normal" -> Profile(7.0f, 0.02, 1.1f, 0.95f, knockback = true, renderItem = Items.COBBLESTONE)
-                "bullet_by_catapult_explode" -> Profile(7.0f, 0.02, 1.1f, 0.95f, knockback = true, explosionPower = 1.0f, renderItem = Items.GUNPOWDER)
+                // Both catapult entities use the Bedrock bullet geometry and
+                // bullet_by_flintlock texture.  Their only visual-independent
+                // difference is the explosive hit behavior.
+                "bullet_by_catapult_normal" -> Profile(7.0f, 0.02, 1.1f, 0.95f, knockback = true, renderItem = null)
+                "bullet_by_catapult_explode" -> Profile(
+                    damage = 7.0f,
+                    gravity = 0.02,
+                    airInertia = 1.1f,
+                    waterInertia = 0.95f,
+                    knockback = true,
+                    explosionPower = 1.0f,
+                    // Bedrock's destroy_affected_by_griefing explosion uses
+                    // the mob-griefing/block-interaction path on Java.
+                    explosionInteraction = Level.ExplosionInteraction.MOB,
+                    renderItem = null,
+                )
                 else -> Profile(5.0f, 0.0, 1.0f, 1.0f)
             }
         }

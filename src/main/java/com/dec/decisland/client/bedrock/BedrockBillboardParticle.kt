@@ -223,7 +223,11 @@ class BedrockBillboardParticle(
         definition.particleMotionDynamic?.linearDragCoefficient?.let { expr ->
             val drag = Molang.evalDouble(expr, createContext(), particleVariables) ?: expr.toDoubleOrNull()
             if (drag != null) {
-                friction = (1.0 - (drag / ticksPerSecond)).toFloat().coerceIn(0.0f, 1.0f)
+                // Bedrock permits negative drag.  It is not a request to
+                // disable drag: it produces an acceleration multiplier above
+                // one (fire_powering uses -11.3 to pull the sparks inward).
+                // Clamping to 1.0 made those particles freeze on the sphere.
+                friction = (1.0 - (drag / ticksPerSecond)).toFloat().coerceAtLeast(0.0f)
             }
         }
     }
